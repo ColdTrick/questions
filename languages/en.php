@@ -145,8 +145,8 @@ To view the question, click here:
 	'questions:settings:general:close:description' => "When an answer of a question is marked as the correct answer, close the question. This will mean no more answers can be given.",
 	'questions:settings:general:solution_time' => "Set a default solution time in days",
 	'questions:settings:general:solution_time:description' => "Questions should be answered before this time expires, groups can override this setting with their own time limit. 0 for no limit.",
-	'questions:settings:general:auto_close_time' => "Automaticly close questions after a number of days",
-	'questions:settings:general:auto_close_time:description' => "Questions which are not yet closed after a number of days will be automaticly closed. 0 or empty for no automatic closing.",
+	'questions:settings:general:auto_close_time' => "Automatically close questions after a number of days",
+	'questions:settings:general:auto_close_time:description' => "Questions which are not yet closed after a number of days will be automatically closed. 0 or empty for no automatic closing.",
 	'questions:settings:general:solution_time_group' => "Group owners can change the default solution time",
 	'questions:settings:general:solution_time_group:description' => "If not allowed, groups will use the default solution time as defined above.",
 	'questions:settings:general:limit_to_groups' => "Limit questions to group context only",
@@ -154,7 +154,7 @@ To view the question, click here:
 	
 	'questions:settings:experts:title' => "Q&A expert settings",
 	'questions:settings:experts:enable' => "Enable expert roles",
-	'questions:settings:experts:enable:description' => "Experts have special privilages and can be assigned by site administrators and group owners.",
+	'questions:settings:experts:enable:description' => "Experts have special privileges and can be assigned by site administrators and group owners.",
 	'questions:settings:experts:answer' => "Only experts can answer a question",
 	'questions:settings:experts:mark' => "Only experts can mark an answer as the correct answer",
 	
@@ -178,7 +178,7 @@ To view the question, click here:
 	'questions:group_settings:who_can_answer' => "Who can answer questions in this group",
 	'questions:group_settings:who_can_answer:experts_only' => "The site administrator has configured that only experts can answer questions.",
 	
-	'questions:group_settings:auto_mark_correct' => "When an expert creates an answer, automaticly mark it as the correct answer",
+	'questions:group_settings:auto_mark_correct' => "When an expert creates an answer, automatically mark it as the correct answer",
 	
 	/**
 	 * Widgets
@@ -209,7 +209,7 @@ To view the question, click here:
 	'questions:action:question:save:error:limited_to_groups' => "Questions are limited to group, please select a group",
 	
 	'questions:action:question:move_to_discussions:error:move' => "You're not allowed to move questions to discussions",
-	'questions:action:question:move_to_discussions:error:topic' => "An error occured while creating the discussion topic, please try again",
+	'questions:action:question:move_to_discussions:error:topic' => "An error occurred while creating the discussion topic, please try again",
 	'questions:action:question:move_to_discussions:success' => "The questions was moved to a discussion topic",
 	
 	'questions:action:toggle_expert:success:make' => "%s is now a questions expert for %s",
