@@ -1,6 +1,12 @@
 Version history
 ===============
 
+5.1 (2017-07-31):
+
+- added: plugin setting to auto close questions
+- added: upgrade script to ensure questions have a status field
+- changed: question edit form to use new Elgg functions
+
 5.0 (2017-01-26):
 
 - changed: increased Elgg version requirement to 2.3
