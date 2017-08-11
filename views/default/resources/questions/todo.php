@@ -33,7 +33,7 @@ elgg_set_page_owner_guid($page_owner->getGUID());
 elgg_push_breadcrumb(elgg_echo('questions:todo'));
 
 // add title button
-elgg_register_title_button();
+elgg_register_title_button('questions', 'add', 'object', ElggQuestion::SUBTYPE);
 
 // prepare options
 $dbprefix = elgg_get_config('dbprefix');
