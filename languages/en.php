@@ -28,6 +28,7 @@ return [
 	'questions:menu:filter:todo' => "Todo",
 	'questions:menu:filter:todo_group' => "Group Todo",
 	'questions:menu:filter:experts' => "Experts",
+	'questions:menu:filter:tags' => "Tags: %s",
 	
 	'river:create:object:question' => '%s asked question %s',
 	'river:create:object:answer' => '%s provided an answer for the question %s',

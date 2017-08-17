@@ -113,6 +113,7 @@ function questions_filter_menu_handler($hook, $type, $items, $params) {
 	}
 	
 	$page_owner = elgg_get_page_owner_entity();
+	$page_owner_guid = elgg_get_page_owner_guid();
 	
 	// change some menu items
 	foreach ($items as $key => $item) {
@@ -140,6 +141,44 @@ function questions_filter_menu_handler($hook, $type, $items, $params) {
 				}
 			}
 		}
+	}
+	
+	// add tags search
+	$session = elgg_get_session();
+	$url = '';
+	$tags = get_input('tags');
+	if (!empty($tags)) {
+		$url = 'questions/all';
+		if ($page_owner instanceof ElggUser) {
+			$url = "questions/owner/{$page_owner->username}";
+		} elseif ($page_owner instanceof ElggGroup) {
+			$url = "questions/group/{$page_owner->guid}/all";
+		}
+		
+		$session->set("questions_tags_{$page_owner_guid}", [
+			'tags' => $tags,
+			'url' => $url,
+		]);
+	} elseif ($session->has("questions_tags_{$page_owner_guid}")) {
+		$settings = $session->get("questions_tags_{$page_owner_guid}");
+		
+		$tags = elgg_extract('tags', $settings);
+		$url = elgg_extract('url', $settings);
+	}
+	
+	if (!empty($tags) && !empty($url)) {
+		$tags_string = $tags;
+		if (is_array($tags_string)) {
+			$tags_string = implode(', ', $tags_string);
+		}
+		
+		$items[] = ElggMenuItem::factory([
+			'name' => 'questions_tags',
+			'text' => elgg_echo('questions:menu:filter:tags', [$tags_string]),
+			'href' => elgg_http_add_url_query_elements($url, ['tags' => $tags, 'offset' => null]),
+			'is_trusted' => true,
+			'priority' => 600,
+		]);
 	}
 	
 	if (questions_is_expert()) {

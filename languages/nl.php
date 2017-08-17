@@ -1,10 +1,11 @@
 <?php
 /**
- * This file was created by Translation Editor v5.2
- * On 2017-02-13 12:56
+ * This file was created by Translation Editor v6.0
+ * On 2017-08-17 14:38
  */
 
 return array (
+  'questions:menu:filter:tags' => 'Tags: %s',
   'questions:notification:auto_close:subject' => 'De vraag \'%s\' is gesloten vanwege inactiviteit',
   'questions:notification:auto_close:summary' => 'De vraag \'%s\' is gesloten vanwege inactiviteit',
   'questions:notification:auto_close:message' => 'Beste %s,
