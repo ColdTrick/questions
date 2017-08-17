@@ -21,6 +21,9 @@ class Cron {
 			return;
 		}
 		
+		echo "Starting Questions auto-close processing" . PHP_EOL;
+		elgg_log("Starting Questions auto-close processing", 'NOTICE');
+		
 		$time = (int) elgg_extract('time', $params, time());
 		$site = elgg_get_site_entity();
 		
@@ -66,5 +69,8 @@ class Cron {
 		
 		// restore access
 		elgg_set_ignore_access($ia);
+		
+		echo "Finished Questions auto-close processing" . PHP_EOL;
+		elgg_log("Finished Questions auto-close processing", 'NOTICE');
 	}
 }

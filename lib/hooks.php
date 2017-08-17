@@ -397,6 +397,9 @@ function questions_daily_cron_handler($hook, $type, $returnvalue, $params) {
 	if (!questions_experts_enabled()) {
 		return;
 	}
+	
+	echo "Starting Questions experts todo notifications" . PHP_EOL;
+	elgg_log("Starting Questions experts todo notifications", 'NOTICE');
 		
 	$time = (int) elgg_extract('time', $params, time());
 	$dbprefix = elgg_get_config('dbprefix');
@@ -554,5 +557,8 @@ function questions_daily_cron_handler($hook, $type, $returnvalue, $params) {
 		
 		// restore user
 		$_SESSION['user'] = $backup_user;
+		
+		echo "Finished Questions experts todo notifications" . PHP_EOL;
+		elgg_log("Finished Questions experts todo notifications", 'NOTICE');
 	}
 }
