@@ -135,7 +135,7 @@ function questions_filter_menu_handler($hook, $type, $items, $params) {
 				
 				// highlight all
 				$current_page = current_page_url();
-				if (stristr($current_page, "questions/group/{$page_owner->getGUID()}/all")) {
+				if (stristr($current_page, "questions/group/{$page_owner->getGUID()}/all") && !get_input('tags')) {
 					$item->setSelected(true);
 				}
 			}
