@@ -72,6 +72,7 @@ try {
 			'action_type' => 'create',
 			'subject_guid' => elgg_get_logged_in_user_guid(),
 			'object_guid' => $question->getGUID(),
+			'target_guid' => $container->getGUID(),
 			'access_id' => $question->access_id,
 		]);
 		

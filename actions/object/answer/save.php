@@ -60,6 +60,7 @@ try {
 			'action_type' => 'create',
 			'subject_guid' => elgg_get_logged_in_user_guid(),
 			'object_guid' => $answer->getGUID(),
+			'target_guid' => $question->getGUID(),
 			'access_id' => $answer->access_id,
 		]);
 	}
