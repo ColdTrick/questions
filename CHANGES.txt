@@ -1,6 +1,13 @@
 Version history
 ===============
 
+5.2 (2017-08-24):
+
+- added: filter tab for last tag search
+- fixed: all tab highlighted with tag search
+- fixed: set correct river target when creating river items
+- fixed: title button respects write permissions
+
 5.1 (2017-07-31):
 
 - added: plugin setting to auto close questions
