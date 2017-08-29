@@ -104,7 +104,7 @@ class ElggAnswer extends ElggObject {
 	 * @return void
 	 */
 	public function undoMarkAsCorrect() {
-		unset($this->correct_answer);
+		$this->correct_answer = null;
 		
 		// don't forget to reopen the question
 		$question = $this->getContainerEntity();
