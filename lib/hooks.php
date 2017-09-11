@@ -389,10 +389,6 @@ function questions_permissions_handler($hook, $type, $returnvalue, $params) {
  */
 function questions_daily_cron_handler($hook, $type, $returnvalue, $params) {
 
-	if (empty($params) || !is_array($params)) {
-		return;
-	}
-	
 	// are experts enabled
 	if (!questions_experts_enabled()) {
 		return;
@@ -436,11 +432,13 @@ function questions_daily_cron_handler($hook, $type, $returnvalue, $params) {
 		'limit' => 3,
 	];
 	
+	$backup_user = elgg_get_logged_in_user_entity();
+	$session = elgg_get_session();
+	
 	// loop through all experts
 	foreach ($experts as $expert) {
 		// fake a logged in user
-		$backup_user = elgg_extract('user', $_SESSION);
-		$_SESSION['user'] = $expert;
+		$session->setLoggedInUser($expert);
 		
 		$subject = elgg_echo('questions:daily:notification:subject', [], get_current_language());
 		$message = '';
@@ -554,9 +552,12 @@ function questions_daily_cron_handler($hook, $type, $returnvalue, $params) {
 			// force to email
 			notify_user($expert->getGUID(), $site->getGUID(), $subject, $message, null, 'email');
 		}
-		
-		// restore user
-		$_SESSION['user'] = $backup_user;
+	}
+	
+	if (!empty($backup_user)) {
+		$session->setLoggedInUser($backup_user);
+	} else {
+		$session->invalidate();
 	}
 	
 	echo "Finished Questions experts todo notifications" . PHP_EOL;
