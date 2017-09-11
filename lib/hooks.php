@@ -557,8 +557,8 @@ function questions_daily_cron_handler($hook, $type, $returnvalue, $params) {
 		
 		// restore user
 		$_SESSION['user'] = $backup_user;
-		
-		echo "Finished Questions experts todo notifications" . PHP_EOL;
-		elgg_log("Finished Questions experts todo notifications", 'NOTICE');
 	}
+	
+	echo "Finished Questions experts todo notifications" . PHP_EOL;
+	elgg_log("Finished Questions experts todo notifications", 'NOTICE');
 }
