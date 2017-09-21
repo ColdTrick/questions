@@ -1,6 +1,11 @@
 Version history
 ===============
 
+5.2.1 (2017-09-21):
+
+- changed: setting user during cron handling
+- fixed: unable to unmark a correct answer as question owner
+
 5.2 (2017-08-24):
 
 - added: filter tab for last tag search
