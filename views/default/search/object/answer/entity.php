@@ -19,6 +19,10 @@ if (!($entity instanceof ElggAnswer)) {
 }
 
 $question = $entity->getContainerEntity();
+if (!$question) {
+	elgg_log("Search found answer {$entity->guid}, but the user cannot see its container.", 'WARNING');
+	return;
+}
 
 // entity icon
 $icon = $entity->getVolatileData('search_icon');
