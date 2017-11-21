@@ -432,6 +432,10 @@ function questions_can_ask_question(ElggEntity $container = null, ElggUser $user
 		$container = elgg_get_page_owner_entity();
 	}
 	
+	if (empty($container)) {
+		return false;
+	}
+	
 	// default to current user
 	if (!($user instanceof ElggUser)) {
 		$user = elgg_get_logged_in_user_entity();
@@ -442,27 +446,7 @@ function questions_can_ask_question(ElggEntity $container = null, ElggUser $user
 		return false;
 	}
 	
-	if (!($container instanceof ElggGroup)) {
-		// personal questions
-		return !questions_limited_to_groups();
-	}
-	
-	if ($container->questions_enable !== 'yes') {
-		// group option not enabled
-		return false;
-	}
-	
-	if (!questions_experts_enabled() || ($container->getPrivateSetting('questions_who_can_ask') !== 'experts')) {
-		// no experts enabled, or not limited to experts
-		return $container->canWriteToContainer($user->getGUID(), 'object', ElggQuestion::SUBTYPE);
-	}
-	
-	if (!questions_is_expert($container, $user)) {
-		// limited to expert, and user isn't one
-		return false;
-	}
-	
-	return $container->canWriteToContainer($user->getGUID(), 'object', ElggQuestion::SUBTYPE);
+	return $container->canWriteToContainer($user->guid, 'object', ElggQuestion::SUBTYPE);
 }
 
 /**

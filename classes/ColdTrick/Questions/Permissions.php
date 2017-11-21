@@ -28,6 +28,11 @@ class Permissions {
 		}
 		
 		if (!($container instanceof \ElggGroup)) {
+			if (questions_limited_to_groups()) {
+				// questions only in groups
+				return false;
+			}
+			
 			// personal
 			return;
 		}
