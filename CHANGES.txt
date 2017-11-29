@@ -1,6 +1,11 @@
 Version history
 ===============
 
+5.3 (2017-11-29):
+
+- added: Spanish translation
+- changed: use more of Elgg permission system for creating questions
+
 5.2.1 (2017-09-21):
 
 - changed: setting user during cron handling
