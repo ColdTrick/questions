@@ -266,7 +266,7 @@ function questions_user_hover_menu_handler($hook, $type, $items, $params) {
 			'guid' => $page_owner->guid,
 		]),
 		'confirm' => $confirm_text,
-		'section' => ($page_owner instanceof ElggSite) ? 'admin' : null,
+		'section' => ($page_owner instanceof ElggSite) ? 'admin' : 'default',
 	]);
 	
 	return $items;
