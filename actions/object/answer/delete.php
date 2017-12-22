@@ -18,4 +18,4 @@ if (!$answer->delete()) {
 	return elgg_error_response(elgg_echo('entity:delete:fail', [$title]));
 }
 
-return elgg_ok_response('', elgg_echo('entity:delete:success'), get_input('forward', $question->getURL()));
+return elgg_ok_response('', elgg_echo('entity:delete:success', [$title]), get_input('forward', $question->getURL()));
