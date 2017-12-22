@@ -189,7 +189,7 @@ function questions_filter_menu_handler($hook, $type, $items, $params) {
 			'priority' => 700,
 		]);
 
-		if ($page_owner instanceof ElggGroup) {
+		if ($page_owner instanceof ElggGroup && questions_is_expert($page_owner)) {
 			$items[] = ElggMenuItem::factory([
 				'name' => 'todo_group',
 				'text' => elgg_echo('questions:menu:filter:todo_group'),
