@@ -478,6 +478,13 @@ function questions_can_answer_question(ElggQuestion $question, ElggUser $user = 
 	$container = $question->getContainerEntity();
 	
 	if (!questions_experts_enabled()) {
+		
+		if (!$container instanceof ElggGroup) {
+			// personal question, anybody can answer
+			return true;
+		}
+		
+		// only group members can answer
 		return questions_can_ask_question($container, $user);
 	}
 	
