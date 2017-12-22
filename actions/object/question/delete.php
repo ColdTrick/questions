@@ -1,33 +1,30 @@
 <?php
 
 $guid = (int) get_input('guid');
-
-elgg_entity_gatekeeper($guid, 'object', ElggQuestion::SUBTYPE);
 $question = get_entity($guid);
+if (!$question instanceof ElggQuestion) {
+	return elgg_error_response(elgg_echo('entity:delete:item_not_found'));
+}
 
-if (!$question->canEdit()) {
-	register_error(elgg_echo('actionunauthorized'));
-	forward(REFERER);
+if (!$question->canDelete()) {
+	return elgg_error_response(elgg_echo('entity:delete:permission_denied'));
 }
 
 $container = $question->getContainerEntity();
 
 $title = $question->getDisplayName();
 
-if ($question->delete()) {
-	system_message(elgg_echo('entity:delete:success', [$title]));
-} else {
-	register_error(elgg_echo('entity:delete:fail', [$title]));
-	forward(REFERER);
+if (!$question->delete()) {
+	return elgg_error_response(elgg_echo('entity:delete:fail', [$title]));
 }
 
 $forward = get_input('forward');
-if (!empty($forward)) {
-	forward($forward);
-} elseif ($container instanceof ElggUser) {
-	forward("questions/owner/{$container->username}");
-} elseif ($container instanceof ElggGroup) {
-	forward("questions/group/{$container->getGUID()}/all");
+if (empty($forward)) {
+	if ($container instanceof ElggUser) {
+		$forward = "questions/owner/{$container->username}";
+	} elseif ($container instanceof ElggGroup) {
+		$forward = "questions/group/{$container->getGUID()}/all";
+	}
 }
 
-forward();
+return elgg_ok_response('', elgg_echo('entity:delete:success', [$title]), $forward);

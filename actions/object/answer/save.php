@@ -9,38 +9,36 @@ if (empty($guid)) {
 	$answer = new ElggAnswer();
 	$adding = true;
 } else {
-	elgg_entity_gatekeeper($guid, 'object', 'answer');
 	$answer = get_entity($guid);
-}
-
-$editing = !$adding;
-
-if ($editing && !$answer->canEdit()) {
-	register_error(elgg_echo('actionunauthorized'));
-	forward(REFERER);
+	if (!$answer instanceof ElggAnswer) {
+		return elgg_error_response(elgg_echo('error:missing_data'));
+	}
+	
+	if (!$answer->canEdit()) {
+		return elgg_error_response(elgg_echo('actionunauthorized'));
+	}
 }
 
 $container_guid = (int) get_input('container_guid');
 $description = get_input('description');
 
 if (empty($container_guid) || empty($description)) {
-	register_error(elgg_echo('questions:action:answer:save:error:body', [$container_guid, $description]));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('questions:action:answer:save:error:body', [$container_guid, $description]));
 }
 
 if ($adding && !can_write_to_container(0, $container_guid, 'object', 'answer')) {
-	register_error(elgg_echo('questions:action:answer:save:error:container'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('questions:action:answer:save:error:container'));
 }
 
-elgg_entity_gatekeeper($container_guid, 'object', ElggQuestion::SUBTYPE);
 $question = get_entity($container_guid);
+if (!$question instanceof ElggQuestion) {
+	return elgg_error_response(elgg_echo('actionunauthorized'));
+}
 
 if ($question->getStatus() != 'open') {
 	elgg_clear_sticky_form('answer');
 	
-	register_error(elgg_echo('questions:action:answer:save:error:question_closed'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('questions:action:answer:save:error:question_closed'));
 }
 
 $answer->description = $description;
@@ -65,10 +63,9 @@ try {
 		]);
 	}
 } catch (Exception $e) {
-	register_error(elgg_echo('questions:action:answer:save:error:save'));
-	register_error($e->getMessage());
+	return elgg_error_response(elgg_echo('questions:action:answer:save:error:save'));
 }
 
 elgg_clear_sticky_form('answer');
 
-forward(get_input('forward', $answer->getURL()));
+return elgg_ok_response('', elgg_echo('save:success'), get_input('forward', $answer->getURL()));
