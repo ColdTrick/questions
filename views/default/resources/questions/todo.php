@@ -17,7 +17,7 @@ if (!empty($group_guid)) {
 	if ($group instanceof ElggGroup) {
 		// make sure the user is an expert of this group
 		if (!questions_is_expert($group)) {
-			forward('questions/all');
+			forward("questions/group/{$group->guid}/all");
 		}
 		$page_owner = $group;
 		elgg_push_breadcrumb($group->name, "questions/group/{$group->getGUID()}/all");
