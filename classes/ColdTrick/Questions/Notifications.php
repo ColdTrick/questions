@@ -24,7 +24,7 @@ class Notifications {
 		$recipient = elgg_extract('recipient', $params);
 		$language = elgg_extract('language', $params);
 		
-		if (!($event instanceof \Elgg\Notifications\Event) || !($recipient instanceof \ElggUser)) {
+		if (!($event instanceof \Elgg\Notifications\NotificationEvent) || !($recipient instanceof \ElggUser)) {
 			return;
 		}
 		
@@ -62,7 +62,7 @@ class Notifications {
 		$recipient = elgg_extract('recipient', $params);
 		$language = elgg_extract('language', $params);
 		
-		if (!($event instanceof \Elgg\Notifications\Event) || !($recipient instanceof \ElggUser)) {
+		if (!($event instanceof \Elgg\Notifications\NotificationEvent) || !($recipient instanceof \ElggUser)) {
 			return;
 		}
 		
@@ -100,7 +100,7 @@ class Notifications {
 		$recipient = elgg_extract('recipient', $params);
 		$language = elgg_extract('language', $params);
 		
-		if (!($event instanceof \Elgg\Notifications\Event) || !($recipient instanceof \ElggUser)) {
+		if (!($event instanceof \Elgg\Notifications\NotificationEvent) || !($recipient instanceof \ElggUser)) {
 			return;
 		}
 		
@@ -141,7 +141,7 @@ class Notifications {
 		$recipient = elgg_extract('recipient', $params);
 		$language = elgg_extract('language', $params);
 		
-		if (!($event instanceof \Elgg\Notifications\Event) || !($recipient instanceof \ElggUser)) {
+		if (!($event instanceof \Elgg\Notifications\NotificationEvent) || !($recipient instanceof \ElggUser)) {
 			return;
 		}
 		
@@ -179,7 +179,7 @@ class Notifications {
 		}
 		
 		$event = elgg_extract('event', $params);
-		if (!($event instanceof \Elgg\Notifications\Event)) {
+		if (!($event instanceof \Elgg\Notifications\NotificationEvent)) {
 			return;
 		}
 		
@@ -220,7 +220,7 @@ class Notifications {
 	public static function addExpertsToSubscribers($hook, $type, $return_value, $params) {
 		
 		$event = elgg_extract('event', $params);
-		if (!($event instanceof \Elgg\Notifications\Event)) {
+		if (!($event instanceof \Elgg\Notifications\NotificationEvent)) {
 			return;
 		}
 		
@@ -303,7 +303,7 @@ class Notifications {
 	public static function addQuestionOwnerToAnswerSubscribers($hook, $type, $return_value, $params) {
 		
 		$event = elgg_extract('event', $params);
-		if (!($event instanceof \Elgg\Notifications\Event)) {
+		if (!($event instanceof \Elgg\Notifications\NotificationEvent)) {
 			return;
 		}
 		
@@ -363,7 +363,7 @@ class Notifications {
 	public static function addAnswerOwnerToAnswerSubscribers($hook, $type, $return_value, $params) {
 		
 		$event = elgg_extract('event', $params);
-		if (!($event instanceof \Elgg\Notifications\Event)) {
+		if (!($event instanceof \Elgg\Notifications\NotificationEvent)) {
 			return;
 		}
 		
@@ -409,7 +409,7 @@ class Notifications {
 	public static function addQuestionSubscribersToAnswerSubscribers($hook, $type, $return_value, $params) {
 		
 		$event = elgg_extract('event', $params);
-		if (!($event instanceof \Elgg\Notifications\Event)) {
+		if (!($event instanceof \Elgg\Notifications\NotificationEvent)) {
 			return;
 		}
 		
