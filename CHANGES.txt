@@ -1,6 +1,13 @@
 Version history
 ===============
 
+5.4 (2018-01-11):
+
+- changed: moved event handlers to classes
+- fixed: don't show todo tabs if experts not enabled
+- fixed: unable to assign site experts
+- fixed: users can't answer personal questions when experts disabled
+
 5.3 (2017-11-29):
 
 - added: Spanish translation
