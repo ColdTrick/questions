@@ -550,7 +550,7 @@ function questions_daily_cron_handler($hook, $type, $returnvalue, $params) {
 		// is there content in the message
 		if (!empty($message)) {
 			// force to email
-			notify_user($expert->getGUID(), $site->getGUID(), $subject, $message, null, 'email');
+			notify_user($expert->getGUID(), $site->getGUID(), $subject, $message, [], 'email');
 		}
 	}
 	
