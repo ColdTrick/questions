@@ -3,7 +3,7 @@
 	"description": "Q&A functionality analagous to Quora, Stack Overflow, or Facebook Questions",
 	"type": "elgg-plugin",
 	"keywords": ["elgg", "plugin"],
-	"license": "GPL-2.0",
+	"license": "GPL-2.0-only",
 	"support": {
 		"source": "https://github.com/ColdTrick/questions",
 		"issues": "https://github.com/ColdTrick/questions/issues"
