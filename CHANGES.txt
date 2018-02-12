@@ -1,6 +1,10 @@
 Version history
 ===============
 
+5.4.1 (2018-02-12):
+
+- fixed: incorrect params notifying a user
+
 5.4 (2018-01-11):
 
 - changed: moved event handlers to classes
