@@ -189,7 +189,7 @@ function questions_filter_menu_handler($hook, $type, $items, $params) {
 			'priority' => 700,
 		]);
 
-		if ($page_owner instanceof ElggGroup) {
+		if ($page_owner instanceof ElggGroup && questions_is_expert($page_owner)) {
 			$items[] = ElggMenuItem::factory([
 				'name' => 'todo_group',
 				'text' => elgg_echo('questions:menu:filter:todo_group'),
@@ -228,10 +228,6 @@ function questions_filter_menu_handler($hook, $type, $items, $params) {
  */
 function questions_user_hover_menu_handler($hook, $type, $items, $params) {
 	
-	if (empty($params) || !is_array($params)) {
-		return;
-	}
-	
 	// are experts enabled
 	if (!questions_experts_enabled()) {
 		return;
@@ -239,7 +235,7 @@ function questions_user_hover_menu_handler($hook, $type, $items, $params) {
 	
 	// get the user for this menu
 	$user = elgg_extract('entity', $params);
-	if (empty($user) || !($user instanceof ElggUser)) {
+	if (!$user instanceof ElggUser) {
 		return;
 	}
 	
@@ -256,17 +252,21 @@ function questions_user_hover_menu_handler($hook, $type, $items, $params) {
 	}
 	
 	$text = elgg_echo('questions:menu:user_hover:make_expert');
-	$confirm_text = elgg_echo('questions:menu:user_hover:make_expert:confirm', [$page_owner->name]);
+	$confirm_text = elgg_echo('questions:menu:user_hover:make_expert:confirm', [$page_owner->getDisplayName()]);
 	if (check_entity_relationship($user->getGUID(), QUESTIONS_EXPERT_ROLE, $page_owner->getGUID())) {
 		$text = elgg_echo('questions:menu:user_hover:remove_expert');
-		$confirm_text = elgg_echo('questions:menu:user_hover:remove_expert:confirm', [$page_owner->name]);
+		$confirm_text = elgg_echo('questions:menu:user_hover:remove_expert:confirm', [$page_owner->getDisplayName()]);
 	}
 	
 	$items[] = ElggMenuItem::factory([
 		'name' => 'questions_expert',
 		'text' => $text,
-		'href' => "action/questions/toggle_expert?user_guid={$user->getGUID()}&guid={$page_owner->getGUID()}",
+		'href' => elgg_http_add_url_query_elements('action/questions/toggle_expert', [
+			'user_guid' => $user->guid,
+			'guid' => $page_owner->guid,
+		]),
 		'confirm' => $confirm_text,
+		'section' => ($page_owner instanceof ElggSite) ? 'admin' : 'default',
 	]);
 	
 	return $items;
@@ -550,7 +550,7 @@ function questions_daily_cron_handler($hook, $type, $returnvalue, $params) {
 		// is there content in the message
 		if (!empty($message)) {
 			// force to email
-			notify_user($expert->getGUID(), $site->getGUID(), $subject, $message, null, 'email');
+			notify_user($expert->getGUID(), $site->getGUID(), $subject, $message, [], 'email');
 		}
 	}
 	

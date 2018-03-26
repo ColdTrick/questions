@@ -6,7 +6,6 @@
 define('QUESTIONS_EXPERT_ROLE', 'questions_expert');
 
 require_once(dirname(__FILE__) . '/lib/functions.php');
-require_once(dirname(__FILE__) . '/lib/events.php');
 require_once(dirname(__FILE__) . '/lib/hooks.php');
 
 elgg_register_event_handler('init', 'system', 'questions_init');
@@ -83,8 +82,7 @@ function questions_init() {
 	elgg_register_plugin_hook_handler('supported_types', 'entity_tools', '\ColdTrick\Questions\MigrateQuestions::supportedSubtypes');
 	
 	// events
-	elgg_register_event_handler('leave', 'group', 'questions_leave_group_handler');
-	elgg_register_event_handler('delete', 'relationship', 'questions_leave_site_handler');
+	elgg_register_event_handler('leave', 'group', '\ColdTrick\Questions\Groups::leave');
 	elgg_register_event_handler('update:after', 'object', '\ColdTrick\Questions\Access::updateQuestion');
 	elgg_register_event_handler('upgrade', 'system', '\ColdTrick\Questions\Upgrade::setStatusOnQuestions');
 	

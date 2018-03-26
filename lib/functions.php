@@ -57,7 +57,10 @@ function questions_experts_only_answer() {
  * @return bool
  */
 function questions_is_expert(ElggEntity $container = null, ElggUser $user = null) {
-	$result = false;
+	
+	if (!questions_experts_enabled()) {
+		return false;
+	}
 	
 	// make sure we have a user
 	if (!($user instanceof ElggUser)) {
@@ -74,33 +77,25 @@ function questions_is_expert(ElggEntity $container = null, ElggUser $user = null
 		}
 		
 		if (($container instanceof ElggSite) || ($container instanceof ElggGroup)) {
-			if (check_entity_relationship($user->getGUID(), QUESTIONS_EXPERT_ROLE, $container->getGUID())) {
+			if (check_entity_relationship($user->guid, QUESTIONS_EXPERT_ROLE, $container->guid)) {
 				// user has the expert role
-				$result = true;
+				return true;
 			}
 		}
 	} else {
 		$expert_options =[
 			'count' => true,
 			'relationship' => QUESTIONS_EXPERT_ROLE,
-			'relationship_guid' => $user->getGUID(),
+			'relationship_guid' => $user->guid,
 		];
 		
 		if (elgg_get_entities_from_relationship($expert_options)) {
 			// check if user has any expert relationship with entity on this site
-			$result = true;
-		}
-		
-		if (!$result) {
-			// added specific check for Subsite Manager plugin where site has no current site entity set as entity_guid
-			if (check_entity_relationship($user->getGUID(), QUESTIONS_EXPERT_ROLE, elgg_get_site_entity()->getGUID())) {
-				// user has the expert role for this site
-				$result = true;
-			}
+			return true;
 		}
 	}
-		
-	return $result;
+	
+	return false;
 }
 
 /**
@@ -432,6 +427,10 @@ function questions_can_ask_question(ElggEntity $container = null, ElggUser $user
 		$container = elgg_get_page_owner_entity();
 	}
 	
+	if (empty($container)) {
+		return false;
+	}
+	
 	// default to current user
 	if (!($user instanceof ElggUser)) {
 		$user = elgg_get_logged_in_user_entity();
@@ -442,27 +441,7 @@ function questions_can_ask_question(ElggEntity $container = null, ElggUser $user
 		return false;
 	}
 	
-	if (!($container instanceof ElggGroup)) {
-		// personal questions
-		return !questions_limited_to_groups();
-	}
-	
-	if ($container->questions_enable !== 'yes') {
-		// group option not enabled
-		return false;
-	}
-	
-	if (!questions_experts_enabled() || ($container->getPrivateSetting('questions_who_can_ask') !== 'experts')) {
-		// no experts enabled, or not limited to experts
-		return $container->canWriteToContainer($user->getGUID(), 'object', ElggQuestion::SUBTYPE);
-	}
-	
-	if (!questions_is_expert($container, $user)) {
-		// limited to expert, and user isn't one
-		return false;
-	}
-	
-	return $container->canWriteToContainer($user->getGUID(), 'object', ElggQuestion::SUBTYPE);
+	return $container->canWriteToContainer($user->guid, 'object', ElggQuestion::SUBTYPE);
 }
 
 /**
@@ -494,6 +473,13 @@ function questions_can_answer_question(ElggQuestion $question, ElggUser $user = 
 	$container = $question->getContainerEntity();
 	
 	if (!questions_experts_enabled()) {
+		
+		if (!$container instanceof ElggGroup) {
+			// personal question, anybody can answer
+			return true;
+		}
+		
+		// only group members can answer
 		return questions_can_ask_question($container, $user);
 	}
 	

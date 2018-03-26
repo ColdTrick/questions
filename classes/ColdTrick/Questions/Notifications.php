@@ -24,7 +24,7 @@ class Notifications {
 		$recipient = elgg_extract('recipient', $params);
 		$language = elgg_extract('language', $params);
 		
-		if (!($event instanceof \Elgg\Notifications\Event) || !($recipient instanceof \ElggUser)) {
+		if (!($event instanceof \Elgg\Notifications\NotificationEvent) || !($recipient instanceof \ElggUser)) {
 			return;
 		}
 		
@@ -62,7 +62,7 @@ class Notifications {
 		$recipient = elgg_extract('recipient', $params);
 		$language = elgg_extract('language', $params);
 		
-		if (!($event instanceof \Elgg\Notifications\Event) || !($recipient instanceof \ElggUser)) {
+		if (!($event instanceof \Elgg\Notifications\NotificationEvent) || !($recipient instanceof \ElggUser)) {
 			return;
 		}
 		
@@ -100,7 +100,7 @@ class Notifications {
 		$recipient = elgg_extract('recipient', $params);
 		$language = elgg_extract('language', $params);
 		
-		if (!($event instanceof \Elgg\Notifications\Event) || !($recipient instanceof \ElggUser)) {
+		if (!($event instanceof \Elgg\Notifications\NotificationEvent) || !($recipient instanceof \ElggUser)) {
 			return;
 		}
 		
@@ -141,7 +141,7 @@ class Notifications {
 		$recipient = elgg_extract('recipient', $params);
 		$language = elgg_extract('language', $params);
 		
-		if (!($event instanceof \Elgg\Notifications\Event) || !($recipient instanceof \ElggUser)) {
+		if (!($event instanceof \Elgg\Notifications\NotificationEvent) || !($recipient instanceof \ElggUser)) {
 			return;
 		}
 		
@@ -179,7 +179,7 @@ class Notifications {
 		}
 		
 		$event = elgg_extract('event', $params);
-		if (!($event instanceof \Elgg\Notifications\Event)) {
+		if (!($event instanceof \Elgg\Notifications\NotificationEvent)) {
 			return;
 		}
 		
@@ -220,7 +220,7 @@ class Notifications {
 	public static function addExpertsToSubscribers($hook, $type, $return_value, $params) {
 		
 		$event = elgg_extract('event', $params);
-		if (!($event instanceof \Elgg\Notifications\Event)) {
+		if (!($event instanceof \Elgg\Notifications\NotificationEvent)) {
 			return;
 		}
 		
@@ -303,7 +303,7 @@ class Notifications {
 	public static function addQuestionOwnerToAnswerSubscribers($hook, $type, $return_value, $params) {
 		
 		$event = elgg_extract('event', $params);
-		if (!($event instanceof \Elgg\Notifications\Event)) {
+		if (!($event instanceof \Elgg\Notifications\NotificationEvent)) {
 			return;
 		}
 		
@@ -326,21 +326,10 @@ class Notifications {
 			return;
 		}
 		
+		/* @var $owner \ElggUser */
 		$owner = $question->getOwnerEntity();
 		
-		$methods = get_user_notification_settings($owner->getGUID());
-		if (empty($methods)) {
-			return;
-		}
-		
-		$filtered_methods = [];
-		foreach ($methods as $method => $value) {
-			if (empty($value)) {
-				continue;
-			}
-			$filtered_methods[] = $method;
-		}
-		
+		$filtered_methods = self::getEnabledNotificationSettings($owner);
 		if (empty($filtered_methods)) {
 			return;
 		}
@@ -363,7 +352,7 @@ class Notifications {
 	public static function addAnswerOwnerToAnswerSubscribers($hook, $type, $return_value, $params) {
 		
 		$event = elgg_extract('event', $params);
-		if (!($event instanceof \Elgg\Notifications\Event)) {
+		if (!($event instanceof \Elgg\Notifications\NotificationEvent)) {
 			return;
 		}
 		
@@ -372,21 +361,10 @@ class Notifications {
 			return;
 		}
 		
+		/* @var $owner \ElggUser */
 		$owner = $answer->getOwnerEntity();
 		
-		$methods = get_user_notification_settings($owner->getGUID());
-		if (empty($methods)) {
-			return;
-		}
-		
-		$filtered_methods = [];
-		foreach ($methods as $method => $value) {
-			if (empty($value)) {
-				continue;
-			}
-			$filtered_methods[] = $method;
-		}
-		
+		$filtered_methods = self::getEnabledNotificationSettings($owner);
 		if (empty($filtered_methods)) {
 			return;
 		}
@@ -409,7 +387,7 @@ class Notifications {
 	public static function addQuestionSubscribersToAnswerSubscribers($hook, $type, $return_value, $params) {
 		
 		$event = elgg_extract('event', $params);
-		if (!($event instanceof \Elgg\Notifications\Event)) {
+		if (!($event instanceof \Elgg\Notifications\NotificationEvent)) {
 			return;
 		}
 		
@@ -429,5 +407,34 @@ class Notifications {
 		}
 		
 		return ($return_value + $subscribers);
+	}
+	
+	/**
+	 * Return the active notifiaction methods of a user
+	 *
+	 * @param \ElggUser $user the user to check
+	 *
+	 * @return string[]
+	 */
+	protected static function getEnabledNotificationSettings(\ElggUser $user) {
+		
+		if (!$user instanceof \ElggUser) {
+			return [];
+		}
+		
+		$methods = $user->getNotificationSettings();
+		if (empty($methods)) {
+			return [];
+		}
+		
+		$filtered_methods = [];
+		foreach ($methods as $method => $value) {
+			if (empty($value)) {
+				continue;
+			}
+			$filtered_methods[] = $method;
+		}
+		
+		return $filtered_methods;
 	}
 }

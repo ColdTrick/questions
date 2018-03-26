@@ -6,37 +6,36 @@ $guid = (int) get_input('guid');
 if (empty($guid)) {
 	$question = new ElggQuestion();
 } else {
-	elgg_entity_gatekeeper($guid, 'object', 'question');
 	$question = get_entity($guid);
+	if (!$question instanceof ElggQuestion) {
+		return elgg_error_response(elgg_echo('error:missing_data'));
+	}
+	
+	if (!$question->canEdit()) {
+		return elgg_error_response(elgg_echo('actionunauthorized'));
+	}
 }
 
 $adding = !$question->getGUID();
 $editing = !$adding;
 $moving = false;
 
-if ($editing && !$question->canEdit()) {
-	register_error(elgg_echo('actionunauthorized'));
-	forward(REFERER);
-}
-
 $container_guid = (int) get_input('container_guid');
 if (empty($container_guid)) {
-	$container_guid = (int) $question->getOwnerGUID();
+	$container_guid = (int) $question->owner_guid;
 }
 
-if ($editing && ($container_guid != $question->getContainerGUID())) {
+if ($editing && ($container_guid !== $question->container_guid)) {
 	$moving = true;
 }
 
 $container = get_entity($container_guid);
 if ($adding && !questions_can_ask_question($container)) {
-	register_error(elgg_echo('questions:action:question:save:error:container'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('questions:action:question:save:error:container'));
 }
 
 if (questions_limited_to_groups() && ($container_guid == $question->getOwnerGUID())) {
-	register_error(elgg_echo('questions:action:question:save:error:limited_to_groups'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('questions:action:question:save:error:limited_to_groups'));
 }
 
 $title = get_input('title');
@@ -46,8 +45,7 @@ $access_id = (int) get_input('access_id');
 $comments_enabled = get_input('comments_enabled');
 
 if (empty($container_guid) || empty($title)) {
-	register_error(elgg_echo('questions:action:question:save:error:body', [$container_guid, $title]));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('questions:action:question:save:error:body', [$container_guid, $title]));
 }
 
 // make sure we have a valid access_id
@@ -86,9 +84,7 @@ try {
 		elgg_trigger_event('move', 'object', $question);
 	}
 } catch (Exception $e) {
-	register_error(elgg_echo('questions:action:question:save:error:save'));
-	register_error($e->getMessage());
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('questions:action:question:save:error:save'));
 }
 
 elgg_clear_sticky_form('question');
@@ -101,4 +97,4 @@ if (!$adding) {
 	$forward_url = "questions/group/{$container->getGUID()}/all";
 }
 
-forward($forward_url);
+return elgg_ok_response('', elgg_echo('save:success'), $forward_url);

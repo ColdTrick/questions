@@ -75,7 +75,7 @@ if (!empty($marked_answer)) {
 }
 
 if (!empty($answers)) {
-	$content .= elgg_view_module('info', "{$count} " . elgg_echo('answers'), $answers, [
+	$content .= elgg_view_module('info', elgg_echo('answers') . " ({$count})", $answers, [
 		'class' => 'mtm',
 		'id' => 'question-answers',
 	]);
