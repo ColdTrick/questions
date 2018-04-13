@@ -26,9 +26,7 @@ switch ($widget->context) {
 		
 		$options['owner_guid'] = $widget->getOwnerGUID();
 		break;
-	case 'dashboard':
-		$base_url = "questions/owner/{$widget->getOwnerEntity()->username}";
-		
+	case 'dashboard':		
 		$type = $widget->content_type;
 		if (($type == 'todo') && !questions_is_expert()) {
 			$type = 'mine';
@@ -89,6 +87,7 @@ switch ($widget->context) {
 				break;
 			case 'mine':
 			default:
+				$base_url = "questions/owner/{$widget->getOwnerEntity()->username}";
 				$options['owner_guid'] = $widget->getOwnerGUID();
 				break;
 		}
