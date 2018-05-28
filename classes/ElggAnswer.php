@@ -58,6 +58,24 @@ class ElggAnswer extends ElggObject {
 	}
 	
 	/**
+	 * {@inheritDoc}
+	 */
+	public function delete($recursive = true) {
+		
+		// make sure the question gets reopened
+		if ($this->getCorrectAnswerMetadata()) {
+			// only if this is the correct answer
+			$ia = elgg_set_ignore_access(true);
+			
+			$this->undoMarkAsCorrect();
+			
+			elgg_set_ignore_access($ia);
+		}
+		
+		return parent::delete($recursive);
+	}
+	
+	/**
 	 * Get the metadata object for the correct answer
 	 *
 	 * @return false|ElggMetadata
