@@ -1,6 +1,10 @@
 Version history
 ===============
 
+5.4.2 (2018-05-31):
+
+- fixed: removing correct answer no reopens the question
+
 5.4.1 (2018-02-12):
 
 - fixed: incorrect params notifying a user
