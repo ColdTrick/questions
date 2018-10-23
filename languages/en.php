@@ -185,8 +185,8 @@ To view the question, click here:
 	 * Widgets
 	 */
 
-	'widget:questions:title' => "Questions",
-	'widget:questions:description' => "You can view the status of your questions.",
+	'widgets:questions:name' => "Questions",
+	'widgets:questions:description' => "You can view the status of your questions.",
 	'widget:questions:content_type' => "Which questions to show",
 	'widget:questions:more' => "View more questions",
 		

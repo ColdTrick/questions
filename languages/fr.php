@@ -184,8 +184,8 @@ Pour répondre, visitez:
 	 * Widgets
 	 */
 
-	'widget:questions:title' => "Questions",
-	'widget:questions:description' => "Vous pouvez regarder l'état de vos questions.",
+	'widgets:questions:name' => "Questions",
+	'widgets:questions:description' => "Vous pouvez regarder l'état de vos questions.",
 	'widget:questions:content_type' => "Quelles questions à montrer",
 	'widget:questions:more' => "Voir plus de questions",
 

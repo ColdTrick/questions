@@ -185,8 +185,8 @@ Para ver la pregunta, ingresa en:
 	 * Widgets
 	 */
 
-	'widget:questions:title' => "Preguntas",
-	'widget:questions:description' => "Puedes ver el estado de tus preguntas.",
+	'widgets:questions:name' => "Preguntas",
+	'widgets:questions:description' => "Puedes ver el estado de tus preguntas.",
 	'widget:questions:content_type' => "Qué preguntas mostrar",
 	'widget:questions:more' => "Ver mas preguntas",
 
