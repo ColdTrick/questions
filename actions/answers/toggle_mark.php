@@ -14,7 +14,7 @@ if (!$entity instanceof ElggAnswer) {
 }
 
 // are you allowed to mark answers as correct
-if (!questions_can_mark_answer($entity)) {
+if (!$entity->canMarkAnswer()) {
 	return elgg_error_response(elgg_echo('questions:action:answer:toggle_mark:error:not_allowed'));
 }
 

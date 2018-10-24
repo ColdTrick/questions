@@ -52,7 +52,7 @@ class Menus {
 			return;
 		}
 						
-		if (!questions_can_mark_answer($entity)) {
+		if (!$entity->canMarkAnswer()) {
 			return;
 		}
 		

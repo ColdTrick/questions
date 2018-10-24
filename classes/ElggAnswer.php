@@ -104,6 +104,44 @@ class ElggAnswer extends ElggObject {
 	}
 	
 	/**
+	 * Check if the user can mark this answer as the correct one
+	 *
+	 * @param \ElggUser $user user to check the ability for
+	 *
+	 * @return bool
+	 */
+	public function canMarkAnswer(\ElggUser $user = null) {
+		
+		// check if we have a user
+		if (empty($user) || !($user instanceof ElggUser)) {
+			$user = elgg_get_logged_in_user_entity();
+		}
+		
+		if (empty($user)) {
+			return false;
+		}
+		
+		$container = $this->getContainerEntity();
+		
+		// are experts enabled
+		if (!questions_experts_enabled()) {
+			// no, so only question owner can mark
+			return ($user->guid === $container->getOwnerGUID());
+		}
+		
+		// are only experts allowed to mark
+		if (elgg_get_plugin_setting('experts_mark', 'questions') !== 'yes') {
+			// no, so the owner of a question can also mark
+			if ($user->getGUID() == $container->getOwnerGUID()) {
+				return true;
+			}
+		}
+		
+		// is the user an expert
+		return questions_is_expert($container->getContainerEntity(), $user);
+	}
+	
+	/**
 	 * Mark an answer as the correct answer for this question
 	 *
 	 * @return void

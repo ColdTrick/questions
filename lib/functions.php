@@ -95,63 +95,6 @@ function questions_is_expert(ElggEntity $container = null, ElggUser $user = null
 }
 
 /**
- * Check if the user can mark this answer as the correct one
- *
- * @param ElggAnswer $entity the answer to check
- * @param ElggUser   $user   the use who is wants to do the action (defaults to current user)
- *
- * @return bool
- */
-function questions_can_mark_answer(ElggAnswer $entity, ElggUser $user = null) {
-	$result = false;
-	static $experts_only;
-	
-	// check if we have a user
-	if (empty($user) || !($user instanceof ElggUser)) {
-		$user = elgg_get_logged_in_user_entity();
-	}
-	
-	if (empty($user) || empty($entity) || !($entity instanceof ElggAnswer)) {
-		return false;
-	}
-	
-	$container = $entity->getContainerEntity();
-	
-	// are experts enabled
-	if (!questions_experts_enabled()) {
-		// no, so only question owner can mark
-		if ($user->getGUID() == $container->getOwnerGUID()) {
-			$result = true;
-		}
-	} else {
-		// get plugin setting for who can mark the answer
-		if (!isset($experts_only)) {
-			$experts_only = false;
-			
-			$setting = elgg_get_plugin_setting('experts_mark', 'questions');
-			if ($setting == 'yes') {
-				$experts_only = true;
-			}
-		}
-		
-		// are only experts allowed to mark
-		if (!$experts_only) {
-			// no, so the owner of a question can also mark
-			if ($user->getGUID() == $container->getOwnerGUID()) {
-				$result = true;
-			}
-		}
-		
-		// is the user an expert
-		if (!$result && questions_is_expert($container->getContainerEntity(), $user)) {
-			$result = true;
-		}
-	}
-	
-	return $result;
-}
-
-/**
  * Make sure the provided access_id is valid for this container
  *
  * @param int $access_id      the current access_id
