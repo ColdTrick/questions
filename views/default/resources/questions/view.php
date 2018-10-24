@@ -1,4 +1,6 @@
 <?php
+use Elgg\Database\Clauses\OrderByClause;
+
 /**
  * View a question
  *
@@ -10,11 +12,13 @@ $guid = (int) elgg_extract('guid', $vars);
 elgg_entity_gatekeeper($guid, 'object', 'question');
 $question = get_entity($guid);
 
+elgg_push_breadcrumb(elgg_echo('questions'), 'questions/all');
+
 // set page owner
 $page_owner = $question->getContainerEntity();
 
 // set breadcrumb
-$crumbs_title = $page_owner->name;
+$crumbs_title = $page_owner->getDisplayName();
 
 if ($page_owner instanceof ElggGroup) {
 	elgg_push_breadcrumb($crumbs_title, "questions/group/{$page_owner->guid}");
@@ -56,15 +60,17 @@ if (!empty($marked_answer)) {
 if (elgg_is_active_plugin('likes')) {
 	// order answers based on likes
 	$dbprefix = elgg_get_config('dbprefix');
-	$likes_id = elgg_get_metastring_id('likes');
 	
 	$options['selects'] = [
-		"(SELECT count(a.name_id) AS likes_count
+		"(SELECT count(a.name) AS likes_count
 		FROM {$dbprefix}annotations a
 		WHERE a.entity_guid = e.guid
-		AND a.name_id = {$likes_id}) AS likes_count",
+		AND a.name = 'likes') AS likes_count",
 	];
-	$options['order_by'] = 'likes_count desc, e.time_created asc';
+	$options['order_by'] = [
+		new OrderByClause('likes_count', 'DESC'),
+		new OrderByClause('e.time_created', 'ASC'),
+	];
 }
 
 $answers .= elgg_list_entities($options);
@@ -84,7 +90,7 @@ if (!empty($answers)) {
 // add answer form
 if (($question->getStatus() === 'open') && $question->canWriteToContainer(0, 'object', 'answer')) {
 	
-	$add_form = elgg_view_form('object/answer/add', [], ['container_guid' => $question->getGUID()]);
+	$add_form = elgg_view_form('object/answer/add', ['action' => elgg_generate_action_url('object/answer/edit', [], false)], ['container_guid' => $question->getGUID()]);
 	
 	$content .= elgg_view_module('info', elgg_echo('answers:addyours'), $add_form);
 } elseif ($question->getStatus() === 'closed') {

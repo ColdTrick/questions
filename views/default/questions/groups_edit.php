@@ -14,7 +14,7 @@ if ($group->questions_enable !== 'yes') {
 }
 
 // default solution time
-if (questions_can_groups_set_solution_time()) {
+if (elgg_get_plugin_setting('solution_time_group', 'questions') === 'yes') {
 	$solution_time = questions_get_solution_time($group);
 	$solution = [];
 	$solution[] = elgg_echo('questions:settings:general:solution_time');

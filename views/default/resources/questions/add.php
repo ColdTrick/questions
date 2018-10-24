@@ -7,9 +7,9 @@
 
 elgg_gatekeeper();
 
-$title = elgg_echo('questions:add');
+elgg_push_breadcrumb(elgg_echo('questions'), 'questions/all');
 
-elgg_push_breadcrumb($title);
+$title = elgg_echo('questions:add');
 
 $form_vars = [];
 if (questions_limited_to_groups()) {
@@ -18,10 +18,9 @@ if (questions_limited_to_groups()) {
 $body_vars = questions_prepare_question_form_vars();
 $content = elgg_view_form('object/question/save', $form_vars, $body_vars);
 
-$body = elgg_view_layout('content', [
+$body = elgg_view_layout('default', [
 	'title' => $title,
 	'content' => $content,
-	'filter' => '',
 ]);
 
 echo elgg_view_page($title, $body);

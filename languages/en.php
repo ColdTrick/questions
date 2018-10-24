@@ -7,8 +7,11 @@ return [
 	/**
 	 * General stuff
 	 */
-	'item:object:answer' => "Answers",
-	'item:object:question' => "Questions",
+	'item:object:answer' => "Answer",
+	'item:object:question' => "Question",
+	
+	'collection:object:question' => "Questions",
+	'collection:object:answer' => "Answers",
 	
 	// admin
 	'admin:upgrades:set_question_status' => "Set status on all questions",
@@ -30,11 +33,12 @@ return [
 	'questions:menu:filter:experts' => "Experts",
 	'questions:menu:filter:tags' => "Tags: %s",
 	
-	'river:create:object:question' => '%s asked question %s',
+	'river:object:question:create' => '%s asked question %s',
 	'river:create:object:answer' => '%s provided an answer for the question %s',
 		
 	'questions' => 'Questions',
 	'questions:asked' => 'Asked by %s',
+	'questions:marked:correct' => 'Correct answer provided',
 	'questions:answered' => 'Last answered by %s %s',
 	'questions:answered:correct' => 'Correct answer provided by %s %s',
 
@@ -134,7 +138,7 @@ To view the question, click here:
 	 * answers
 	 */
 	'questions:answer:edit' => "Update answer",
-	'questions:answer:checkmark:title' => "%s marked this as the correct answer on %s",
+	'questions:answer:checkmark:title' => "Marked as the correct answer on %s",
 	
 	'questions:search:answer:title' => "Answer",
 	

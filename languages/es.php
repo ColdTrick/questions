@@ -30,7 +30,7 @@ return [
 	'questions:menu:filter:experts' => "Expertos",
 	'questions:menu:filter:tags' => "Etiquetas: %s",
 
-	'river:create:object:question' => '%s preguntó %s',
+	'river:object:question:create' => '%s preguntó %s',
 	'river:create:object:answer' => '%s compartió una respuesta a la pregunta %s',
 
 	'questions' => 'Preguntas',
@@ -134,7 +134,6 @@ Para ver la pregunta, ingresa en:
 	 * answers
 	 */
 	'questions:answer:edit' => "Editar respuesta",
-	'questions:answer:checkmark:title' => "%s marcó esta respuesta como la correcta para la pregunta %s",
 
 	'questions:search:answer:title' => "Respuesta",
 

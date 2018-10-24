@@ -3,6 +3,8 @@
 namespace ColdTrick\Questions;
 
 use Elgg\DefaultPluginBootstrap;
+use ElggQuestion;
+use ElggAnswer;
 
 class Bootstrap extends DefaultPluginBootstrap {
 	
@@ -12,7 +14,6 @@ class Bootstrap extends DefaultPluginBootstrap {
 	public function init() {
 		
 		require_once(self::plugin()->getPath() . '/lib/functions.php');
-		require_once(self::plugin()->getPath() . '/lib/hooks.php');
 		
 		// extend CSS/JS
 		elgg_extend_view('css/elgg', 'css/questions/site.css');
@@ -20,6 +21,7 @@ class Bootstrap extends DefaultPluginBootstrap {
 		
 		elgg_register_menu_item('site', [
 			'name' => 'questions',
+			'icon' => 'question',
 			'text' => elgg_echo('questions'),
 			'href' => 'questions/all',
 		]);
@@ -27,26 +29,26 @@ class Bootstrap extends DefaultPluginBootstrap {
 		elgg_register_plugin_hook_handler('search', 'object:question', '\ColdTrick\Questions\Search::handleQuestionsSearch');
 		elgg_register_plugin_hook_handler('search_params', 'search:combined', '\ColdTrick\Questions\SearchAdvanced::combinedParams');
 		
-		// register page handler for nice urls
-		elgg_register_page_handler('questions', '\ColdTrick\Questions\PageHandler::questions');
-		elgg_register_page_handler('answers', '\ColdTrick\Questions\PageHandler::answers');
-		
 		// register group options
-		add_group_tool_option('questions', elgg_echo('questions:enable'), false);
+		elgg()->group_tools->register('questions', [
+			'label' => elgg_echo('questions:enable'),
+			'default_on' => false,
+		]);
+		
 		elgg_extend_view('groups/tool_latest', 'questions/group_module');
 		
 		elgg_extend_view('groups/edit', 'questions/groups_edit');
 		
 		// plugin hooks
-		elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'questions_owner_block_menu_handler');
-		elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'questions_user_hover_menu_handler');
-		elgg_register_plugin_hook_handler('register', 'menu:entity', 'questions_entity_menu_handler');
-		elgg_register_plugin_hook_handler('register', 'menu:filter', 'questions_filter_menu_handler');
-		elgg_register_plugin_hook_handler('container_permissions_check', 'object', 'questions_container_permissions_handler');
+		elgg_register_plugin_hook_handler('register', 'menu:owner_block', '\ColdTrick\Questions\Menus::registerOwnerBlock');
+		elgg_register_plugin_hook_handler('register', 'menu:user_hover', '\ColdTrick\Questions\Menus::registerUserHover');
+		elgg_register_plugin_hook_handler('register', 'menu:entity', '\ColdTrick\Questions\Menus::registerEntity');
+		elgg_register_plugin_hook_handler('register', 'menu:filter', '\ColdTrick\Questions\Menus::registerFilter');
+		elgg_register_plugin_hook_handler('container_permissions_check', 'object', '\ColdTrick\Questions\Permissions::answerContainer');
 		elgg_register_plugin_hook_handler('container_permissions_check', 'object', '\ColdTrick\Questions\Permissions::questionsContainer');
-		elgg_register_plugin_hook_handler('permissions_check', 'object', 'questions_permissions_handler');
+		elgg_register_plugin_hook_handler('permissions_check', 'object', '\ColdTrick\Questions\Permissions::objectPermissionsCheck');
 		elgg_register_plugin_hook_handler('entity:url', 'object', '\ColdTrick\Questions\WidgetManager::widgetURL');
-		elgg_register_plugin_hook_handler('cron', 'daily', 'questions_daily_cron_handler');
+		elgg_register_plugin_hook_handler('cron', 'daily', '\ColdTrick\Questions\Cron::notifyQuestionExperts');
 		elgg_register_plugin_hook_handler('cron', 'daily', '\ColdTrick\Questions\Cron::autoCloseQuestions');
 		
 		elgg_register_plugin_hook_handler('index_entity_type_subtypes', 'elasticsearch', '\ColdTrick\Questions\Elasticsearch::indexTypes');

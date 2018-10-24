@@ -7,6 +7,8 @@
 
 elgg_gatekeeper();
 
+elgg_push_breadcrumb(elgg_echo('questions'), 'questions/all');
+
 $question_guid = (int) elgg_extract('guid', $vars);
 
 elgg_entity_gatekeeper($question_guid, 'object', 'question');

@@ -5,11 +5,13 @@
  * @package ElggQuestions
  */
 
+elgg_push_breadcrumb(elgg_echo('questions'), 'questions/all');
+
 $group_guid = (int) elgg_extract('group_guid', $vars);
 
 $container = get_entity($group_guid);
 if ($container instanceof ElggGroup) {
-	elgg_push_breadcrumb($container->name, "questions/group/{$container->getGUID()}/all");
+	elgg_push_breadcrumb($container->getDisplayName(), "questions/group/{$container->guid}/all");
 } else {
 	$container = elgg_get_site_entity();
 }
@@ -23,7 +25,7 @@ elgg_push_breadcrumb($title_text);
 // expert description
 if ($container instanceof ElggGroup) {
 	$desciption = elgg_view('output/longtext', [
-		'value' => elgg_echo('questions:experts:description:group', [$container->name]),
+		'value' => elgg_echo('questions:experts:description:group', [$container->getDisplayName()]),
 	]);
 } else {
 	$desciption = elgg_view('output/longtext', [
@@ -32,19 +34,13 @@ if ($container instanceof ElggGroup) {
 }
 
 // expert listing
-$options = [
+$user_list = elgg_list_entities([
 	'type' => 'user',
 	'relationship' => QUESTIONS_EXPERT_ROLE,
-	'relationship_guid' => $container->getGUID(),
+	'relationship_guid' => $container->guid,
 	'inverse_relationship' => true,
-	'full_view' => false,
-];
-$user_list = elgg_list_entities_from_relationship($options);
-if (empty($user_list)) {
-	$user_list = elgg_view('output/longtext', [
-		'value' => elgg_echo('questions:experts:none', [$container->name]),
-	]);
-}
+	'no_results' => elgg_echo('questions:experts:none', [$container->getDisplayName()]),
+]);
 
 // build page
 $page_data = elgg_view_layout('content', [

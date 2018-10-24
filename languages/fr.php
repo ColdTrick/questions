@@ -29,7 +29,7 @@ return [
 	'questions:menu:filter:todo_group' => "Créer Groupe à Faire",
 	'questions:menu:filter:experts' => "Experts",
 
-	'river:create:object:question' => '%s demandés questions %s',
+	'river:object:question:create' => '%s demandés questions %s',
 	'river:create:object:answer' => '%s a fourni une réponse pour question %s',
 
 	'questions' => 'Questions',
@@ -133,7 +133,6 @@ Pour répondre, visitez:
 	 * answers
 	 */
 	'questions:answer:edit' => "Actualiser la réponse",
-	'questions:answer:checkmark:title' => "%s a marqué ceci comme la réponse correcte sur %s",
 
 	'questions:search:answer:title' => "Réponse",
 

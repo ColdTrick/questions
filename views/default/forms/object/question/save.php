@@ -90,8 +90,10 @@ if (!$editing || (questions_experts_enabled() && questions_is_expert($container)
 				'name' => 'questions_enable',
 				'value' => 'yes'
 			],
-			'joins' => ['JOIN ' . elgg_get_config('dbprefix') . 'groups_entity ge ON e.guid = ge.guid'],
-			'order_by' => 'ge.name ASC'
+			'order_by_metadata' => [
+				'name' => 'name',
+				'direction' => 'ASC',
+			],
 		];
 		
 		if (!$editing) {
@@ -104,7 +106,7 @@ if (!$editing || (questions_experts_enabled() && questions_is_expert($container)
 		}
 		
 		// group selector
-		$groups = new ElggBatch('elgg_get_entities_from_relationship', $group_options);
+		$groups = new ElggBatch('elgg_get_entities', $group_options);
 		// build group optgroup
 		$group_optgroup = [];
 		foreach ($groups as $group) {
@@ -120,7 +122,7 @@ if (!$editing || (questions_experts_enabled() && questions_is_expert($container)
 			if ($group->getGUID() === $container->getGUID()) {
 				$selected['selected'] = true;
 			}
-			$group_optgroup[] = elgg_format_element('option', $selected, $group->name);
+			$group_optgroup[] = elgg_format_element('option', $selected, $group->getDisplayName());
 		}
 		
 		if (!empty($group_optgroup)) {
@@ -138,7 +140,7 @@ if (!$editing || (questions_experts_enabled() && questions_is_expert($container)
 			if (!questions_limited_to_groups()) {
 				$selected['value'] = $owner->getGUID();
 				
-				$select_options[] = elgg_format_element('option', $selected, $owner->name);
+				$select_options[] = elgg_format_element('option', $selected, $owner->getDisplayName());
 			} else {
 				$select_options[] = elgg_format_element('option', $selected, elgg_echo('questions:edit:question:container:select'));
 			}

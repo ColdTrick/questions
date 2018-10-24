@@ -11,8 +11,6 @@ elgg_register_title_button('questions', 'add', 'object', ElggQuestion::SUBTYPE);
 $options = [
 	'type' => 'object',
 	'subtype' => 'question',
-	'full_view' => false,
-	'list_type_toggle' => false,
 	'no_results' => elgg_echo('questions:none'),
 ];
 
@@ -31,7 +29,7 @@ if (!empty($tags)) {
 // build content
 $title = elgg_echo('questions:everyone');
 
-$content = elgg_list_entities_from_metadata($options);
+$content = elgg_list_entities($options);
 
 // build page
 $body = elgg_view_layout('content', [

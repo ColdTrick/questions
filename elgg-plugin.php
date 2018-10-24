@@ -7,8 +7,12 @@ define('QUESTIONS_EXPERT_ROLE', 'questions_expert');
 return [
 	'bootstrap' => Bootstrap::class,
 	'settings' => [
-// 		'generate_username_from_email' => 'no',
-		
+		'close_on_marked_answer' => 'no',
+		'solution_time_group' => 'yes',
+		'limit_to_groups' => 'no',
+		'experts_enabled' => 'no',
+		'experts_answer' => 'no',
+		'experts_mark' => 'no',
 	],
 	'entities' => [
 		[
@@ -24,26 +28,62 @@ return [
 		],
 	],
 	'routes' => [
-// 		'action:register' => [
-// 			'path' => '/action/register',
-// 			'file' => Paths::elgg() . 'actions/register.php',
-// 			'walled' => false,
-// 			'middleware' => [
-// 				'\ColdTrick\ProfileManager\Users::validateRegisterAction',
-// 			]
-// 		],
+		'add:object:question' => [
+			'path' => '/questions/add/{guid?}',
+			'resource' => 'questions/add',
+		],
+		'edit:object:question' => [
+			'path' => '/questions/edit/{guid}',
+			'resource' => 'questions/edit',
+		],
+		'add:object:answer' => [
+			'path' => '/answers/add/{guid?}',
+			'resource' => 'answers/add',
+		],
+		'edit:object:answer' => [
+			'path' => '/answers/edit/{guid}',
+			'resource' => 'answers/edit',
+		],
+		'view:object:question' => [
+			'path' => '/questions/view/{guid}/{title?}',
+			'resource' => 'questions/view',
+		],
+		'collection:object:question:todo' => [
+			'path' => '/questions/todo/{group_guid?}',
+			'resource' => 'questions/todo',
+		],
+		'collection:object:question:experts' => [
+			'path' => '/questions/experts/{group_guid?}',
+			'resource' => 'questions/experts',
+		],
+		'collection:object:question:group' => [
+			'path' => '/questions/group/{guid}/{subpage?}',
+			'resource' => 'questions/owner',
+			'defaults' => [
+				'subpage' => 'all',
+			],
+		],
+		'collection:object:question:owner' => [
+			'path' => '/questions/owner/{username?}',
+			'resource' => 'questions/owner',
+		],
+		'collection:object:question:all' => [
+			'path' => '/questions/all',
+			'resource' => 'questions/all',
+		],
+		'default:object:question' => [
+			'path' => '/questions',
+			'resource' => 'questions/all',
+		],
 	],
 	'actions' => [
 		'questions/toggle_expert' => [],
 		'questions/group_settings' => [],
-		'questions/delete' => [],
 		'object/question/move_to_discussions' => [],
 		'object/question/save' => [],
 		
-		'object/answer/add' => [], // mapped to edit
 		'object/answer/edit' => [],
 
-		'answers/delete' => [],
 		'answers/toggle_mark' => [],
 	],
 	'widgets' => [

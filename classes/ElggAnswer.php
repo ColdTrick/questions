@@ -25,7 +25,7 @@ class ElggAnswer extends ElggObject {
 		// get the container/question
 		$container_entity = $this->getContainerEntity();
 		
-		$url = $container_entity->getURL() . "#elgg-object-{$this->getGUID()}";
+		$url = $container_entity->getURL() . "#elgg-object-{$this->guid}";
 		
 		// restore access
 		elgg_set_ignore_access($ia);
@@ -63,7 +63,7 @@ class ElggAnswer extends ElggObject {
 	public function delete($recursive = true) {
 		
 		// make sure the question gets reopened
-		if ($this->getCorrectAnswerMetadata()) {
+		if ($this->isCorrectAnswer()) {
 			// only if this is the correct answer
 			$ia = elgg_set_ignore_access(true);
 			
@@ -83,17 +83,24 @@ class ElggAnswer extends ElggObject {
 	public function getCorrectAnswerMetadata() {
 		$result = false;
 		
-		$options = [
+		$metadata = elgg_get_metadata([
 			'metadata_name' => 'correct_answer',
-			'guid' => $this->getGUID(),
-		];
-		
-		$metadata = elgg_get_metadata($options);
+			'guid' => $this->guid,
+		]);
 		if ($metadata) {
 			$result = $metadata[0];
 		}
 		
 		return $result;
+	}
+	
+	/**
+	 * Is this the correct answer
+	 *
+	 * @return bool
+	 */
+	public function isCorrectAnswer() {
+		return !empty($this->getCorrectAnswerMetadata());
 	}
 	
 	/**
@@ -109,7 +116,7 @@ class ElggAnswer extends ElggObject {
 		elgg_trigger_event('correct', 'object', $this);
 		
 		// depending of the plugin settings, we also need to close the question
-		if (questions_close_on_marked_answer()) {
+		if (elgg_get_plugin_setting('close_on_marked_answer', 'questions') === 'yes') {
 			$question = $this->getContainerEntity();
 			
 			$question->close();

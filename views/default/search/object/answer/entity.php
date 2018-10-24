@@ -32,11 +32,7 @@ if (!$icon) {
 // search results
 $description = $entity->getVolatileData('search_matched_description');
 $extra_info = $entity->getVolatileData('search_matched_extra');
-$url = $entity->getVolatileData('search_url');
-
-if (!$url) {
-	$url = $entity->getURL();
-}
+$url = $entity->getVolatileData('search_url') ?: $entity->getURL();
 
 // make title
 $answer_link = elgg_view('output/url', [
@@ -56,7 +52,7 @@ $title = elgg_echo('generic_comment:on', [$answer_link, $question_link]);
 $question_container = $question->getContainerEntity();
 if (($question_container instanceof ElggGroup) && (elgg_get_page_owner_guid() !== $question_container->getGUID())) {
 	$group_link = elgg_view('output/url', [
-		'text' => $question_container->name,
+		'text' => $question_container->getDisplayName(),
 		'href' => $question_container->getURL(),
 		'is_trusted' => true,
 	]);

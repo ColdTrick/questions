@@ -15,7 +15,7 @@ $question = $answer->getContainerEntity();
 
 $subject_link = elgg_view('output/url', [
 	'href' => $subject->getURL(),
-	'text' => $subject->name,
+	'text' => $subject->getDisplayName(),
 	'class' => 'elgg-river-subject',
 	'is_trusted' => true,
 ]);
@@ -27,11 +27,9 @@ $object_link = elgg_view('output/url', [
 	'is_trusted' => true,
 ]);
 
-$message = elgg_get_excerpt($answer->description);
-
 echo elgg_view('river/elements/layout', [
 	'item' => $item,
-	'message' => $message,
+	'message' =>  elgg_get_excerpt($answer->description),
 	'summary' => elgg_echo('river:create:object:answer', [$subject_link, $object_link]),
 ]);
 

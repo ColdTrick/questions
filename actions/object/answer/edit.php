@@ -26,13 +26,13 @@ if (empty($container_guid) || empty($description)) {
 	return elgg_error_response(elgg_echo('questions:action:answer:save:error:body', [$container_guid, $description]));
 }
 
-if ($adding && !can_write_to_container(0, $container_guid, 'object', 'answer')) {
-	return elgg_error_response(elgg_echo('questions:action:answer:save:error:container'));
-}
-
 $question = get_entity($container_guid);
 if (!$question instanceof ElggQuestion) {
 	return elgg_error_response(elgg_echo('actionunauthorized'));
+}
+
+if ($adding && !$question->canWriteToContainer(0, 'object', 'answer')) {
+	return elgg_error_response(elgg_echo('questions:action:answer:save:error:container'));
 }
 
 if ($question->getStatus() != 'open') {

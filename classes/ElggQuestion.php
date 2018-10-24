@@ -1,5 +1,7 @@
 <?php
 
+use Elgg\Database\Clauses\OrderByClause;
+
 class ElggQuestion extends ElggObject {
 	
 	const SUBTYPE = 'question';
@@ -48,7 +50,7 @@ class ElggQuestion extends ElggObject {
 	 */
 	public function getAnswers(array $options = []) {
 		$defaults = [
-			'order_by' => 'time_created asc',
+			'order_by' => new OrderByClause('time_created', 'asc'),
 		];
 		
 		$overrides = [
@@ -81,18 +83,16 @@ class ElggQuestion extends ElggObject {
 	public function getMarkedAnswer() {
 		$result = false;
 		
-		$options = [
+		$answers = elgg_get_entities([
 			'type' => 'object',
 			'subtype' => ElggAnswer::SUBTYPE,
 			'limit' => 1,
-			'container_guid' => $this->getGUID(),
+			'container_guid' => $this->guid,
 			'metadata_name_value_pairs' => [
 				'name' => 'correct_answer',
 				'value' => true,
 			],
-		];
-		
-		$answers = elgg_get_entities_from_metadata($options);
+		]);
 		if (!empty($answers)) {
 			$result = $answers[0];
 		}
@@ -131,7 +131,7 @@ class ElggQuestion extends ElggObject {
 		$result = $this->status;
 		
 		// should we check if the status is correct
-		if (!questions_close_on_marked_answer()) {
+		if (elgg_get_plugin_setting('close_on_marked_answer', 'questions') !== 'yes') {
 			return $result;
 		}
 		

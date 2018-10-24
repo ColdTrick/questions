@@ -10,6 +10,8 @@ if (!questions_is_expert()) {
 	forward('questions/all');
 }
 
+elgg_push_breadcrumb(elgg_echo('questions'), 'questions/all');
+
 // check for a group filter
 $group_guid = (int) elgg_extract('group_guid', $vars);
 if (!empty($group_guid)) {
@@ -20,7 +22,7 @@ if (!empty($group_guid)) {
 			forward("questions/group/{$group->guid}/all");
 		}
 		$page_owner = $group;
-		elgg_push_breadcrumb($group->name, "questions/group/{$group->getGUID()}/all");
+		elgg_push_breadcrumb($group->getDisplayName(), "questions/group/{$group->guid}/all");
 	}
 }
 
@@ -37,7 +39,6 @@ elgg_register_title_button('questions', 'add', 'object', ElggQuestion::SUBTYPE);
 
 // prepare options
 $dbprefix = elgg_get_config('dbprefix');
-$correct_answer_id = elgg_get_metastring_id('correct_answer');
 
 $options = [
 	'type' => 'object',
@@ -47,7 +48,7 @@ $options = [
 		FROM {$dbprefix}entities e2
 		JOIN {$dbprefix}metadata md ON e2.guid = md.entity_guid
 		WHERE e2.container_guid = e.guid
-		AND md.name_id = {$correct_answer_id})",
+		AND md.name = 'correct_answer')",
 	],
 	'full_view' => false,
 	'list_type_toggle' => false,
@@ -67,19 +68,20 @@ if ($page_owner instanceof ElggGroup) {
 			SELECT ge.guid
 			FROM {$dbprefix}entities ge
 			WHERE ge.type = 'group'
-			AND ge.site_guid = {$site->getGUID()}
+			AND ge.site_guid = {$site->guid}
 			AND ge.enabled = 'yes'
 		))";
 	}
 	
-	$group_options = [
+	$groups = elgg_get_entities([
 		'type' => 'group',
 		'limit' => false,
 		'relationship' => QUESTIONS_EXPERT_ROLE,
-		'relationship_guid' => $user->getGUID(),
-		'callback' => 'questions_row_to_guid'
-	];
-	$groups = elgg_get_entities_from_relationship($group_options);
+		'relationship_guid' => $user->guid,
+		'callback' => function ($row) {
+			return (int) $row->guid;
+		},
+	]);
 	if (!empty($groups)) {
 		$container_where[] = '(e.container_guid IN (' . implode(',', $groups) . '))';
 	}
@@ -104,7 +106,7 @@ if (!empty($tags)) {
 // build page elements
 $title = elgg_echo('questions:todo');
 
-$content = elgg_list_entities_from_metadata($options);
+$content = elgg_list_entities($options);
 
 // build page
 $body = elgg_view_layout('content', [

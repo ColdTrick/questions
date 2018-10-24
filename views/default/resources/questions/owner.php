@@ -15,7 +15,7 @@ if (empty($page_owner)) {
 	forward(REFERER);
 }
 
-elgg_push_breadcrumb($page_owner->name);
+elgg_push_breadcrumb(elgg_echo('questions'), 'questions/all');
 
 elgg_register_title_button('questions', 'add', 'object', ElggQuestion::SUBTYPE);
 
@@ -48,9 +48,9 @@ if (!empty($tags)) {
 }
 
 // build page elements
-$title = elgg_echo('questions:owner', [$page_owner->name]);
+$title = elgg_echo('questions:owner', [$page_owner->getDisplayName()]);
 
-$content = elgg_list_entities_from_metadata($options);
+$content = elgg_list_entities($options);
 
 // build page
 $body = elgg_view_layout('content', [

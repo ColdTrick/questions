@@ -83,16 +83,12 @@ function questions_is_expert(ElggEntity $container = null, ElggUser $user = null
 			}
 		}
 	} else {
-		$expert_options =[
+		// check if user has any expert relationship with entity on this site
+		return (bool) elgg_get_entities([
 			'count' => true,
 			'relationship' => QUESTIONS_EXPERT_ROLE,
 			'relationship_guid' => $user->guid,
-		];
-		
-		if (elgg_get_entities_from_relationship($expert_options)) {
-			// check if user has any expert relationship with entity on this site
-			return true;
-		}
+		]);
 	}
 	
 	return false;
@@ -268,26 +264,6 @@ function questions_get_group_access_level(ElggGroup $group) {
 }
 
 /**
- * This function checks of the plugin setting to close a question on a marked answer is set
- *
- * @return bool
- */
-function questions_close_on_marked_answer() {
-	static $result;
-	
-	if (!isset($result)) {
-		$result = false;
-		
-		$setting = elgg_get_plugin_setting('close_on_marked_answer', 'questions');
-		if ($setting === 'yes') {
-			$result = true;
-		}
-	}
-	
-	return $result;
-}
-
-/**
  * Return the number of days it should take to solve a question.
  *
  * @param ElggEntity $container if a group is provided, first the setting of the group is checked, then the default setting of the site
@@ -305,7 +281,7 @@ function questions_get_solution_time(ElggEntity $container) {
 	$result = $plugin_setting;
 	
 	// check is group
-	if (($container instanceof ElggGroup) && questions_can_groups_set_solution_time()) {
+	if (($container instanceof ElggGroup) && (elgg_get_plugin_setting('solution_time_group', 'questions') === 'yes')) {
 		// get group setting
 		$group_setting = $container->getPrivateSetting('questions_solution_time');
 		if (($group_setting !== false) && ($group_setting !== null)) {
@@ -335,17 +311,6 @@ function questions_limited_to_groups() {
 	}
 	
 	return $result;
-}
-
-/**
- * Return the GUID from a database row.
- *
- * @param stdObject $row the database row
- *
- * @return int
- */
-function questions_row_to_guid($row) {
-	return (int) $row->guid;
 }
 
 /**
@@ -511,26 +476,6 @@ function questions_can_answer_question(ElggQuestion $question, ElggUser $user = 
 	
 	// are you a group member or can you edit the group
 	return ($container->isMember($user) || $container->canEdit($user->getGUID()));
-}
-
-/**
- * Can group owners set the solution time
- *
- * @return bool
- */
-function questions_can_groups_set_solution_time() {
-	static $result;
-	
-	if (isset($result)) {
-		return $result;
-	}
-	
-	$result = true;
-	if (elgg_get_plugin_setting('solution_time_group', 'questions') === 'no') {
-		$result = false;
-	}
-	
-	return $result;
 }
 
 /**

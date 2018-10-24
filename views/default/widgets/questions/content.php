@@ -41,7 +41,7 @@ switch ($widget->context) {
 				
 				// prepare options
 				$dbprefix = elgg_get_config('dbprefix');
-				$correct_answer_id = elgg_get_metastring_id('correct_answer');
+				
 				$site = elgg_get_site_entity();
 				$user = elgg_get_logged_in_user_entity();
 				
@@ -52,7 +52,7 @@ switch ($widget->context) {
 					FROM {$dbprefix}entities e2
 					JOIN {$dbprefix}metadata md ON e2.guid = md.entity_guid
 					WHERE e2.container_guid = e.guid
-					AND md.name_id = {$correct_answer_id})"
+					AND md.name = 'correct_answer')"
 				];
 				$options['order_by_metadata'] = ['name' => 'solution_time'];
 				
@@ -61,20 +61,20 @@ switch ($widget->context) {
 						SELECT ge.guid
 						FROM {$dbprefix}entities ge
 						WHERE ge.type = 'group'
-						AND ge.site_guid = {$site->getGUID()}
+						AND ge.site_guid = {$site->guid}
 						AND ge.enabled = 'yes'
 					))";
 				}
 				
-				$group_options = [
+				$groups = elgg_get_entities([
 					'type' => 'group',
 					'limit' => false,
 					'relationship' => QUESTIONS_EXPERT_ROLE,
-					'relationship_guid' => $user->getGUID(),
-					'callback' => 'questions_row_to_guid',
-				];
-				
-				$groups = elgg_get_entities_from_relationship($group_options);
+					'relationship_guid' => $user->guid,
+					'callback' => function ($row) {
+						return (int) $row->guid;
+					},
+				]);
 				if (!empty($groups)) {
 					$container_where[] = '(e.container_guid IN (' . implode(',', $groups) . '))';
 				}
@@ -115,11 +115,10 @@ if (!empty($filter_tags)) {
 	$filter_tags = null;
 }
 
-$content = elgg_list_entities_from_metadata($options);
+$content = elgg_list_entities($options);
 if (empty($content)) {
 	$content = elgg_view('output/longtext', ['value' => elgg_echo('questions:none')]);
 } else {
-	
 	$content .= elgg_format_element('div', ['class' => 'elgg-widget-more'], elgg_view('output/url', [
 		'text' => elgg_echo('widget:questions:more'),
 		'href' => elgg_http_add_url_query_elements($base_url, ['tags' => $filter_tags]),

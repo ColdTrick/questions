@@ -50,4 +50,109 @@ class Permissions {
 		
 		return questions_is_expert($container, $user);
 	}
+
+	/**
+	 * Check if a user has permissions
+	 *
+	 * @param string $hook        the name of the hook
+	 * @param string $type        the type of the hook
+	 * @param bool   $returnvalue current return value
+	 * @param array  $params      supplied params
+	 *
+	 * @return void|bool
+	 */
+	public static function objectPermissionsCheck($hook, $type, $returnvalue, $params) {
+		
+		if (empty($params) || !is_array($params)) {
+			return;
+		}
+		
+		// get the provided data
+		$entity = elgg_extract('entity', $params);
+		$user = elgg_extract('user', $params);
+		
+		if (!($user instanceof ElggUser)) {
+			return;
+		}
+		
+		if (!($entity instanceof ElggQuestion) && !($entity instanceof ElggAnswer)) {
+			return;
+		}
+		
+		// expert only changes
+		if (questions_experts_enabled()) {
+			// check if an expert can edit a question
+			if (!$returnvalue && ($entity instanceof ElggQuestion)) {
+				$container = $entity->getContainerEntity();
+				if (!($container instanceof ElggGroup)) {
+					$container = elgg_get_site_entity();
+				}
+				
+				if (questions_is_expert($container, $user)) {
+					$returnvalue = true;
+				}
+			}
+			
+			// an expert should be able to edit an answer, so fix this
+			if (!$returnvalue && ($entity instanceof ElggAnswer)) {
+				// user is not the owner
+				if ($entity->getOwnerGUID() !== $user->getGUID()) {
+					$question = $entity->getContainerEntity();
+					
+					if ($question instanceof ElggQuestion) {
+						$container = $question->getContainerEntity();
+						if (!($container instanceof ElggGroup)) {
+							$container = elgg_get_site_entity();
+						}
+						
+						// if the user is an expert
+						if (questions_is_expert($container, $user)) {
+							$returnvalue = true;
+						}
+					}
+				}
+			}
+		}
+		
+		// questions can't be editted by owner if it is closed
+		if ($returnvalue && ($entity instanceof ElggQuestion)) {
+			// is the question closed
+			if ($entity->getStatus() === 'closed') {
+				// are you the owner
+				if ($user->getGUID() === $entity->getOwnerGUID()) {
+					$returnvalue = false;
+				}
+			}
+		}
+	
+		return $returnvalue;
+	}
+	
+	/**
+	 * Check if a user can write an answer
+	 *
+	 * @param string $hook        the name of the hook
+	 * @param string $type        the type of the hook
+	 * @param bool   $returnvalue current return value
+	 * @param array  $params      supplied params
+	 *
+	 * @return void|bool
+	 */
+	public static function answerContainer($hook, $type, $returnvalue, $params) {
+		static $experts_only;
+	
+		if ($returnvalue || empty($params) || !is_array($params)) {
+			return;
+		}
+		
+		$question = elgg_extract('container', $params);
+		$user = elgg_extract('user', $params);
+		$subtype = elgg_extract('subtype', $params);
+		
+		if (($subtype !== 'answer') || !($user instanceof ElggUser) || !($question instanceof ElggQuestion)) {
+			return;
+		}
+		
+		return questions_can_answer_question($question, $user);
+	}
 }

@@ -29,4 +29,5 @@
 		<priority>after</priority>
 	</requires>
 	
+	<category>ColdTrick</category>
 </plugin_manifest>

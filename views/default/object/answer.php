@@ -1,37 +1,50 @@
 <?php
 
 $answer = elgg_extract('entity', $vars);
-if (!($answer instanceof ElggAnswer)) {
+if (!$answer instanceof ElggAnswer) {
 	return;
 }
+
+$vars['title'] = false;
+$vars['access'] = false;
+$vars['icon_entity'] = $answer->getOwnerEntity();
+
+$vars['content'] = elgg_view('output/longtext', ['value' => $answer->description]);
+
+$correct_answer = $answer->getCorrectAnswerMetadata();
+if ($correct_answer) {
+	$timestamp = htmlspecialchars(date(elgg_echo('friendlytime:date_format'), $correct_answer->time_created));
+	$vars['imprint'][] = [
+		'icon_name' => 'check',
+		'content' => elgg_echo('questions:answer:checkmark:title', [$timestamp]),
+	];
+}
+
+echo elgg_view('object/elements/summary', $vars);
+return;
 
 $question = $answer->getContainerEntity();
 
 $image = elgg_view_entity_icon($answer->getOwnerEntity(), 'tiny');
 
 // mark this as the correct answer?
-$correct_answer = $answer->getCorrectAnswerMetadata();
-if ($correct_answer) {
-	$owner = $correct_answer->getOwnerEntity();
-	$owner_name = htmlspecialchars($owner->name);
+
+// if ($correct_answer) {
+// 	$owner = $correct_answer->getOwnerEntity();
+// 	var_dump($owner);
+// 	var_dump($correct_answer);
+// 	exit();
+// 	$owner_name = htmlspecialchars($owner->getDisplayName());
 	
-	$timestamp = htmlspecialchars(date(elgg_echo('friendlytime:date_format'), $correct_answer->time_created));
+// 	$timestamp = htmlspecialchars(date(elgg_echo('friendlytime:date_format'), $correct_answer->time_created));
 	
-	$title = elgg_echo('questions:answer:checkmark:title', [$owner_name, $timestamp]);
+// 	$title = elgg_echo('questions:answer:checkmark:title', [$owner_name, $timestamp]);
 	
-	$image .= elgg_format_element('div', ['class' => 'questions-checkmark', 'title' => $title], elgg_view_icon('checkmark'));
-}
+// 	$image .= elgg_format_element('div', ['class' => 'questions-checkmark', 'title' => $title], elgg_view_icon('checkmark'));
+// }
 
 // create subtitle
 $subtitle = elgg_view('page/elements/by_line', $vars);
-
-// build entity menu
-$entity_menu = elgg_view_menu('entity', [
-	'entity' => $answer,
-	'handler' => 'answers',
-	'sort_by' => 'priority',
-	'class' => 'elgg-menu-hz',
-]);
 
 $body = elgg_view('output/longtext', ['value' => $answer->description]);
 
@@ -68,11 +81,9 @@ if ($question->comments_enabled !== 'off') {
 $params = [
 	'entity' => $answer,
 	'title' => false,
-	'metadata' => $entity_menu,
+	'icon_entity' => $answer->getOwnerEntity(),
 	'subtitle' => $subtitle,
 	'content' => $body,
 ];
 
-$summary = elgg_view('page/components/summary', $params);
-
-echo elgg_view_image_block($image, $summary);
+echo elgg_view('object/elements/summary', $params);

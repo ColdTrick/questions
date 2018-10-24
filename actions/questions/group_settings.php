@@ -17,7 +17,7 @@ if (!$group->canEdit()) {
 }
 
 // save the settings
-if (questions_can_groups_set_solution_time()) {
+if (elgg_get_plugin_setting('solution_time_group', 'questions') === 'yes') {
 	$group->setPrivateSetting('questions_solution_time', $solution_time);
 }
 
