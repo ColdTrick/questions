@@ -13,9 +13,7 @@ class Bootstrap extends DefaultPluginBootstrap {
 	 */
 	public function init() {
 		
-		// extend CSS/JS
-		elgg_extend_view('css/elgg', 'css/questions/site.css');
-		elgg_extend_view('js/elgg', 'js/questions/site.js');
+		$this->extendViews();
 		
 		elgg_register_menu_item('site', [
 			'name' => 'questions',
@@ -32,10 +30,6 @@ class Bootstrap extends DefaultPluginBootstrap {
 			'label' => elgg_echo('questions:enable'),
 			'default_on' => false,
 		]);
-		
-		elgg_extend_view('groups/tool_latest', 'questions/group_module');
-		
-		elgg_extend_view('groups/edit', 'questions/groups_edit');
 		
 		// plugin hooks
 		elgg_register_plugin_hook_handler('register', 'menu:owner_block', '\ColdTrick\Questions\Menus::registerOwnerBlock');
@@ -76,7 +70,17 @@ class Bootstrap extends DefaultPluginBootstrap {
 		// events
 		elgg_register_event_handler('leave', 'group', '\ColdTrick\Questions\Groups::leave');
 		elgg_register_event_handler('update:after', 'object', '\ColdTrick\Questions\Access::updateQuestion');
-		
-		
+	}
+	
+	/**
+	 * register extend views
+	 *
+	 * @return void
+	 */
+	protected function extendViews() {
+		elgg_extend_view('css/elgg', 'css/questions/site.css');
+		elgg_extend_view('groups/tool_latest', 'questions/group_module');
+		elgg_extend_view('groups/edit', 'questions/groups_edit');
+		elgg_extend_view('js/elgg', 'js/questions/site.js');
 	}
 }
