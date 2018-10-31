@@ -4,6 +4,8 @@ use ColdTrick\Questions\Bootstrap;
 
 define('QUESTIONS_EXPERT_ROLE', 'questions_expert');
 
+require_once(__DIR__ . '/lib/functions.php');
+
 return [
 	'bootstrap' => Bootstrap::class,
 	'settings' => [

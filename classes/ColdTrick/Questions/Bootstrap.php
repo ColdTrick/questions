@@ -13,8 +13,6 @@ class Bootstrap extends DefaultPluginBootstrap {
 	 */
 	public function init() {
 		
-		require_once(self::plugin()->getPath() . '/lib/functions.php');
-		
 		// extend CSS/JS
 		elgg_extend_view('css/elgg', 'css/questions/site.css');
 		elgg_extend_view('js/elgg', 'js/questions/site.js');
