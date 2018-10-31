@@ -15,7 +15,7 @@ class Access {
 	 */
 	public static function updateQuestion($event, $type, $entity) {
 		
-		if (!($entity instanceof \ElggQuestion)) {
+		if (!$entity instanceof \ElggQuestion) {
 			return;
 		}
 		
@@ -26,26 +26,20 @@ class Access {
 		}
 		
 		// ignore access for this part
-		$ia = elgg_set_ignore_access(true);
-		
-		// get all the answers for this question
-		$answers = $entity->getAnswers(['limit' => false]);
-		if (empty($answers)) {
-			// restore access
-			elgg_set_ignore_access($ia);
+		elgg_call(ELGG_IGNORE_ACCESS, function() use ($entity) {
 			
-			return;
-		}
-		
-		/* @var $answer \ElggAnswer */
-		foreach ($answers as $answer) {
-			// update the access_id with the questions access_id
-			$answer->access_id = $entity->access_id;
+			$answers = $entity->getAnswers(['limit' => false]);
+			if (empty($answers)) {
+				return;
+			}
 			
-			$answer->save();
-		}
-		
-		// restore access
-		elgg_set_ignore_access($ia);
+			/* @var $answer \ElggAnswer */
+			foreach ($answers as $answer) {
+				// update the access_id with the questions access_id
+				$answer->access_id = $entity->access_id;
+				
+				$answer->save();
+			}
+		});
 	}
 }
