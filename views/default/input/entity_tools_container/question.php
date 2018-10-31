@@ -1,6 +1,6 @@
 <?php
 
-if (elgg_get_plugin_setting('limit_to_groups', 'questions', 'no') === 'yes') {
+if (elgg_get_plugin_setting('limit_to_groups', 'questions') === 'yes') {
 	$vars['add_users'] = false;
 }
 
