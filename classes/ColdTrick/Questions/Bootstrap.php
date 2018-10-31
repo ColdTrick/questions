@@ -58,7 +58,7 @@ class Bootstrap extends DefaultPluginBootstrap {
 		$hooks->registerHandler('container_permissions_check', 'object', __NAMESPACE__ . '\Permissions::questionsContainer');
 		$hooks->registerHandler('cron', 'daily', __NAMESPACE__ . '\Cron::notifyQuestionExperts');
 		$hooks->registerHandler('cron', 'daily', __NAMESPACE__ . '\Cron::autoCloseQuestions');
-		$hooks->registerHandler('entity:url', 'object', __NAMESPACE__ . '\WidgetManager::widgetURL');
+		$hooks->registerHandler('entity:url', 'object', __NAMESPACE__ . '\Widgets::getURL');
 		$hooks->registerHandler('entity_types', 'content_subscriptions', __NAMESPACE__ . '\ContentSubscriptions::getEntityTypes');
 		$hooks->registerHandler('get', 'subscriptions', __NAMESPACE__ . '\Notifications::addExpertsToSubscribers');
 		$hooks->registerHandler('get', 'subscriptions', __NAMESPACE__ . '\Notifications::addQuestionOwnerToAnswerSubscribers');
