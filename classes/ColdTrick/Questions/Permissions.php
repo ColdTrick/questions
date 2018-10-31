@@ -63,28 +63,24 @@ class Permissions {
 	 */
 	public static function objectPermissionsCheck($hook, $type, $returnvalue, $params) {
 		
-		if (empty($params) || !is_array($params)) {
-			return;
-		}
-		
 		// get the provided data
 		$entity = elgg_extract('entity', $params);
 		$user = elgg_extract('user', $params);
 		
-		if (!($user instanceof ElggUser)) {
+		if (!$user instanceof \ElggUser) {
 			return;
 		}
 		
-		if (!($entity instanceof ElggQuestion) && !($entity instanceof ElggAnswer)) {
+		if (!$entity instanceof \ElggQuestion && !$entity instanceof \ElggAnswer) {
 			return;
 		}
 		
 		// expert only changes
 		if (questions_experts_enabled()) {
 			// check if an expert can edit a question
-			if (!$returnvalue && ($entity instanceof ElggQuestion)) {
+			if (!$returnvalue && $entity instanceof \ElggQuestion) {
 				$container = $entity->getContainerEntity();
-				if (!($container instanceof ElggGroup)) {
+				if (!$container instanceof \ElggGroup) {
 					$container = elgg_get_site_entity();
 				}
 				
@@ -94,14 +90,14 @@ class Permissions {
 			}
 			
 			// an expert should be able to edit an answer, so fix this
-			if (!$returnvalue && ($entity instanceof ElggAnswer)) {
+			if (!$returnvalue && $entity instanceof \ElggAnswer) {
 				// user is not the owner
-				if ($entity->getOwnerGUID() !== $user->getGUID()) {
+				if ($entity->owner_guid !== $user->guid) {
 					$question = $entity->getContainerEntity();
 					
-					if ($question instanceof ElggQuestion) {
+					if ($question instanceof \ElggQuestion) {
 						$container = $question->getContainerEntity();
-						if (!($container instanceof ElggGroup)) {
+						if (!$container instanceof \ElggGroup) {
 							$container = elgg_get_site_entity();
 						}
 						
@@ -115,16 +111,16 @@ class Permissions {
 		}
 		
 		// questions can't be editted by owner if it is closed
-		if ($returnvalue && ($entity instanceof ElggQuestion)) {
+		if ($returnvalue && $entity instanceof \ElggQuestion) {
 			// is the question closed
 			if ($entity->getStatus() === 'closed') {
 				// are you the owner
-				if ($user->getGUID() === $entity->getOwnerGUID()) {
+				if ($user->guid === $entity->owner_guid) {
 					$returnvalue = false;
 				}
 			}
 		}
-	
+		
 		return $returnvalue;
 	}
 	
@@ -139,9 +135,8 @@ class Permissions {
 	 * @return void|bool
 	 */
 	public static function answerContainer($hook, $type, $returnvalue, $params) {
-		static $experts_only;
-	
-		if ($returnvalue || empty($params) || !is_array($params)) {
+		
+		if ($returnvalue) {
 			return;
 		}
 		
@@ -149,7 +144,7 @@ class Permissions {
 		$user = elgg_extract('user', $params);
 		$subtype = elgg_extract('subtype', $params);
 		
-		if (($subtype !== 'answer') || !($user instanceof ElggUser) || !($question instanceof ElggQuestion)) {
+		if (($subtype !== \ElggAnswer::SUBTYPE) || !$user instanceof \ElggUser || !$question instanceof \ElggQuestion) {
 			return;
 		}
 		
