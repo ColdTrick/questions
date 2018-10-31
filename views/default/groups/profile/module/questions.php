@@ -5,14 +5,15 @@
  * @package Questions
  */
 
-$group = elgg_get_page_owner_entity();
-
-if ($group->questions_enable !== 'yes') {
-	return true;
+$group = elgg_extract('entity', $vars);
+if (!$group instanceof ElggGroup) {
+	return;
 }
 
 $all_link = elgg_view('output/url', [
-	'href' => "questions/group/{$group->getGUID()}/all",
+	'href' => elgg_generate_url('collection:object:question:group', [
+		'guid' => $group->guid,
+	]),
 	'text' => elgg_echo('link:view:all'),
 	'is_trusted' => true,
 ]);
@@ -20,8 +21,8 @@ $all_link = elgg_view('output/url', [
 elgg_push_context('widgets');
 $options = [
 	'type' => 'object',
-	'subtype' => 'question',
-	'container_guid' => elgg_get_page_owner_guid(),
+	'subtype' => ElggQuestion::SUBTYPE,
+	'container_guid' => $group->guid,
 	'limit' => 6,
 	'full_view' => false,
 	'pagination' => false,
@@ -34,9 +35,11 @@ if (!$content) {
 }
 
 $new_link = '';
-if ($group->canWriteToContainer(0, 'object', 'question')) {
+if ($group->canWriteToContainer(0, 'object', ElggQuestion::SUBTYPE)) {
 	$new_link = elgg_view('output/url', [
-		'href' => "questions/add/{$group->getGUID()}",
+		'href' => elgg_generate_url('add:object:question', [
+			'guid' => $group->guid,
+		]),
 		'text' => elgg_echo('questions:add'),
 		'is_trusted' => true,
 	]);

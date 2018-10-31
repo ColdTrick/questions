@@ -20,16 +20,6 @@ class ElggQuestion extends ElggObject {
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see ElggEntity::getURL()
-	 */
-	public function getURL() {
-		$url = "questions/view/{$this->getGUID()}/" . elgg_get_friendly_title($this->getDisplayName());
-		
-		return elgg_normalize_url($url);
-	}
-	
-	/**
-	 * (non-PHPdoc)
 	 * @see ElggObject::canComment()
 	 */
 	public function canComment($user_guid = 0, $default = null) {

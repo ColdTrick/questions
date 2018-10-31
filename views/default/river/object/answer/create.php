@@ -6,7 +6,7 @@
 $item = elgg_extract('item', $vars);
 
 $answer = $item->getObjectEntity();
-if (!($answer instanceof ElggAnswer)) {
+if (!$answer instanceof ElggAnswer) {
 	return;
 }
 
@@ -32,4 +32,3 @@ echo elgg_view('river/elements/layout', [
 	'message' =>  elgg_get_excerpt($answer->description),
 	'summary' => elgg_echo('river:create:object:answer', [$subject_link, $object_link]),
 ]);
-

@@ -19,18 +19,17 @@ class ElggAnswer extends ElggObject {
 	 * @see ElggEntity::getURL()
 	 */
 	public function getURL() {
+		
 		// make sure we can get the container
-		$ia = elgg_set_ignore_access(true);
+		$base_url = elgg_call(ELGG_IGNORE_ACCESS, function() {
+			$container_entity = $this->getContainerEntity();
+			
+			return $container_entity->getURL();
+		});
 		
-		// get the container/question
-		$container_entity = $this->getContainerEntity();
+		$base_url .= "#elgg-object-{$this->guid}";
 		
-		$url = $container_entity->getURL() . "#elgg-object-{$this->guid}";
-		
-		// restore access
-		elgg_set_ignore_access($ia);
-		
-		return $url;
+		return $base_url;
 	}
 	
 	/**
@@ -65,11 +64,9 @@ class ElggAnswer extends ElggObject {
 		// make sure the question gets reopened
 		if ($this->isCorrectAnswer()) {
 			// only if this is the correct answer
-			$ia = elgg_set_ignore_access(true);
-			
-			$this->undoMarkAsCorrect();
-			
-			elgg_set_ignore_access($ia);
+			elgg_call(ELGG_IGNORE_ACCESS, function() {
+				$this->undoMarkAsCorrect();
+			});
 		}
 		
 		return parent::delete($recursive);

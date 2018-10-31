@@ -3,6 +3,7 @@
  *	Questions widget content
  **/
 
+/* @var $widget ElggWidget */
 $widget = elgg_extract('entity', $vars);
 
 $limit = (int) $widget->limit;
@@ -18,26 +19,30 @@ $options = [
 	'pagination' => false,
 ];
 
-$base_url = 'questions/all';
+$route = 'questions/all';
+$route_params = [];
 
 switch ($widget->context) {
 	case 'profile':
-		$base_url = "questions/owner/{$widget->getOwnerEntity()->username}";
+		$route = 'collection:object:question:owner';
+		$route_params['username'] = $widget->getOwnerEntity()->username;
 		
-		$options['owner_guid'] = $widget->getOwnerGUID();
+		$options['owner_guid'] = $widget->owner_guid;
 		break;
 	case 'dashboard':
-		$base_url = "questions/owner/{$widget->getOwnerEntity()->username}";
+		$route = 'collection:object:question:owner';
+		$route_params['username'] = $widget->getOwnerEntity()->username;
 		
 		$type = $widget->content_type;
-		if (($type == 'todo') && !questions_is_expert()) {
+		if (($type === 'todo') && !questions_is_expert()) {
 			$type = 'mine';
 		}
 		
 		// user shows owned
 		switch ($type) {
 			case 'todo':
-				$base_url = 'questions/todo';
+				$route = 'collection:object:question:todo';
+				unset($route_params['username']);
 				
 				// prepare options
 				$dbprefix = elgg_get_config('dbprefix');
@@ -89,16 +94,17 @@ switch ($widget->context) {
 				break;
 			case 'mine':
 			default:
-				$options['owner_guid'] = $widget->getOwnerGUID();
+				$options['owner_guid'] = $widget->owner_guid;
 				break;
 		}
 		
 		break;
 	case 'groups':
-		$base_url = "questions/group/{$widget->getOwnerGUID()}/all";
+		$route = 'collection:object:question:group';
+		$route_params['guid'] = $widget->owner_guid;
 		
 		// only in this container
-		$options['container_guid'] = $widget->getOwnerGUID();
+		$options['container_guid'] = $widget->owner_guid;
 		break;
 }
 
@@ -111,8 +117,8 @@ if (!empty($filter_tags)) {
 		'name' => 'tags',
 		'value' => $filter_tags,
 	];
-} else {
-	$filter_tags = null;
+	
+	$route_params['tags'] = $filter_tags;
 }
 
 $content = elgg_list_entities($options);
@@ -121,7 +127,7 @@ if (empty($content)) {
 } else {
 	$content .= elgg_format_element('div', ['class' => 'elgg-widget-more'], elgg_view('output/url', [
 		'text' => elgg_echo('widget:questions:more'),
-		'href' => elgg_http_add_url_query_elements($base_url, ['tags' => $filter_tags]),
+		'href' => elgg_generate_url($route, $route_params),
 		'is_trusted' => true,
 	]));
 }

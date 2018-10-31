@@ -14,7 +14,7 @@
 */
 
 $entity = elgg_extract('entity', $vars);
-if (!($entity instanceof ElggAnswer)) {
+if (!$entity instanceof ElggAnswer) {
 	return;
 }
 

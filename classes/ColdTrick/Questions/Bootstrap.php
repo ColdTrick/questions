@@ -21,7 +21,7 @@ class Bootstrap extends DefaultPluginBootstrap {
 			'name' => 'questions',
 			'icon' => 'question',
 			'text' => elgg_echo('questions'),
-			'href' => 'questions/all',
+			'href' => elgg_generate_url('collection:object:question:all'),
 		]);
 		
 		// register group options
@@ -42,7 +42,6 @@ class Bootstrap extends DefaultPluginBootstrap {
 	 */
 	protected function extendViews() {
 		elgg_extend_view('css/elgg', 'css/questions/site.css');
-		elgg_extend_view('groups/tool_latest', 'questions/group_module');
 		elgg_extend_view('groups/edit', 'questions/groups_edit');
 		elgg_extend_view('js/elgg', 'js/questions/site.js');
 	}

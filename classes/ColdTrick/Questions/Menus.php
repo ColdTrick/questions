@@ -2,35 +2,37 @@
 
 namespace ColdTrick\Questions;
 
+use Elgg\Menu\MenuItems;
+use Elgg\Router\Route;
+
 class Menus {
 	
 	/**
 	 * Add menu items to the owner_block menu
 	 *
-	 * @param string         $hook   the name of the hook
-	 * @param string         $type   the type of the hook
-	 * @param \ElggMenuItem[] $items  current return value
-	 * @param array          $params supplied params
+	 * @param \Elgg\Hook $hook 'register', 'menu:owner_block'
 	 *
-	 * @return void|ElggMenuItem[]
+	 * @return void|MenuItems
 	 */
-	public static function registerOwnerBlock($hook, $type, $items, $params) {
+	public static function registerOwnerBlock(\Elgg\Hook $hook) {
 		
-		if (empty($params) || !is_array($params)) {
-			return;
-		}
+		$items = $hook->getValue();
 		
-		$entity = elgg_extract('entity', $params);
-		if (($entity instanceof \ElggGroup) && ($entity->questions_enable === 'yes')) {
+		$entity = $hook->getEntityParam();
+		if ($entity instanceof \ElggGroup && $entity->isToolEnabled('questions')) {
 			$items[] = \ElggMenuItem::factory([
 				'name' => 'questions',
-				'href' => "questions/group/{$entity->guid}/all",
+				'href' => elgg_generate_url('collection:object:question:group', [
+					'guid' => $entity->guid,
+				]),
 				'text' => elgg_echo('questions:group'),
 			]);
 		} elseif ($entity instanceof \ElggUser) {
 			$items[] = \ElggMenuItem::factory([
 				'name' => 'questions',
-				'href' => "questions/owner/{$entity->username}",
+				'href' => elgg_generate_url('collection:object:question:owner', [
+					'username' => $entity->username,
+				]),
 				'text' => elgg_echo('questions'),
 			]);
 		}
@@ -43,7 +45,7 @@ class Menus {
 	 *
 	 * @param \Elgg\Hook $hook hook
 	 *
-	 * @return void|ElggMenuItem[]
+	 * @return void|MenuItems
 	 */
 	public static function registerEntity(\Elgg\Hook $hook) {
 			
@@ -61,8 +63,9 @@ class Menus {
 		$result[] = \ElggMenuItem::factory([
 			'name' => 'questions-mark',
 			'text' => elgg_echo('questions:menu:entity:answer:mark'),
-			'href' => "action/answers/toggle_mark?guid={$entity->guid}",
-			'is_action' => true,
+			'href' => elgg_generate_action_url('answers/toggle_mark', [
+				'guid' => $entity->guid,
+			]),
 			'icon' => 'check',
 			'item_class' => $entity->isCorrectAnswer() ? 'hidden' : '',
 			'data-toggle' => 'questions-unmark',
@@ -71,8 +74,9 @@ class Menus {
 		$result[] = \ElggMenuItem::factory([
 			'name' => 'questions-unmark',
 			'text' => elgg_echo('questions:menu:entity:answer:unmark'),
-			'href' => "action/answers/toggle_mark?guid={$entity->guid}",
-			'is_action' => true,
+			'href' => elgg_generate_action_url('answers/toggle_mark', [
+				'guid' => $entity->guid,
+			]),
 			'icon' => 'undo',
 			'item_class' => $entity->isCorrectAnswer() ? '' : 'hidden',
 			'data-toggle' => 'questions-mark',
@@ -84,83 +88,84 @@ class Menus {
 	/**
 	 * Add menu items to the filter menu
 	 *
-	 * @param string         $hook   the name of the hook
-	 * @param string         $type   the type of the hook
-	 * @param \ElggMenuItem[] $items  current return value
-	 * @param array          $params supplied params
+	 * @param \Elgg\Hook $hook 'register', 'menu:filter'
 	 *
-	 * @return void|ElggMenuItem[]
+	 * @return void|MenuItems
 	 */
-	public static function registerFilter($hook, $type, $items, $params) {
-	
-		if (empty($items) || !is_array($items) || !elgg_in_context('questions')) {
+	public static function registerFilter(\Elgg\Hook $hook) {
+		
+		if (!elgg_in_context('questions')) {
 			return;
 		}
 		
-		$page_owner = elgg_get_page_owner_entity();
-		$page_owner_guid = elgg_get_page_owner_guid();
+		/* @var $items MenuItems */
+		$items = $hook->getValue();
 		
-		// change some menu items
-		foreach ($items as $key => $item) {
-			// remove friends
-			if ($item->getName() == 'friend') {
-				unset($items[$key]);
-			}
+		$page_owner = elgg_get_page_owner_entity();
+		
+		// remove friends
+		$items->remove('friend');
+		
+		if ($page_owner instanceof \ElggGroup) {
+			$items->remove('mine');
 			
-			// in group context
-			if ($page_owner instanceof ElggGroup) {
-				// remove mine
-				if ($item->getName() == 'mine') {
-					unset($items[$key]);
-				}
-	
-				// check if all is correct
-				if ($item->getName() === 'all') {
-					// set correct url
-					$item->setHref("questions/group/{$page_owner->getGUID()}/all");
-					
-					// highlight all
-					$current_page = current_page_url();
-					if (stristr($current_page, "questions/group/{$page_owner->getGUID()}/all") && !get_input('tags')) {
-						$item->setSelected(true);
+			$all = $items->get('all');
+			if ($all instanceof \ElggMenuItem) {
+				$all->setHref(elgg_generate_url('collection:object:question:group', [
+					'guid' => $page_owner->guid,
+				]));
+				
+				$route = _elgg_services()->request->getRoute();
+				if ($route instanceof Route && !get_input('tags')) {
+					if ($route->getName() === 'collection:object:question:group') {
+						$all->setSelected(true);
 					}
 				}
+				
+				$items->add($all);
 			}
 		}
 		
 		// add tags search
 		$session = elgg_get_session();
-		$url = '';
+		$route = false;
+		$route_params = [];
 		$tags = get_input('tags');
 		if (!empty($tags)) {
-			$url = 'questions/all';
-			if ($page_owner instanceof ElggUser) {
-				$url = "questions/owner/{$page_owner->username}";
-			} elseif ($page_owner instanceof ElggGroup) {
-				$url = "questions/group/{$page_owner->guid}/all";
+			$route = 'collection:object:question:all';
+			if ($page_owner instanceof \ElggUser) {
+				$route = 'collection:object:question:owner';
+				$route_params['username'] = $page_owner->username;
+			} elseif ($page_owner instanceof \ElggGroup) {
+				$route = 'collection:object:question:group';
+				$route_params['guid'] = $page_owner->guid;
 			}
 			
-			$session->set("questions_tags_{$page_owner_guid}", [
+			$session->set("questions_tags_{$page_owner->guid}", [
 				'tags' => $tags,
-				'url' => $url,
+				'route' => $route,
+				'route_params' => $route_params,
 			]);
 		} elseif ($session->has("questions_tags_{$page_owner_guid}")) {
 			$settings = $session->get("questions_tags_{$page_owner_guid}");
 			
 			$tags = elgg_extract('tags', $settings);
-			$url = elgg_extract('url', $settings);
+			$route = elgg_extract('route', $settings);
+			$route_params = (array) elgg_extract('route_params', $settings, []);
 		}
 		
-		if (!empty($tags) && !empty($url)) {
+		if (!empty($tags) && !empty($route)) {
 			$tags_string = $tags;
 			if (is_array($tags_string)) {
 				$tags_string = implode(', ', $tags_string);
 			}
 			
+			$route_params['tags'] = $tags;
+			
 			$items[] = \ElggMenuItem::factory([
 				'name' => 'questions_tags',
 				'text' => elgg_echo('questions:menu:filter:tags', [$tags_string]),
-				'href' => elgg_http_add_url_query_elements($url, ['tags' => $tags, 'offset' => null]),
+				'href' => elgg_generate_url($route, $route_params),
 				'is_trusted' => true,
 				'priority' => 600,
 			]);
@@ -170,30 +175,32 @@ class Menus {
 			$items[] = \ElggMenuItem::factory([
 				'name' => 'todo',
 				'text' => elgg_echo('questions:menu:filter:todo'),
-				'href' => 'questions/todo',
+				'href' => elgg_generate_url('collection:object:question:todo'),
 				'priority' => 700,
 			]);
 	
-			if ($page_owner instanceof ElggGroup && questions_is_expert($page_owner)) {
+			if ($page_owner instanceof \ElggGroup && questions_is_expert($page_owner)) {
 				$items[] = \ElggMenuItem::factory([
 					'name' => 'todo_group',
 					'text' => elgg_echo('questions:menu:filter:todo_group'),
-					'href' => "questions/todo/{$page_owner->getGUID()}",
+					'href' => elgg_generate_url('collection:object:question:todo', [
+						'group_guid' => $page_owner->guid,
+					]),
 					'priority' => 710,
 				]);
 			}
 		}
 	
 		if (questions_experts_enabled()) {
-			$experts_href = 'questions/experts';
-			if ($page_owner instanceof ElggGroup) {
-				$experts_href .= "/{$page_owner->getGUID()}";
+			$route_params = [];
+			if ($page_owner instanceof \ElggGroup) {
+				$route_params['group_guid'] = $page_owner->guid;
 			}
 	
 			$items[] = \ElggMenuItem::factory([
 				'name' => 'experts',
 				'text' => elgg_echo('questions:menu:filter:experts'),
-				'href' => $experts_href,
+				'href' => elgg_generate_url('collection:object:question:experts', $route_params),
 				'priority' => 800,
 			]);
 		}
@@ -204,14 +211,11 @@ class Menus {
 	/**
 	 * Add menu items to the user_hover menu
 	 *
-	 * @param string         $hook   the name of the hook
-	 * @param string         $type   the type of the hook
-	 * @param \ElggMenuItem[] $items  current return value
-	 * @param array          $params supplied params
+	 * @param \Elgg\Hook $hook 'register', 'menu:user_hover'
 	 *
-	 * @return void|ElggMenuItem[]
+	 * @return void|MenuItems
 	 */
-	public static function registerUserHover($hook, $type, $items, $params) {
+	public static function registerUserHover(\Elgg\Hook $hook) {
 		
 		// are experts enabled
 		if (!questions_experts_enabled()) {
@@ -219,14 +223,14 @@ class Menus {
 		}
 		
 		// get the user for this menu
-		$user = elgg_extract('entity', $params);
-		if (!$user instanceof ElggUser) {
+		$user = $hook->getEntityParam();
+		if (!$user instanceof \ElggUser) {
 			return;
 		}
 		
 		// get page owner
 		$page_owner = elgg_get_page_owner_entity();
-		if (!($page_owner instanceof ElggGroup)) {
+		if (!$page_owner instanceof \ElggGroup) {
 			$page_owner = elgg_get_site_entity();
 		}
 		
@@ -236,22 +240,34 @@ class Menus {
 			return;
 		}
 		
-		$text = elgg_echo('questions:menu:user_hover:make_expert');
-		$confirm_text = elgg_echo('questions:menu:user_hover:make_expert:confirm', [$page_owner->getDisplayName()]);
-		if (check_entity_relationship($user->getGUID(), QUESTIONS_EXPERT_ROLE, $page_owner->getGUID())) {
-			$text = elgg_echo('questions:menu:user_hover:remove_expert');
-			$confirm_text = elgg_echo('questions:menu:user_hover:remove_expert:confirm', [$page_owner->getDisplayName()]);
-		}
+		$items = $hook->getValue();
+		
+		$is_expert = check_entity_relationship($user->guid, QUESTIONS_EXPERT_ROLE, $page_owner->guid);
 		
 		$items[] = \ElggMenuItem::factory([
 			'name' => 'questions_expert',
-			'text' => $text,
-			'href' => elgg_http_add_url_query_elements('action/questions/toggle_expert', [
+			'icon' => 'level-up-alt',
+			'text' => elgg_echo('questions:menu:user_hover:make_expert'),
+			'href' => elgg_generate_action_url('questions/toggle_expert', [
 				'user_guid' => $user->guid,
 				'guid' => $page_owner->guid,
 			]),
-			'confirm' => $confirm_text,
-			'section' => ($page_owner instanceof ElggSite) ? 'admin' : 'default',
+			'section' => ($page_owner instanceof \ElggSite) ? 'admin' : 'default',
+			'data-toggle' => 'questions-expert-undo',
+			'item_class' => $is_expert ? 'hidden' : null,
+		]);
+		
+		$items[] = \ElggMenuItem::factory([
+			'name' => 'questions_expert_undo',
+			'icon' => 'level-down-alt',
+			'text' => elgg_echo('questions:menu:user_hover:remove_expert'),
+			'href' => elgg_generate_action_url('questions/toggle_expert', [
+				'user_guid' => $user->guid,
+				'guid' => $page_owner->guid,
+			]),
+			'section' => ($page_owner instanceof \ElggSite) ? 'admin' : 'default',
+			'data-toggle' => 'questions-expert',
+			'item_class' => $is_expert ? null : 'hidden',
 		]);
 		
 		return $items;
