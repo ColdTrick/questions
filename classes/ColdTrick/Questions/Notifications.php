@@ -166,7 +166,7 @@ class Notifications {
 	 * Change the notification message for comments on answers
 	 *
 	 * @param string                           $hook         the name of the hook
-	 * @param stirng                           $type         the type of the hook
+	 * @param string                           $type         the type of the hook
 	 * @param \Elgg\Notifications\Notification $return_value the current return value
 	 * @param array                            $params       supplied values
 	 *
