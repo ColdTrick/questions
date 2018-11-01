@@ -71,7 +71,7 @@ if (elgg_is_active_plugin('likes')) {
 				->where($qb->compare('entity_guid', '=', "{$main_alias}.guid"))
 				->andWhere($qb->compare('name', '=', 'likes', ELGG_VALUE_STRING));
 			
-			return "(){$sub->getSQL()}) as likes_count";
+			return "({$sub->getSQL()}) as likes_count";
 		},
 	];
 	$options['order_by'] = [
