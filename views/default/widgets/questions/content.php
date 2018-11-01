@@ -3,6 +3,8 @@
  *	Questions widget content
  **/
 
+use Elgg\Database\QueryBuilder;
+
 /* @var $widget ElggWidget */
 $widget = elgg_extract('entity', $vars);
 
@@ -19,7 +21,7 @@ $options = [
 	'pagination' => false,
 ];
 
-$route = 'questions/all';
+$route = 'collection:object:question:all';
 $route_params = [];
 
 switch ($widget->context) {
@@ -45,49 +47,20 @@ switch ($widget->context) {
 				unset($route_params['username']);
 				
 				// prepare options
-				$dbprefix = elgg_get_config('dbprefix');
-				
-				$site = elgg_get_site_entity();
-				$user = elgg_get_logged_in_user_entity();
-				
-				$container_where = [];
-								
-				$options['wheres'] = ["NOT EXISTS (
-					SELECT 1
-					FROM {$dbprefix}entities e2
-					JOIN {$dbprefix}metadata md ON e2.guid = md.entity_guid
-					WHERE e2.container_guid = e.guid
-					AND md.name = 'correct_answer')"
+				$options['wheres'] = [
+					function (QueryBuilder $qb, $main_alias) {
+						$sub = $qb->subquery('entities', 'a')
+							->select('a.container_guid')
+							->join('a', 'metadata', 'asmd', $qb->compare('a.guid', '=', 'asmd.entity_guid'))
+							->where($qb->compare('asmd.name', '=', 'correct_answer', ELGG_VALUE_STRING))
+							->andWhere($qb->compare('a.type', '=', 'object', ELGG_VALUE_STRING))
+							->andWhere($qb->compare('a.subtype', '=', ElggAnswer::SUBTYPE, ELGG_VALUE_STRING));
+						
+						return $qb->compare("{$main_alias}.guid", 'NOT IN', $sub->getSQL());
+					},
+					questions_get_expert_where_sql(),
 				];
 				$options['order_by_metadata'] = ['name' => 'solution_time'];
-				
-				if (check_entity_relationship($user->getGUID(), QUESTIONS_EXPERT_ROLE, $site->getGUID())) {
-					$container_where[] = "(e.container_guid NOT IN (
-						SELECT ge.guid
-						FROM {$dbprefix}entities ge
-						WHERE ge.type = 'group'
-						AND ge.site_guid = {$site->guid}
-						AND ge.enabled = 'yes'
-					))";
-				}
-				
-				$groups = elgg_get_entities([
-					'type' => 'group',
-					'limit' => false,
-					'relationship' => QUESTIONS_EXPERT_ROLE,
-					'relationship_guid' => $user->guid,
-					'callback' => function ($row) {
-						return (int) $row->guid;
-					},
-				]);
-				if (!empty($groups)) {
-					$container_where[] = '(e.container_guid IN (' . implode(',', $groups) . '))';
-				}
-				
-				$container_where = '(' . implode(' OR ', $container_where) . ')';
-				
-				$options['wheres'][] = $container_where;
-								
 				break;
 			case 'all':
 				// just get all questions

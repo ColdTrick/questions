@@ -5,6 +5,8 @@
  * @package ElggQuestions
  */
 
+use Elgg\Database\QueryBuilder;
+
 elgg_gatekeeper();
 if (!questions_is_expert()) {
 	forward('questions/all');
@@ -38,17 +40,20 @@ elgg_push_breadcrumb(elgg_echo('questions:todo'));
 elgg_register_title_button('questions', 'add', 'object', ElggQuestion::SUBTYPE);
 
 // prepare options
-$dbprefix = elgg_get_config('dbprefix');
-
 $options = [
 	'type' => 'object',
-	'subtype' => 'question',
-	'wheres' => ["NOT EXISTS (
-		SELECT 1
-		FROM {$dbprefix}entities e2
-		JOIN {$dbprefix}metadata md ON e2.guid = md.entity_guid
-		WHERE e2.container_guid = e.guid
-		AND md.name = 'correct_answer')",
+	'subtype' => ElggQuestion::SUBTYPE,
+	'wheres' => [
+		function (QueryBuilder $qb, $main_alias) {
+			$sub = $qb->subquery('entities', 'a')
+				->select('a.container_guid')
+				->join('a', 'metadata', 'asmd', $qb->compare('a.guid', '=', 'asmd.entity_guid'))
+				->where($qb->compare('asmd.name', '=', 'correct_answer', ELGG_VALUE_STRING))
+				->andWhere($qb->compare('a.type', '=', 'object', ELGG_VALUE_STRING))
+				->andWhere($qb->compare('a.subtype', '=', ElggAnswer::SUBTYPE, ELGG_VALUE_STRING));
+			
+			return $qb->compare("{$main_alias}.guid", 'NOT IN', $sub->getSQL());
+		},
 	],
 	'full_view' => false,
 	'list_type_toggle' => false,
@@ -59,36 +64,7 @@ $options = [
 if ($page_owner instanceof ElggGroup) {
 	$options['container_guid'] = $page_owner->getGUID();
 } else {
-	$site = elgg_get_site_entity();
-	$user = elgg_get_logged_in_user_entity();
-	$container_where = [];
-	
-	if (check_entity_relationship($user->getGUID(), QUESTIONS_EXPERT_ROLE, $site->getGUID())) {
-		$container_where[] = "(e.container_guid NOT IN (
-			SELECT ge.guid
-			FROM {$dbprefix}entities ge
-			WHERE ge.type = 'group'
-			AND ge.site_guid = {$site->guid}
-			AND ge.enabled = 'yes'
-		))";
-	}
-	
-	$groups = elgg_get_entities([
-		'type' => 'group',
-		'limit' => false,
-		'relationship' => QUESTIONS_EXPERT_ROLE,
-		'relationship_guid' => $user->guid,
-		'callback' => function ($row) {
-			return (int) $row->guid;
-		},
-	]);
-	if (!empty($groups)) {
-		$container_where[] = '(e.container_guid IN (' . implode(',', $groups) . '))';
-	}
-	
-	$container_where = '(' . implode(' OR ', $container_where) . ')';
-	
-	$options['wheres'][] = $container_where;
+	$options['wheres'][] = questions_get_expert_where_sql();
 }
 
 $tags = get_input('tags');

@@ -1,15 +1,16 @@
 <?php
-use Elgg\Database\Clauses\OrderByClause;
-
 /**
  * View a question
  *
  * @package ElggQuestions
  */
 
+use Elgg\Database\Clauses\OrderByClause;
+use Elgg\Database\QueryBuilder;
+
 $guid = (int) elgg_extract('guid', $vars);
 
-elgg_entity_gatekeeper($guid, 'object', 'question');
+elgg_entity_gatekeeper($guid, 'object', ElggQuestion::SUBTYPE);
 $question = get_entity($guid);
 
 elgg_push_breadcrumb(elgg_echo('questions'), 'questions/all');
@@ -33,7 +34,7 @@ elgg_push_breadcrumb($title);
 // build page elements
 $title_icon = '';
 
-$content = elgg_view_entity($question,['full_view' => true]);
+$content = elgg_view_entity($question, ['full_view' => true]);
 
 $answers = '';
 
@@ -46,26 +47,32 @@ if (!empty($marked_answer)) {
 // add the rest of the answers
 $options = [
 	'type' => 'object',
-	'subtype' => 'answer',
-	'container_guid' => $question->getGUID(),
+	'subtype' => ElggAnswer::SUBTYPE,
+	'container_guid' => $question->guid,
 	'count' => true,
 	'limit' => false,
 ];
 
 if (!empty($marked_answer)) {
 	// do not include the marked answer as it already  added to the output before
-	$options['wheres'] = ["e.guid <> {$marked_answer->getGUID()}"];
+	$options['wheres'] = [
+		function (QueryBuilder $qb, $main_alias) use ($marked_answer) {
+			return $qb->compare("{$main_alias}.guid", '!=', $marked_answer->guid, ELGG_VALUE_GUID);
+		},
+	];
 }
 
 if (elgg_is_active_plugin('likes')) {
 	// order answers based on likes
-	$dbprefix = elgg_get_config('dbprefix');
-	
 	$options['selects'] = [
-		"(SELECT count(a.name) AS likes_count
-		FROM {$dbprefix}annotations a
-		WHERE a.entity_guid = e.guid
-		AND a.name = 'likes') AS likes_count",
+		function (QueryBuilder $qb, $main_alias) {
+			$sub = $qb->subquery('annotations')
+				->select('count(name)')
+				->where($qb->compare('entity_guid', '=', "{$main_alias}.guid"))
+				->andWhere($qb->compare('name', '=', 'likes', ELGG_VALUE_STRING));
+			
+			return "(){$sub->getSQL()}) as likes_count";
+		},
 	];
 	$options['order_by'] = [
 		new OrderByClause('likes_count', 'DESC'),

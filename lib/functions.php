@@ -3,6 +3,8 @@
  * All helper functions for the questions plugin can be found in this file.
  */
 
+use Elgg\Database\QueryBuilder;
+
 /**
  * This function checks if expert roles are enabled in the plugin settings
  *
@@ -305,19 +307,22 @@ function questions_can_move_to_discussions(ElggEntity $container, ElggUser $user
  */
 function questions_backdate_entity($entity_guid, $time_created) {
 	
-	$entity_guid = sanitise_int($entity_guid, false);
-	$time_created = sanitise_int($time_created);
-	
+	$entity_guid = (int) $entity_guid;
+	$time_created = (int) $time_created;
 	if (empty($entity_guid)) {
 		return false;
 	}
 	
-	$dbprefix = elgg_get_config('dbprefix');
-	$query = "UPDATE {$dbprefix}entities
-		SET time_created = {$time_created}
-		WHERE guid = {$entity_guid}";
-	
-	return (bool) update_data($query);
+	return elgg_call(ELGG_IGNORE_ACCESS, function() use ($entity_guid, $time_created) {
+		$entity = get_entity($entity_guid);
+		if (empty($entity)) {
+			return false;
+		}
+		
+		$entity->time_created = $time_created;
+		
+		return (bool) $entity->save();
+	});
 }
 
 /**
@@ -501,4 +506,65 @@ function questions_prepare_question_form_vars($question = null) {
 	}
 	
 	return $defaults;
+}
+
+/**
+ * Get the where clauses to select todo items (open questions)
+ *
+ * @param int $user_guid GUID of the user to check for (default: current user)
+ *
+ * @return false|callable
+ */
+function questions_get_expert_where_sql($user_guid = 0) {
+	
+	$user_guid = (int) $user_guid;
+	if ($user_guid < 1) {
+		$user_guid = elgg_get_logged_in_user_guid();
+	}
+	
+	$user = get_user($user_guid);
+	if (!$user instanceof ElggUser) {
+		return false;
+	}
+	
+	$site = elgg_get_site_entity();
+	
+	$wheres = [];
+	
+	// site expert
+	if (questions_is_expert($site, $user)) {
+		// filter all non group questions
+		$wheres[] = function (QueryBuilder $qb, $main_alias) {
+			$sub = $qb->subquery('entities')
+				->select('guid')
+				->where($qb->compare('type', '=', 'group', ELGG_VALUE_STRING))
+				->andWhere($qb->compare('enabled', '=', 'yes', ELGG_VALUE_STRING));
+			
+			return $qb->compare("{$main_alias}.container_guid", 'NOT IN', $sub->getSQL());
+		};
+	}
+	
+	// fetch groups where user is expert
+	$groups = elgg_get_entities([
+		'type' => 'group',
+		'limit' => false,
+		'relationship' => QUESTIONS_EXPERT_ROLE,
+		'relationship_guid' => $user->guid,
+		'callback' => function ($row) {
+			return (int) $row->guid;
+		},
+	]);
+	if (!empty($groups)) {
+		$wheres[] = function (QueryBuilder $qb, $main_alias) use ($groups) {
+			return $qb->compare("{$main_alias}.container_guid", 'IN', $groups);
+		};
+	}
+	
+	if (empty($wheres)) {
+		return false;
+	}
+	
+	return function (QueryBuilder $qb, $main_alias) use ($wheres) {
+		return $qb->merge($wheres, 'OR');
+	};
 }
