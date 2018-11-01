@@ -64,7 +64,6 @@ class Bootstrap extends DefaultPluginBootstrap {
 		$hooks->registerHandler('get', 'subscriptions', __NAMESPACE__ . '\Notifications::addQuestionOwnerToAnswerSubscribers');
 		$hooks->registerHandler('get', 'subscriptions', __NAMESPACE__ . '\Notifications::addAnswerOwnerToAnswerSubscribers');
 		$hooks->registerHandler('get', 'subscriptions', __NAMESPACE__ . '\Notifications::addQuestionSubscribersToAnswerSubscribers');
-		$hooks->registerHandler('index_entity_type_subtypes', 'elasticsearch', __NAMESPACE__ . '\Elasticsearch::indexTypes');
 		$hooks->registerHandler('likes:is_likable', 'object:' . \ElggQuestion::SUBTYPE, '\Elgg\Values::getTrue');
 		$hooks->registerHandler('likes:is_likable', 'object:' . \ElggAnswer::SUBTYPE, '\Elgg\Values::getTrue');
 		$hooks->registerHandler('permissions_check', 'object', __NAMESPACE__ . '\Permissions::objectPermissionsCheck');
@@ -77,8 +76,8 @@ class Bootstrap extends DefaultPluginBootstrap {
 		$hooks->registerHandler('register', 'menu:filter:questions', __NAMESPACE__ . '\Menus::registerFilter');
 		$hooks->registerHandler('register', 'menu:owner_block', __NAMESPACE__ . '\Menus::registerOwnerBlock');
 		$hooks->registerHandler('register', 'menu:user_hover', __NAMESPACE__ . '\Menus::registerUserHover');
-		$hooks->registerHandler('search', 'object:question', __NAMESPACE__ . '\Search::handleQuestionsSearch');
-		$hooks->registerHandler('search_params', 'search:combined', __NAMESPACE__ . '\SearchAdvanced::combinedParams');
+		$hooks->registerHandler('search:config', 'type_subtype_pairs', __NAMESPACE__ . '\Search::typeSubtypePairsConfig');
+		$hooks->registerHandler('search:options', 'all', __NAMESPACE__ . '\Search::optionsAddAnswers');
 		$hooks->registerHandler('supported_types', 'entity_tools', __NAMESPACE__ . '\MigrateQuestions::supportedSubtypes');
 	}
 	

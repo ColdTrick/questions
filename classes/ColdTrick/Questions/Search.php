@@ -5,27 +5,64 @@ namespace ColdTrick\Questions;
 class Search {
 	
 	/**
-	 * Handle search hook, to include answers in the same set as questions
+	 * Remove answers from the searchable types, to prevent an menu item
 	 *
-	 * @param string $hook         the name of the hook
-	 * @param string $type         the type of the hook
-	 * @param mixed  $return_value current return value
-	 * @param array  $params       supplied params
+	 * @param \Elgg\Hook $hook 'search:config', 'type_subtype_pairs'
 	 *
 	 * @return void|mixed
 	 */
-	public static function handleQuestionsSearch($hook, $type, $return_value, $params) {
+	public static function typeSubtypePairsConfig(\Elgg\Hook $hook) {
 		
-		if (empty($params) || !is_array($params)) {
+		$types = $hook->getValue();
+		$objects = elgg_extract('object', $types);
+		if (empty($objects)) {
 			return;
 		}
 		
-		unset($params['subtype']);
-		$params['subtypes'] = [
-			\ElggAnswer::SUBTYPE,
-			\ElggQuestion::SUBTYPE,
-		];
+		$key = array_search(\ElggAnswer::SUBTYPE, $objects);
+		if ($key === false) {
+			return;
+		}
 		
-		return elgg_trigger_plugin_hook('search', 'object', $params, $return_value);
+		unset($objects[$key]);
+		$types['object'] = $objects;
+		
+		return $types;
+	}
+	
+	/**
+	 * Add answers to the question searches
+	 *
+	 * @param \Elgg\Hook $hook 'search:options', 'all'
+	 *
+	 * @return void|mixed
+	 */
+	public static function optionsAddAnswers(\Elgg\Hook $hook) {
+		
+		$search_params = $hook->getValue();
+		
+		$type_subtype_pairs = false;
+		$subtypes = (array) elgg_extract('subtypes', $search_params, elgg_extract('subtype', $search_params));
+		if (empty($subtypes)) {
+			$type_subtype_pairs = (array) elgg_extract('type_subtype_pairs', $search_params);
+			$subtypes = (array) elgg_extract('object', $type_subtype_pairs);
+		}
+		
+		if (empty($subtypes) || !in_array(\ElggQuestion::SUBTYPE, $subtypes) || in_array(\ElggAnswer::SUBTYPE, $subtypes)) {
+			return;
+		}
+		
+		$subtypes[] = \ElggAnswer::SUBTYPE;
+		
+		if ($type_subtype_pairs !== false) {
+			$type_subtype_pairs['object'] = $subtypes;
+			
+			$search_params['type_subtype_pairs'] = $type_subtype_pairs;
+		} else {
+			$search_params['subtypes'] = $subtypes;
+			unset($search_params['subtype']);
+		}
+		
+		return $search_params;
 	}
 }

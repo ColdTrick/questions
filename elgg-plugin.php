@@ -20,13 +20,14 @@ return [
 		[
 			'type' => 'object',
 			'subtype' => 'question',
-			'class' => 'ElggQuestion',
+			'class' => ElggQuestion::class,
 			'searchable' => true,
 		],
 		[
 			'type' => 'object',
 			'subtype' => 'answer',
-			'class' => 'ElggAnswer',
+			'class' => ElggAnswer::class,
+			'searchable' => true,
 		],
 	],
 	'routes' => [
