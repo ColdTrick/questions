@@ -23,11 +23,11 @@ class Permissions {
 		
 		$user = elgg_extract('user', $params);
 		$container = elgg_extract('container', $params);
-		if (!($user instanceof \ElggUser) || !($container instanceof \ElggEntity)) {
+		if (!$user instanceof \ElggUser || !$container instanceof \ElggEntity) {
 			return false;
 		}
 		
-		if (!($container instanceof \ElggGroup)) {
+		if (!$container instanceof \ElggGroup) {
 			if (questions_limited_to_groups()) {
 				// questions only in groups
 				return false;
@@ -38,7 +38,7 @@ class Permissions {
 		}
 		
 		// group
-		if ($container->questions_enable !== 'yes') {
+		if (!$container->isToolEnabled('questions')) {
 			// questions not enabled in this group
 			return false;
 		}

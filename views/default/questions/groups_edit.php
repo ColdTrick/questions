@@ -9,7 +9,7 @@ if (!$group->canEdit()) {
 	return;
 }
 
-if ($group->questions_enable !== 'yes') {
+if (!$group->isToolEnabled('questions')) {
 	return;
 }
 
