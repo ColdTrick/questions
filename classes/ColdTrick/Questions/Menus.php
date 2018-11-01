@@ -146,8 +146,8 @@ class Menus {
 				'route' => $route,
 				'route_params' => $route_params,
 			]);
-		} elseif ($session->has("questions_tags_{$page_owner_guid}")) {
-			$settings = $session->get("questions_tags_{$page_owner_guid}");
+		} elseif ($session->has("questions_tags_{$page_owner->guid}")) {
+			$settings = $session->get("questions_tags_{$page_owner->guid}");
 			
 			$tags = elgg_extract('tags', $settings);
 			$route = elgg_extract('route', $settings);
