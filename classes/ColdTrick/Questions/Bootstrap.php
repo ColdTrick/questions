@@ -74,7 +74,7 @@ class Bootstrap extends DefaultPluginBootstrap {
 		$hooks->registerHandler('prepare', 'notification:correct:object:' . ElggAnswer::SUBTYPE, __NAMESPACE__ . '\Notifications::correctAnswer');
 		$hooks->registerHandler('prepare', 'notification:create:object:comment', __NAMESPACE__ . '\Notifications::createCommentOnAnswer');
 		$hooks->registerHandler('register', 'menu:entity', __NAMESPACE__ . '\Menus::registerEntity');
-		$hooks->registerHandler('register', 'menu:filter', __NAMESPACE__ . '\Menus::registerFilter');
+		$hooks->registerHandler('register', 'menu:filter:questions', __NAMESPACE__ . '\Menus::registerFilter');
 		$hooks->registerHandler('register', 'menu:owner_block', __NAMESPACE__ . '\Menus::registerOwnerBlock');
 		$hooks->registerHandler('register', 'menu:user_hover', __NAMESPACE__ . '\Menus::registerUserHover');
 		$hooks->registerHandler('search', 'object:question', __NAMESPACE__ . '\Search::handleQuestionsSearch');
