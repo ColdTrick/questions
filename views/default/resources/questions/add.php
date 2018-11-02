@@ -5,9 +5,9 @@
  * @package ElggQuestions
  */
 
-elgg_gatekeeper();
+$page_owner = elgg_get_page_owner_entity();
 
-elgg_push_breadcrumb(elgg_echo('questions'), 'questions/all');
+elgg_push_collection_breadcrumbs('object', ElggQuestion::SUBTYPE, $page_owner);
 
 $title = elgg_echo('questions:add');
 

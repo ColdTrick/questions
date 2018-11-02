@@ -5,22 +5,18 @@
  * @package ElggQuestions
  */
 
-elgg_gatekeeper();
-
-elgg_push_breadcrumb(elgg_echo('questions'), 'questions/all');
+use Elgg\EntityPermissionsException;
 
 $question_guid = (int) elgg_extract('guid', $vars);
+elgg_entity_gatekeeper($question_guid, 'object', ElggQuestion::SUBTYPE);
 
-elgg_entity_gatekeeper($question_guid, 'object', 'question');
+/* @var $question ElggQuestion */
 $question = get_entity($question_guid);
-
 if (!$question->canEdit()) {
-	register_error(elgg_echo('actionunauthorized'));
-	forward(REFERRER);
+	throw new EntityPermissionsException();
 }
 
-elgg_push_breadcrumb($question->getDisplayName(), $question->getURL());
-elgg_push_breadcrumb(elgg_echo('edit'));
+elgg_push_entity_breadcrumbs($question, true);
 
 $form_vars = [];
 if (questions_limited_to_groups()) {

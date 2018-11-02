@@ -5,6 +5,8 @@
  * @package ElggQuestions
  */
 
+elgg_push_collection_breadcrumbs('object', ElggQuestion::SUBTYPE);
+
 elgg_register_title_button('questions', 'add', 'object', ElggQuestion::SUBTYPE);
 
 // prepare options

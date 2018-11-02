@@ -5,14 +5,14 @@
  * @package ElggQuestions
  */
 
-elgg_push_breadcrumb(elgg_echo('questions'), 'questions/all');
-
 $group_guid = (int) elgg_extract('group_guid', $vars);
 
 $container = get_entity($group_guid);
 if ($container instanceof ElggGroup) {
-	elgg_push_breadcrumb($container->getDisplayName(), "questions/group/{$container->guid}/all");
+	elgg_push_collection_breadcrumbs('object', ElggQuestion::SUBTYPE, $container);
 } else {
+	elgg_push_collection_breadcrumbs('object', ElggQuestion::SUBTYPE);
+	
 	$container = elgg_get_site_entity();
 }
 
@@ -20,7 +20,6 @@ elgg_set_page_owner_guid($container->getGUID());
 
 // build page elements
 $title_text = elgg_echo('questions:experts:title');
-elgg_push_breadcrumb($title_text);
 
 // expert description
 if ($container instanceof ElggGroup) {

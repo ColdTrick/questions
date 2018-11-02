@@ -5,12 +5,11 @@
  * @package Questions
  */
 
-use Elgg\EntityNotFoundException;
+elgg_entity_gatekeeper(elgg_get_page_owner_guid(), 'group');
+elgg_group_tool_gatekeeper('questions');
 
+/* @var $page_owner ElggGroup */
 $page_owner = elgg_get_page_owner_entity();
-if (!$page_owner instanceof ElggUser) {
-	throw new EntityNotFoundException();
-}
 
 elgg_push_collection_breadcrumbs('object', ElggQuestion::SUBTYPE, $page_owner);
 
@@ -20,7 +19,7 @@ elgg_register_title_button('questions', 'add', 'object', ElggQuestion::SUBTYPE);
 $options = [
 	'type' => 'object',
 	'subtype' => 'question',
-	'owner_guid' => $page_owner->guid,
+	'container_guid' => $page_owner->guid,
 	'full_view' => false,
 	'list_type_toggle' => false,
 	'no_results' => elgg_echo('questions:none'),
@@ -47,7 +46,6 @@ $content = elgg_list_entities($options);
 $body = elgg_view_layout('content', [
 	'title' => $title,
 	'content' => $content,
-	'filter_context' => ($page_owner->guid === elgg_get_logged_in_user_guid()) ? 'mine' : '',
 ]);
 
 // draw page

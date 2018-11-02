@@ -9,29 +9,20 @@ use Elgg\Database\Clauses\OrderByClause;
 use Elgg\Database\QueryBuilder;
 
 $guid = (int) elgg_extract('guid', $vars);
-
 elgg_entity_gatekeeper($guid, 'object', ElggQuestion::SUBTYPE);
-$question = get_entity($guid);
 
-elgg_push_breadcrumb(elgg_echo('questions'), 'questions/all');
+/* @var $question ElggQuestion */
+$question = get_entity($guid);
 
 // set page owner
 $page_owner = $question->getContainerEntity();
 
 // set breadcrumb
-$crumbs_title = $page_owner->getDisplayName();
-
-if ($page_owner instanceof ElggGroup) {
-	elgg_push_breadcrumb($crumbs_title, "questions/group/{$page_owner->guid}");
-} else {
-	elgg_push_breadcrumb($crumbs_title, "questions/owner/{$page_owner->username}");
-}
-
-$title = $question->getDisplayName();
-
-elgg_push_breadcrumb($title);
+elgg_push_entity_breadcrumbs($question, false);
 
 // build page elements
+$title = $question->getDisplayName();
+
 $title_icon = '';
 
 $content = elgg_view_entity($question, ['full_view' => true]);

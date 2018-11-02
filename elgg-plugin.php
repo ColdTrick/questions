@@ -1,6 +1,7 @@
 <?php
 
 use ColdTrick\Questions\Bootstrap;
+use Elgg\Router\Middleware\Gatekeeper;
 
 define('QUESTIONS_EXPERT_ROLE', 'questions_expert');
 
@@ -34,18 +35,30 @@ return [
 		'add:object:question' => [
 			'path' => '/questions/add/{guid?}',
 			'resource' => 'questions/add',
+			'middleware' => [
+				Gatekeeper::class,
+			],
 		],
 		'edit:object:question' => [
 			'path' => '/questions/edit/{guid}',
 			'resource' => 'questions/edit',
+			'middleware' => [
+				Gatekeeper::class,
+			],
 		],
 		'add:object:answer' => [
 			'path' => '/answers/add/{guid?}',
 			'resource' => 'answers/add',
+			'middleware' => [
+				Gatekeeper::class,
+			],
 		],
 		'edit:object:answer' => [
 			'path' => '/answers/edit/{guid}',
 			'resource' => 'answers/edit',
+			'middleware' => [
+				Gatekeeper::class,
+			],
 		],
 		'view:object:question' => [
 			'path' => '/questions/view/{guid}/{title?}',
@@ -54,6 +67,9 @@ return [
 		'collection:object:question:todo' => [
 			'path' => '/questions/todo/{group_guid?}',
 			'resource' => 'questions/todo',
+			'middleware' => [
+				Gatekeeper::class,
+			],
 		],
 		'collection:object:question:experts' => [
 			'path' => '/questions/experts/{group_guid?}',
@@ -61,7 +77,7 @@ return [
 		],
 		'collection:object:question:group' => [
 			'path' => '/questions/group/{guid}/{subpage?}',
-			'resource' => 'questions/owner',
+			'resource' => 'questions/group',
 			'defaults' => [
 				'subpage' => 'all',
 			],

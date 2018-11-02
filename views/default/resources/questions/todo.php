@@ -1,18 +1,17 @@
 <?php
 /**
- * Elgg questions plugin everyone page
+ * Elgg questions plugin todo page
  *
  * @package ElggQuestions
  */
 
 use Elgg\Database\QueryBuilder;
+use Elgg\EntityPermissionsException;
 
-elgg_gatekeeper();
 if (!questions_is_expert()) {
-	forward('questions/all');
+	$e = new EntityPermissionsException();
+	$e->setRedirectUrl(elgg_generate_url('collection:object:question:all'));
 }
-
-elgg_push_breadcrumb(elgg_echo('questions'), 'questions/all');
 
 // check for a group filter
 $group_guid = (int) elgg_extract('group_guid', $vars);
@@ -21,10 +20,12 @@ if (!empty($group_guid)) {
 	if ($group instanceof ElggGroup) {
 		// make sure the user is an expert of this group
 		if (!questions_is_expert($group)) {
-			forward("questions/group/{$group->guid}/all");
+			$e = new EntityPermissionsException();
+			$e->setRedirectUrl(elgg_generate_url('collection:object:question:group', [
+				'guid' => $group->guid,
+			]));
 		}
 		$page_owner = $group;
-		elgg_push_breadcrumb($group->getDisplayName(), "questions/group/{$group->guid}/all");
 	}
 }
 
@@ -32,9 +33,10 @@ if (empty($page_owner)) {
 	$page_owner = elgg_get_logged_in_user_entity();
 }
 
+elgg_push_collection_breadcrumbs('object', ElggQuestion::SUBTYPE, $page_owner);
+
 // set page owner and add breadcrumb
 elgg_set_page_owner_guid($page_owner->getGUID());
-elgg_push_breadcrumb(elgg_echo('questions:todo'));
 
 // add title button
 elgg_register_title_button('questions', 'add', 'object', ElggQuestion::SUBTYPE);
