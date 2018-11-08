@@ -81,6 +81,16 @@ switch ($widget->context) {
 		break;
 }
 
+// check if a group was selected using the grouppicker
+$groups = $widget->group_guid;
+if (!empty($groups)) {
+	$route = 'collection:object:question:group';
+	$route_params['guid'] = $groups[0];
+	
+	// only in this container
+	$options['container_guid'] = $groups[0];
+}
+
 // add tags filter
 $filter_tags = $widget->filter_tags;
 if (!empty($filter_tags)) {

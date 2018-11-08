@@ -52,6 +52,14 @@ class Widgets {
 			]);
 		}
 		
+		// custom group selected?
+		$groups = $entity->group_guid;
+		if (!empty($groups)) {
+			return elgg_generate_url('collection:object:question:group', [
+				'guid' => $groups[0],
+			]);
+		}
+		
 		return elgg_generate_url('collection:object:question:all');
 	}
 }

@@ -3,6 +3,7 @@
  * Questions widget settings
  */
 
+/* @var $widget ElggWidget */
 $widget = elgg_extract('entity', $vars);
 
 if ($widget->context === 'dashboard') {
@@ -20,6 +21,24 @@ if ($widget->context === 'dashboard') {
 		'name' => 'params[content_type]',
 		'value' => $widget->content_type,
 		'options_values' => $content_type_options,
+	]);
+} else {
+	
+	$groups = [];
+	if ($widget->context === 'groups') {
+		$groups = [$widget->owner_guid];
+	}
+	
+	if ($widget->group_guid) {
+		$groups = $widget->group_guid;
+	}
+	
+	echo elgg_view_field([
+		'#type' => 'grouppicker',
+		'#label' => elgg_echo('widget:questions:edit:group'),
+		'name' => 'params[group_guid]',
+		'values' => $groups,
+		'limit' => 1,
 	]);
 }
 

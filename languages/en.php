@@ -192,6 +192,7 @@ To view the question, click here:
 	'widgets:questions:name' => "Questions",
 	'widgets:questions:description' => "You can view the status of your questions.",
 	'widget:questions:content_type' => "Which questions to show",
+	'widget:questions:edit:group' => "Limit questions to the selected group",
 	'widget:questions:more' => "View more questions",
 		
 	/**
