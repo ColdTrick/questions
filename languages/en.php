@@ -155,7 +155,7 @@ To view the question, click here:
 	'questions:settings:general:solution_time_group' => "Group owners can change the default solution time",
 	'questions:settings:general:solution_time_group:description' => "If not allowed, groups will use the default solution time as defined above.",
 	'questions:settings:general:limit_to_groups' => "Limit questions to group context only",
-	'questions:settings:general:limit_to_groups:description' => "If set to 'yes', questions can no longer be made in the personal context.",
+	'questions:settings:general:limit_to_groups:description' => "If enabled, questions can no longer be made in the personal context.",
 	
 	'questions:settings:experts:title' => "Q&A expert settings",
 	'questions:settings:experts:enable' => "Enable expert roles",
