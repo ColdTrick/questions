@@ -64,6 +64,9 @@ switch ($widget->context) {
 				break;
 			case 'all':
 				// just get all questions
+				$route = 'collection:object:question:all';
+				unset($route_params['username']);
+				
 				break;
 			case 'mine':
 			default:
