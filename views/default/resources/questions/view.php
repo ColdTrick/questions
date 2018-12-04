@@ -14,9 +14,6 @@ elgg_entity_gatekeeper($guid, 'object', ElggQuestion::SUBTYPE);
 /* @var $question ElggQuestion */
 $question = get_entity($guid);
 
-// set page owner
-$page_owner = $question->getContainerEntity();
-
 // set breadcrumb
 elgg_push_entity_breadcrumbs($question, false);
 
@@ -42,6 +39,7 @@ $options = [
 	'container_guid' => $question->guid,
 	'count' => true,
 	'limit' => false,
+	'full_view' => true,
 ];
 
 if (!empty($marked_answer)) {
@@ -78,28 +76,53 @@ if (!empty($marked_answer)) {
 	$count++;
 }
 
-if (!empty($answers)) {
-	$content .= elgg_view_module('info', elgg_echo('answers') . " ({$count})", $answers, [
-		'class' => 'mtm',
-		'id' => 'question-answers',
-	]);
-}
+$answer_menu = '';
 
 // add answer form
-if (($question->getStatus() === 'open') && $question->canWriteToContainer(0, 'object', 'answer')) {
+if (($question->getStatus() === 'open') && $question->canWriteToContainer(0, 'object', ElggAnswer::SUBTYPE)) {
 	
-	$add_form = elgg_view_form('object/answer/add', ['action' => elgg_generate_action_url('object/answer/edit', [], false)], ['container_guid' => $question->getGUID()]);
+	$class = [
+		'mtm',
+	];
+	if (!empty($count)) {
+		$class[] = 'hidden';
+	}
 	
-	$content .= elgg_view_module('info', elgg_echo('answers:addyours'), $add_form);
+	$answers = elgg_view_form('object/answer/add', [
+		'action' => elgg_generate_action_url('object/answer/edit', [], false),
+		'class' => $class,
+	], [
+		'container_guid' => $question->guid,
+	]) . $answers;
+	
+	if (!empty($count)) {
+		$answer_menu .= elgg_view('output/url', [
+			'icon' => 'plus',
+			'text' => elgg_echo('answers:addyours'),
+			'href' => false,
+			'rel' => 'toggle',
+			'class' => ['elgg-button', 'elgg-button-action'],
+			'data-toggle-selector' => '.elgg-form-object-answer-add',
+		]);
+	}
 } elseif ($question->getStatus() === 'closed') {
 	// add an icon to show this question is closed
 	$title_icon = elgg_view_icon('lock-closed');
 }
 
+if (!empty($answers)) {
+	$content .= elgg_view_module('answers', elgg_echo('answers') . " ({$count})", $answers, [
+		'class' => 'mtm',
+		'id' => 'question-answers',
+		'menu' => $answer_menu,
+	]);
+}
+
 $body = elgg_view_layout('content', [
+	'entity' => $question,
 	'title' => $title_icon . $title,
 	'content' => $content,
-	'filter' => '',
+	'filter' => false,
 ]);
 
 echo elgg_view_page($title, $body);

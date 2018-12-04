@@ -1,89 +1,82 @@
 <?php
 
+use Elgg\Values;
+
 $answer = elgg_extract('entity', $vars);
 if (!$answer instanceof ElggAnswer) {
 	return;
 }
 
-$vars['title'] = false;
-$vars['access'] = false;
-$vars['icon_entity'] = $answer->getOwnerEntity();
+$full_view = (bool) elgg_extract('full_view', $vars, false);
 
-$vars['content'] = elgg_view('output/longtext', ['value' => $answer->description]);
+/* @var $question ElggQuestion */
+$question = elgg_call(ELGG_IGNORE_ACCESS, function() use ($answer) {
+	return $answer->getContainerEntity();
+});
+
+$params = [
+	'entity' => $answer,
+	'access' => false,
+	'icon_entity' => $answer->getOwnerEntity(),
+	'imprint' => [],
+];
 
 $correct_answer = $answer->getCorrectAnswerMetadata();
 if ($correct_answer) {
-	$timestamp = htmlspecialchars(date(elgg_echo('friendlytime:date_format'), $correct_answer->time_created));
-	$vars['imprint'][] = [
+	
+	$date = Values::normalizeTime($correct_answer->time_created);
+	
+	$content = elgg_format_element('time', [
+		'datetime' => $date->format('c'),
+	], elgg_echo('questions:answer:checkmark:title', [
+		$date->format(elgg_echo('friendlytime:date_format')),
+	]));
+	
+	$params['imprint'][] = [
 		'icon_name' => 'check',
-		'content' => elgg_echo('questions:answer:checkmark:title', [$timestamp]),
+		'content' => $content,
 	];
 }
 
-echo elgg_view('object/elements/summary', $vars);
-return;
-
-$question = $answer->getContainerEntity();
-
-$image = elgg_view_entity_icon($answer->getOwnerEntity(), 'tiny');
-
-// mark this as the correct answer?
-
-// if ($correct_answer) {
-// 	$owner = $correct_answer->getOwnerEntity();
-// 	var_dump($owner);
-// 	var_dump($correct_answer);
-// 	exit();
-// 	$owner_name = htmlspecialchars($owner->getDisplayName());
+if (!$full_view) {
+	// listing view
 	
-// 	$timestamp = htmlspecialchars(date(elgg_echo('friendlytime:date_format'), $correct_answer->time_created));
+	// make title
+	$answer_link = elgg_view('output/url', [
+		'text' => elgg_echo('questions:search:answer:title'),
+		'href' => $answer->getURL(),
+		'is_trusted' => true,
+	]);
+	$question_link = elgg_view('output/url', [
+		'text' => $question->getDisplayName(),
+		'href' => $question->getURL(),
+		'is_trusted' => true,
+	]);
 	
-// 	$title = elgg_echo('questions:answer:checkmark:title', [$owner_name, $timestamp]);
+	$params['title'] = elgg_echo('generic_comment:on', [$answer_link, $question_link]);
 	
-// 	$image .= elgg_format_element('div', ['class' => 'questions-checkmark', 'title' => $title], elgg_view_icon('checkmark'));
-// }
-
-// create subtitle
-$subtitle = elgg_view('page/elements/by_line', $vars);
-
-$body = elgg_view('output/longtext', ['value' => $answer->description]);
-
-// show comments?
-if ($question->comments_enabled !== 'off') {
-	$comment_count = $answer->countComments();
-	if ($comment_count) {
-		$comment_options = [
-			'type' => 'object',
-			'subtype' => 'comment',
-			'container_guid' => $answer->getGUID(),
-			'limit' => false,
-			'list_class' => 'elgg-river-comments',
-			'distinct' => false,
-			'full_view' => true,
-		];
-		
-		$body .= elgg_format_element('h3', ['class' => 'elgg-river-comments-tab mtm'], elgg_echo('comments'));
-		$body .= elgg_list_entities($comment_options);
-	}
+	// excerpt
+	$excerpt = elgg_get_excerpt($answer->description);
 	
-	if ($answer->canComment()) {
-		// show a comment form like in the river
-		$body_vars = [
-			'entity' => $answer,
-			'inline' => true,
-		];
-		$form = elgg_view_form('comment/save', [], $body_vars);
-		$body .= elgg_format_element('div', ['class' => ['elgg-river-item', 'hidden'], 'id' => "comments-add-{$answer->getGUID()}"], $form);
-	}
+	$params['content'] = $excerpt;
+	
+	$params = $params + $vars;
+	echo elgg_view('object/elements/summary', $params);
 }
 
-// build content
-$params = [
-	'entity' => $answer,
-	'title' => false,
-	'icon_entity' => $answer->getOwnerEntity(),
-	'subtitle' => $subtitle,
-	'content' => $body,
-];
+// full view
+$params['title'] = false;
+$params['show_summary'] = true;
+$params['body'] = elgg_view('output/longtext', [
+	'value' => $answer->description,
+]);
 
-echo elgg_view('object/elements/summary', $params);
+// show comments?
+$allow_comments = $question->comments_enabled !== 'off';
+
+$params['responses'] = elgg_view_comments($answer, $allow_comments, [
+	'inline' => true,
+]);
+
+$params = $params + $vars;
+echo elgg_view('object/elements/full', $params);
