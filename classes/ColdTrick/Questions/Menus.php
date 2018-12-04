@@ -88,15 +88,11 @@ class Menus {
 	/**
 	 * Add menu items to the filter menu
 	 *
-	 * @param \Elgg\Hook $hook 'register', 'menu:filter'
+	 * @param \Elgg\Hook $hook 'register', 'menu:filter:questions'
 	 *
 	 * @return void|MenuItems
 	 */
 	public static function registerFilter(\Elgg\Hook $hook) {
-		
-		if (!elgg_in_context('questions')) {
-			return;
-		}
 		
 		/* @var $items MenuItems */
 		$items = $hook->getValue();
