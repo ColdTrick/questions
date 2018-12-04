@@ -269,7 +269,7 @@ function questions_limited_to_groups() {
 function questions_can_move_to_discussions(ElggEntity $container, ElggUser $user = null) {
 	
 	// make sure we have a user
-	if (!($user instanceof ElggUser)) {
+	if (!$user instanceof ElggUser) {
 		$user = elgg_get_logged_in_user_entity();
 	}
 	
@@ -278,7 +278,7 @@ function questions_can_move_to_discussions(ElggEntity $container, ElggUser $user
 	}
 	
 	// only if container is a group
-	if (!($container instanceof ElggGroup)) {
+	if (!$container instanceof ElggGroup) {
 		return false;
 	}
 	
@@ -288,41 +288,11 @@ function questions_can_move_to_discussions(ElggEntity $container, ElggUser $user
 	}
 	
 	// are discussions enabled
-	if ($container->forum_enable === 'no') {
+	if (!$container->isToolEnabled('forum')) {
 		return false;
 	}
 	
 	return true;
-}
-
-/**
- * Backdate an entity, since this can't be done by Elgg core functions
- *
- * @param int $entity_guid  the entity to update
- * @param int $time_created the new time_created
- *
- * @access private
- *
- * @return bool
- */
-function questions_backdate_entity($entity_guid, $time_created) {
-	
-	$entity_guid = (int) $entity_guid;
-	$time_created = (int) $time_created;
-	if (empty($entity_guid)) {
-		return false;
-	}
-	
-	return elgg_call(ELGG_IGNORE_ACCESS, function() use ($entity_guid, $time_created) {
-		$entity = get_entity($entity_guid);
-		if (empty($entity)) {
-			return false;
-		}
-		
-		$entity->time_created = $time_created;
-		
-		return (bool) $entity->save();
-	});
 }
 
 /**
@@ -336,7 +306,7 @@ function questions_backdate_entity($entity_guid, $time_created) {
 function questions_can_ask_question(ElggEntity $container = null, ElggUser $user = null) {
 	
 	// default to page owner
-	if (!($container instanceof ElggEntity)) {
+	if (!$container instanceof ElggEntity) {
 		$container = elgg_get_page_owner_entity();
 	}
 	
@@ -345,7 +315,7 @@ function questions_can_ask_question(ElggEntity $container = null, ElggUser $user
 	}
 	
 	// default to current user
-	if (!($user instanceof ElggUser)) {
+	if (!$user instanceof ElggUser) {
 		$user = elgg_get_logged_in_user_entity();
 	}
 	

@@ -43,7 +43,6 @@ class Bootstrap extends DefaultPluginBootstrap {
 	protected function extendViews() {
 		elgg_extend_view('elgg.css', 'css/questions/site.css');
 		elgg_extend_view('groups/edit', 'questions/groups_edit');
-		elgg_extend_view('elgg.js', 'js/questions/site.js');
 	}
 	
 	/**
