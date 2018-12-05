@@ -40,7 +40,7 @@ if (!$full) {
 	
 	if ($question->getMarkedAnswer()) {
 		array_unshift($imprint, [
-			'icon' => 'checkmark',
+			'icon_name' => 'checkmark',
 			'content' => elgg_echo('questions:marked:correct'),
 		]);
 	}
