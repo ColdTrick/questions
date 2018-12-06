@@ -120,7 +120,7 @@ Klik hier om de vraag te beantwoorden:
   'questions:daily:notification:message:due' => 'De volgende vragen moeten vandaag worden beantwoord',
   'questions:daily:notification:message:new' => 'Nieuwe vragen',
   'questions:answer:edit' => 'Antwoord bijwerken',
-  'questions:answer:checkmark:title' => 'Dit antwoord is als het juiste antwoord sinds %s',
+  'questions:answer:checkmark:title' => 'Correct sinds %s',
   'questions:settings:general:title' => 'Algemene instellingen',
   'questions:settings:general:close' => 'Sluit een vraag als het als beantwoord wordt gemarkeerd',
   'questions:settings:general:close:description' => 'Als een antwoord op een vraag als het juiste antwoord wordt gemarkeerd, sluit de vraag. Er kunnen dan geen nieuwe antwoorden meer worden gegeven.',

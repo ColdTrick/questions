@@ -138,7 +138,7 @@ To view the question, click here:
 	 * answers
 	 */
 	'questions:answer:edit' => "Update answer",
-	'questions:answer:checkmark:title' => "Marked as the correct answer on %s",
+	'questions:answer:checkmark:title' => "Correct since %s",
 	
 	'questions:search:answer:title' => "Answer",
 	
