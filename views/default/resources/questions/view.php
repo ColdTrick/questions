@@ -29,7 +29,11 @@ $answers = '';
 // add the answer marked as the correct answer first
 $marked_answer = $question->getMarkedAnswer();
 if (!empty($marked_answer)) {
-	$answers .= elgg_view_entity($marked_answer);
+	$answers .= elgg_view_entity_list([$marked_answer], [
+		'limit' => false,
+		'full_view' => true,
+		'list_class' => ['mtm'],
+	]);
 }
 
 // add the rest of the answers
@@ -40,6 +44,7 @@ $options = [
 	'count' => true,
 	'limit' => false,
 	'full_view' => true,
+	'list_class' => ['mtm'],
 ];
 
 if (!empty($marked_answer)) {
@@ -112,7 +117,6 @@ if (($question->getStatus() === 'open') && $question->canWriteToContainer(0, 'ob
 
 if (!empty($answers)) {
 	$content .= elgg_view_module('answers', elgg_echo('answers') . " ({$count})", $answers, [
-		'class' => 'mtm',
 		'id' => 'question-answers',
 		'menu' => $answer_menu,
 	]);

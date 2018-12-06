@@ -71,10 +71,7 @@ $params['body'] = elgg_view('output/longtext', [
 	'value' => $answer->description,
 ]);
 
-// show comments?
-$allow_comments = $question->comments_enabled !== 'off';
-
-$params['responses'] = elgg_view_comments($answer, $allow_comments, [
+$params['responses'] = elgg_view_comments($answer, true, [
 	'inline' => true,
 ]);
 

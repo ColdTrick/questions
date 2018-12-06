@@ -15,6 +15,9 @@ $params = [
 	'title' => false,
 	'show_summary' => true,
 	'body' => elgg_view('output/longtext', ['value' => $question->description]),
+	'responses' => elgg_view_comments($question, true, [
+		'inline' => true,
+	]),
 ];
 
 $params = $params + $vars;
