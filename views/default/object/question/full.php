@@ -20,6 +20,14 @@ $params = [
 	]),
 ];
 
+if ($question->getStatus() === 'closed') {
+	// add an icon to show this question is closed
+	$params['imprint'][] = [
+		'icon_name' => 'lock-closed',
+		'content' => elgg_echo('status:closed'),
+	];
+}
+
 $params = $params + $vars;
 
 echo elgg_view('object/elements/full', $params);

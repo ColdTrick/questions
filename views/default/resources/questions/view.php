@@ -20,8 +20,6 @@ elgg_push_entity_breadcrumbs($question, false);
 // build page elements
 $title = $question->getDisplayName();
 
-$title_icon = '';
-
 $content = elgg_view_entity($question, ['full_view' => true]);
 
 $answers = '';
@@ -110,9 +108,6 @@ if (($question->getStatus() === 'open') && $question->canWriteToContainer(0, 'ob
 			'data-toggle-selector' => '.elgg-form-object-answer-add',
 		]);
 	}
-} elseif ($question->getStatus() === 'closed') {
-	// add an icon to show this question is closed
-	$title_icon = elgg_view_icon('lock-closed');
 }
 
 if (!empty($answers)) {
@@ -124,7 +119,7 @@ if (!empty($answers)) {
 
 $body = elgg_view_layout('content', [
 	'entity' => $question,
-	'title' => $title_icon . $title,
+	'title' => $title,
 	'content' => $content,
 	'filter' => false,
 ]);

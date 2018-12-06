@@ -11,7 +11,7 @@ if (!$question instanceof ElggQuestion) {
 }
 $full = (bool) elgg_extract('full_view', $vars, false);
 if ($full) {
-	echo elgg_view('questions/question/full', $vars);
+	echo elgg_view('object/question/full', $vars);
 	return;
 }
 
