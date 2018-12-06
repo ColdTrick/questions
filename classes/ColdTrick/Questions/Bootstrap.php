@@ -74,6 +74,7 @@ class Bootstrap extends DefaultPluginBootstrap {
 		$hooks->registerHandler('register', 'menu:entity', __NAMESPACE__ . '\Menus::registerEntity');
 		$hooks->registerHandler('register', 'menu:filter:questions', __NAMESPACE__ . '\Menus::registerFilter');
 		$hooks->registerHandler('register', 'menu:owner_block', __NAMESPACE__ . '\Menus::registerOwnerBlock');
+		$hooks->registerHandler('register', 'menu:social', __NAMESPACE__ . '\Menus::removeCommentsLinkForAnswers', 999);
 		$hooks->registerHandler('register', 'menu:user_hover', __NAMESPACE__ . '\Menus::registerUserHover');
 		$hooks->registerHandler('search:config', 'type_subtype_pairs', __NAMESPACE__ . '\Search::typeSubtypePairsConfig');
 		$hooks->registerHandler('search:options', 'all', __NAMESPACE__ . '\Search::optionsAddAnswers');
