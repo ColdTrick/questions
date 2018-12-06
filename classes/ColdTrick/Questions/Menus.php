@@ -268,4 +268,22 @@ class Menus {
 		
 		return $items;
 	}
+	
+	/**
+	 * Removes comments link for answers
+	 *
+	 * @param \Elgg\Hook $hook 'register', 'menu:entity'
+	 *
+	 * @return void|MenuItems
+	 */
+	public static function removeCommentsLinkForAnswers(\Elgg\Hook $hook) {
+
+		if (!$hook->getEntityParam() instanceof \ElggAnswer) {
+			return;
+		}
+		
+		$items = $hook->getValue();
+		$items->remove('comment');
+		return $items;
+	}
 }

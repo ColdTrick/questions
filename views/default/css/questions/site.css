@@ -22,4 +22,37 @@
 	color: red;
 }
 
+#question-answers {
+	margin-top: 4rem;
+}
+
+.question-comments,
+.answer-comments {
+	margin-left: 2rem;
+	
+	> .elgg-head {
+		display: none;
+	}
+	
+	> .elgg-body {
+		display: flex;
+		flex-direction: column;
+		
+		> form {
+			order: 1;
+			display: block;
+		}
+		
+		.elgg-item-object-comment > .elgg-image-block {
+			> .elgg-image {
+				display: none;
+			}
+			
+			.elgg-content {
+				margin: 0;
+			}
+		}
+	}
+}
+
 /* end questions css*/
