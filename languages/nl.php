@@ -1,10 +1,14 @@
 <?php
 /**
- * This file was created by Translation Editor v6.0
- * On 2017-08-17 14:38
+ * This file was created by Translation Editor v7.0-beta
+ * On 2018-12-14 16:51
  */
 
 return array (
+  'collection:object:question' => 'Vragen',
+  'collection:object:answer' => 'Antwoorden',
+  'questions:marked:correct' => 'Juiste antwoord is gegeven',
+  'widget:questions:edit:group' => 'Beperk de vragen tot de opgegeven groep',
   'questions:menu:filter:tags' => 'Tags: %s',
   'questions:notification:auto_close:subject' => 'De vraag \'%s\' is gesloten vanwege inactiviteit',
   'questions:notification:auto_close:summary' => 'De vraag \'%s\' is gesloten vanwege inactiviteit',
@@ -62,8 +66,6 @@ Om de reactie te bekijken, klik hier:
   'questions:menu:filter:todo_group' => 'Groep Todo',
   'questions:todo:none' => 'Er zijn geen openstaande vragen, blijf zo doorgaan!',
   'questions:search:answer:title' => 'Antwoord',
-  'questions:menu:user_hover:make_expert:confirm' => 'Weet je zeker dat je deze gebruiker een Vragen expert wilt maken van %s?',
-  'questions:menu:user_hover:remove_expert:confirm' => 'Weet je zeker dat je deze gebruiker wilt verwijderen als Vragen expert van %s?',
   'questions:edit:question:move_to_discussions' => 'Verplaats naar discussies',
   'questions:edit:question:move_to_discussions:confirm' => 'Weet je zeker dat je deze vraag wilt verplaatsen naar de discussies? Dit kan niet ongedaan worden gemaakt!!',
   'questions:action:question:move_to_discussions:error:move' => 'Je mag geen vragen verplaatsen naar discussies',
@@ -82,9 +84,6 @@ Om de reactie te bekijken, klik hier:
   'river:object:question:create' => '%s stelde vraag %s',
   'river:create:object:answer' => '%s ga een antwoord op de vraag %s',
   'questions' => 'Vragen',
-  'questions:asked' => 'Gesteld door %s',
-  'questions:answered' => 'Laatst beantwoord door %s %s',
-  'questions:answered:correct' => 'Juiste antwoord gegeven door %s %s',
   'questions:everyone' => 'Alle Vragen',
   'questions:add' => 'Stel een vraag',
   'questions:todo' => 'Todo',

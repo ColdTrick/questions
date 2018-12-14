@@ -21,9 +21,7 @@ return [
 	 * Menu items
 	 */
 	'questions:menu:user_hover:make_expert' => "Make Questions expert",
-	'questions:menu:user_hover:make_expert:confirm' => "Are you sure you wish to make this user a Questions expert of %s?",
 	'questions:menu:user_hover:remove_expert' => "Remove Questions expert",
-	'questions:menu:user_hover:remove_expert:confirm' => "Are you sure you wish to remove this user form the Questions experts of %s?",
 	
 	'questions:menu:entity:answer:mark' => "This is correct",
 	'questions:menu:entity:answer:unmark' => "No longer correct",
@@ -37,11 +35,8 @@ return [
 	'river:create:object:answer' => '%s provided an answer for the question %s',
 		
 	'questions' => 'Questions',
-	'questions:asked' => 'Asked by %s',
 	'questions:marked:correct' => 'Correct answer provided',
-	'questions:answered' => 'Last answered by %s %s',
-	'questions:answered:correct' => 'Correct answer provided by %s %s',
-
+	
 	'questions:everyone' => 'All Questions',
 	'questions:add' => 'Add a Question',
 	'questions:todo' => 'Todo',
