@@ -22,14 +22,7 @@ $params = [
 
 $imprint = [];
 
-$answer_options = [
-	'type' => 'object',
-	'subtype' => ElggAnswer::SUBTYPE,
-	'container_guid' => $question->guid,
-	'count' => true,
-];
-
-$num_answers = elgg_get_entities($answer_options);
+$num_answers = $question->getAnswers(['count' => true]);
 if ($num_answers > 0) {
 	$imprint[] = [
 		'icon_name' => 'comments',
@@ -72,4 +65,3 @@ $params['imprint'] = $imprint;
 $params = $params + $vars;
 
 echo elgg_view('object/elements/summary', $params);
-

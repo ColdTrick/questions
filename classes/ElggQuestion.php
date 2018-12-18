@@ -46,7 +46,7 @@ class ElggQuestion extends ElggObject {
 		$overrides = [
 			'type' => 'object',
 			'subtype' => 'answer',
-			'container_guid' => $this->getGUID(),
+			'container_guid' => $this->guid,
 		];
 		
 		$options = array_merge($defaults, $options, $overrides);
