@@ -24,7 +24,7 @@ class ElggQuestion extends ElggObject {
 	 */
 	public function canComment($user_guid = 0, $default = null) {
 		
-		if ($this->comments_enabled === 'off') {
+		if (!$this->commentsEnabled()) {
 			return false;
 		}
 		
@@ -136,5 +136,14 @@ class ElggQuestion extends ElggObject {
 		}
 		
 		return $result;
+	}
+	
+	/**
+	 * Are comments enabled
+	 *
+	 * @return bool
+	 */
+	public function commentsEnabled() {
+		return $this->comments_enabled !== 'off';
 	}
 }
