@@ -28,7 +28,8 @@ if ($num_answers > 0) {
 		'icon_name' => 'comments',
 		'content' => elgg_view('output/url', [
 			'href' => "{$question->getURL()}#question-answers",
-			'text' => elgg_echo('answers') . " ({$num_answers})",
+			'text' => elgg_echo('answers'),
+			'badge' => $num_answers,
 		]),
 	];
 }
