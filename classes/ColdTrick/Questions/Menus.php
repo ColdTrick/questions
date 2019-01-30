@@ -248,7 +248,7 @@ class Menus {
 				'user_guid' => $user->guid,
 				'guid' => $page_owner->guid,
 			]),
-			'section' => ($page_owner instanceof \ElggSite) ? 'admin' : 'default',
+			'section' => ($page_owner instanceof \ElggSite) ? 'admin' : 'action',
 			'data-toggle' => 'questions-expert-undo',
 			'item_class' => $is_expert ? 'hidden' : null,
 		]);
@@ -261,7 +261,7 @@ class Menus {
 				'user_guid' => $user->guid,
 				'guid' => $page_owner->guid,
 			]),
-			'section' => ($page_owner instanceof \ElggSite) ? 'admin' : 'default',
+			'section' => ($page_owner instanceof \ElggSite) ? 'admin' : 'action',
 			'data-toggle' => 'questions-expert',
 			'item_class' => $is_expert ? null : 'hidden',
 		]);
