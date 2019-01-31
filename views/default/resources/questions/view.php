@@ -30,7 +30,7 @@ if (!empty($marked_answer)) {
 	$answers .= elgg_view_entity_list([$marked_answer], [
 		'limit' => false,
 		'full_view' => true,
-		'list_class' => ['mtm'],
+		'list_class' => ['mtm', 'questions-correct-answers'],
 	]);
 }
 
