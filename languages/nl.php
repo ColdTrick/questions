@@ -1,10 +1,13 @@
 <?php
 /**
  * This file was created by Translation Editor v7.0-beta
- * On 2018-12-14 16:51
+ * On 2019-03-01 15:43
  */
 
 return array (
+  'river:object:question:comment' => '%s reageerde op de vraag %s',
+  'river:object:answer:create' => '%s heeft een antwoord gegeven op de vraag %s',
+  'river:object:answer:comment' => '%s reageerde op %s',
   'collection:object:question' => 'Vragen',
   'collection:object:answer' => 'Antwoorden',
   'questions:marked:correct' => 'Juiste antwoord is gegeven',
@@ -82,7 +85,6 @@ Om de reactie te bekijken, klik hier:
   'questions:menu:filter:todo' => 'Todo',
   'questions:menu:filter:experts' => 'Experts',
   'river:object:question:create' => '%s stelde vraag %s',
-  'river:create:object:answer' => '%s ga een antwoord op de vraag %s',
   'questions' => 'Vragen',
   'questions:everyone' => 'Alle Vragen',
   'questions:add' => 'Stel een vraag',
