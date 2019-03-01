@@ -5,7 +5,7 @@
 
 $item = elgg_extract('item', $vars);
 $question = $item->getObjectEntity();
-if (!($question instanceof ElggQuestion)) {
+if (!$question instanceof ElggQuestion) {
 	return;
 }
 

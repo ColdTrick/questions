@@ -32,7 +32,9 @@ return [
 	'questions:menu:filter:tags' => "Tags: %s",
 	
 	'river:object:question:create' => '%s asked question %s',
-	'river:create:object:answer' => '%s provided an answer for the question %s',
+	'river:object:question:comment' => '%s commented on the question %s',
+	'river:object:answer:create' => '%s provided an answer for the question %s',
+	'river:object:answer:comment' => '%s commented on %s',
 		
 	'questions' => 'Questions',
 	'questions:marked:correct' => 'Correct answer provided',

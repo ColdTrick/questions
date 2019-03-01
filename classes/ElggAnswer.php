@@ -55,7 +55,7 @@ class ElggAnswer extends ElggObject {
 	public function getDisplayName() {
 		$question = $this->getContainerEntity();
 		
-		return elgg_echo('questions:object:answer:title', [$question->title]);
+		return elgg_echo('questions:object:answer:title', [$question->getDisplayName()]);
 	}
 	
 	/**
