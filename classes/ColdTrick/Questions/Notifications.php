@@ -2,6 +2,8 @@
 
 namespace ColdTrick\Questions;
 
+use Elgg\Notifications\SubscriptionNotificationEvent;
+
 class Notifications {
 	
 	/**
@@ -16,7 +18,7 @@ class Notifications {
 	 */
 	public static function createQuestion($hook, $type, $return_value, $params) {
 		
-		if (!($return_value instanceof \Elgg\Notifications\Notification)) {
+		if (!$return_value instanceof \Elgg\Notifications\Notification) {
 			return;
 		}
 		
@@ -24,7 +26,7 @@ class Notifications {
 		$recipient = elgg_extract('recipient', $params);
 		$language = elgg_extract('language', $params);
 		
-		if (!($event instanceof \Elgg\Notifications\NotificationEvent) || !($recipient instanceof \ElggUser)) {
+		if (!$event instanceof SubscriptionNotificationEvent || !$recipient instanceof \ElggUser) {
 			return;
 		}
 		
@@ -54,7 +56,7 @@ class Notifications {
 	 */
 	public static function moveQuestion($hook, $type, $return_value, $params) {
 		
-		if (!($return_value instanceof \Elgg\Notifications\Notification)) {
+		if (!$return_value instanceof \Elgg\Notifications\Notification) {
 			return;
 		}
 		
@@ -62,7 +64,7 @@ class Notifications {
 		$recipient = elgg_extract('recipient', $params);
 		$language = elgg_extract('language', $params);
 		
-		if (!($event instanceof \Elgg\Notifications\NotificationEvent) || !($recipient instanceof \ElggUser)) {
+		if (!$event instanceof SubscriptionNotificationEvent || !$recipient instanceof \ElggUser) {
 			return;
 		}
 		
@@ -92,7 +94,7 @@ class Notifications {
 	 */
 	public static function createAnswer($hook, $type, $return_value, $params) {
 		
-		if (!($return_value instanceof \Elgg\Notifications\Notification)) {
+		if (!$return_value instanceof \Elgg\Notifications\Notification) {
 			return;
 		}
 		
@@ -100,7 +102,7 @@ class Notifications {
 		$recipient = elgg_extract('recipient', $params);
 		$language = elgg_extract('language', $params);
 		
-		if (!($event instanceof \Elgg\Notifications\NotificationEvent) || !($recipient instanceof \ElggUser)) {
+		if (!$event instanceof SubscriptionNotificationEvent || !$recipient instanceof \ElggUser) {
 			return;
 		}
 		
@@ -133,7 +135,7 @@ class Notifications {
 	 */
 	public static function correctAnswer($hook, $type, $return_value, $params) {
 		
-		if (!($return_value instanceof \Elgg\Notifications\Notification)) {
+		if (!$return_value instanceof \Elgg\Notifications\Notification) {
 			return;
 		}
 		
@@ -141,7 +143,7 @@ class Notifications {
 		$recipient = elgg_extract('recipient', $params);
 		$language = elgg_extract('language', $params);
 		
-		if (!($event instanceof \Elgg\Notifications\NotificationEvent) || !($recipient instanceof \ElggUser)) {
+		if (!$event instanceof SubscriptionNotificationEvent || !$recipient instanceof \ElggUser) {
 			return;
 		}
 		
@@ -174,18 +176,26 @@ class Notifications {
 	 */
 	public static function createCommentOnAnswer($hook, $type, $return_value, $params) {
 		
-		if (!($return_value instanceof \Elgg\Notifications\Notification)) {
+		if (!$return_value instanceof \Elgg\Notifications\Notification) {
 			return;
 		}
 		
 		$event = elgg_extract('event', $params);
-		if (!($event instanceof \Elgg\Notifications\NotificationEvent)) {
+		if (!$event instanceof SubscriptionNotificationEvent) {
+			return;
+		}
+		
+		if ($event->getAction() !== 'çreate') {
 			return;
 		}
 		
 		$comment = $event->getObject();
+		if (!$comment instanceof \ElggComment) {
+			return;
+		}
+		
 		$object = $comment->getContainerEntity();
-		if (!($object instanceof \ElggAnswer)) {
+		if (!$object instanceof \ElggAnswer) {
 			return;
 		}
 		
@@ -220,12 +230,16 @@ class Notifications {
 	public static function addExpertsToSubscribers($hook, $type, $return_value, $params) {
 		
 		$event = elgg_extract('event', $params);
-		if (!($event instanceof \Elgg\Notifications\NotificationEvent)) {
+		if (!$event instanceof SubscriptionNotificationEvent) {
+			return;
+		}
+		
+		if (!in_aray($event->getAction(), ['create', 'move'])) {
 			return;
 		}
 		
 		$question = $event->getObject();
-		if (!($question instanceof \ElggQuestion)) {
+		if (!$question instanceof \ElggQuestion) {
 			return;
 		}
 		
@@ -241,7 +255,7 @@ class Notifications {
 		}
 		
 		$container = $question->getContainerEntity();
-		if (!($container instanceof \ElggGroup)) {
+		if (!$container instanceof \ElggGroup) {
 			$container = elgg_get_site_entity();
 		}
 		
@@ -252,7 +266,7 @@ class Notifications {
 			'site_guids' => false,
 			'limit' => false,
 			'relationship' => QUESTIONS_EXPERT_ROLE,
-			'relationship_guid' => $container->getGUID(),
+			'relationship_guid' => $container->guid,
 			'inverse_relationship' => true,
 		]);
 		if (!empty($users)) {
@@ -271,15 +285,15 @@ class Notifications {
 		}
 		
 		foreach ($experts as $expert) {
-			if (!isset($return_value[$expert->getGUID()])) {
+			if (!isset($return_value[$expert->guid])) {
 				// no notification for this user, so add email notification
-				$return_value[$expert->getGUID()] = ['email'];
+				$return_value[$expert->guid] = ['email'];
 				continue;
 			}
 			
-			if (!in_array('email', $return_value[$expert->getGUID()])) {
+			if (!in_array('email', $return_value[$expert->guid])) {
 				// user already got a notification, but not email so add that
-				$return_value[$expert->getGUID()][] = 'email';
+				$return_value[$expert->guid][] = 'email';
 				continue;
 			}
 		}
@@ -303,12 +317,16 @@ class Notifications {
 	public static function addQuestionOwnerToAnswerSubscribers($hook, $type, $return_value, $params) {
 		
 		$event = elgg_extract('event', $params);
-		if (!($event instanceof \Elgg\Notifications\NotificationEvent)) {
+		if (!$event instanceof SubscriptionNotificationEvent) {
+			return;
+		}
+		
+		if (!in_array($event->getAction(), ['create', 'correct'])) {
 			return;
 		}
 		
 		$object = $event->getObject();
-		if (!($object instanceof \ElggObject)) {
+		if (!$object instanceof \ElggObject) {
 			return;
 		}
 		
@@ -321,7 +339,7 @@ class Notifications {
 			$question = $container->getContainerEntity();
 		}
 		
-		if (!($question instanceof \ElggQuestion)) {
+		if (!$question instanceof \ElggQuestion) {
 			// something went wrong, maybe access
 			return;
 		}
@@ -334,7 +352,7 @@ class Notifications {
 			return;
 		}
 		
-		$return_value[$owner->getGUID()] = $filtered_methods;
+		$return_value[$owner->guid] = $filtered_methods;
 		
 		return $return_value;
 	}
@@ -352,12 +370,16 @@ class Notifications {
 	public static function addAnswerOwnerToAnswerSubscribers($hook, $type, $return_value, $params) {
 		
 		$event = elgg_extract('event', $params);
-		if (!($event instanceof \Elgg\Notifications\NotificationEvent)) {
+		if (!$event instanceof SubscriptionNotificationEvent) {
+			return;
+		}
+		
+		if (!in_array($event->getAction(), ['create', 'correct'])) {
 			return;
 		}
 		
 		$answer = $event->getObject();
-		if (!($answer instanceof \ElggAnswer)) {
+		if (!$answer instanceof \ElggAnswer) {
 			return;
 		}
 		
@@ -369,7 +391,7 @@ class Notifications {
 			return;
 		}
 		
-		$return_value[$owner->getGUID()] = $filtered_methods;
+		$return_value[$owner->guid] = $filtered_methods;
 		
 		return $return_value;
 	}
@@ -387,21 +409,25 @@ class Notifications {
 	public static function addQuestionSubscribersToAnswerSubscribers($hook, $type, $return_value, $params) {
 		
 		$event = elgg_extract('event', $params);
-		if (!($event instanceof \Elgg\Notifications\NotificationEvent)) {
+		if (!$event instanceof SubscriptionNotificationEvent) {
+			return;
+		}
+		
+		if (!in_array($event->getAction(), ['create', 'correct'])) {
 			return;
 		}
 		
 		$object = $event->getObject();
-		if (!($object instanceof \ElggEntity)) {
+		if (!$object instanceof \ElggEntity) {
 			return;
 		}
 		$container = $object->getContainerEntity();
-		if (!($container instanceof \ElggAnswer)) {
+		if (!$container instanceof \ElggAnswer) {
 			return;
 		}
 		
 		$question = $container->getContainerEntity();
-		$subscribers = elgg_get_subscriptions_for_container($question->getGUID());
+		$subscribers = elgg_get_subscriptions_for_container($question->guid);
 		if (empty($subscribers)) {
 			return;
 		}
