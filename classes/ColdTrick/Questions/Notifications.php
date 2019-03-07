@@ -234,7 +234,7 @@ class Notifications {
 			return;
 		}
 		
-		if (!in_aray($event->getAction(), ['create', 'move'])) {
+		if (!in_array($event->getAction(), ['create', 'move'])) {
 			return;
 		}
 		
