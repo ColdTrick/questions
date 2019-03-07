@@ -57,7 +57,7 @@ $ia = elgg_set_ignore_access(true);
 // copy all answers on the question to topic replies
 $answer_options = [
 	'type' => 'object',
-	'subtype' => 'answer',
+	'subtype' => ElggAnswer::SUBTYPE,
 	'container_guid' => $entity->guid,
 	'limit' => false,
 	'batch' => true,

@@ -113,7 +113,7 @@ class Permissions {
 		// questions can't be editted by owner if it is closed
 		if ($returnvalue && $entity instanceof \ElggQuestion) {
 			// is the question closed
-			if ($entity->getStatus() === 'closed') {
+			if ($entity->getStatus() === \ElggQuestion::STATUS_CLOSED) {
 				// are you the owner
 				if ($user->guid === $entity->owner_guid) {
 					$returnvalue = false;

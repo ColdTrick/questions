@@ -35,7 +35,7 @@ if ($adding && !$question->canWriteToContainer(0, 'object', 'answer')) {
 	return elgg_error_response(elgg_echo('questions:action:answer:save:error:container'));
 }
 
-if ($question->getStatus() != 'open') {
+if ($question->getStatus() != ElggQuestion::STATUS_OPEN) {
 	elgg_clear_sticky_form('answer');
 	
 	return elgg_error_response(elgg_echo('questions:action:answer:save:error:question_closed'));

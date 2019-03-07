@@ -5,6 +5,8 @@ use Elgg\Database\Clauses\OrderByClause;
 class ElggQuestion extends ElggObject {
 	
 	const SUBTYPE = 'question';
+	const STATUS_OPEN = 'open';
+	const STATUS_CLOSED = 'closed';
 	
 	/**
 	 * (non-PHPdoc)
@@ -15,7 +17,7 @@ class ElggQuestion extends ElggObject {
 		
 		$this->attributes['subtype'] = self::SUBTYPE;
 		
-		$this->status = 'open';
+		$this->status = self::STATUS_OPEN;
 	}
 	
 	/**
@@ -45,7 +47,7 @@ class ElggQuestion extends ElggObject {
 		
 		$overrides = [
 			'type' => 'object',
-			'subtype' => 'answer',
+			'subtype' => ElggAnswer::SUBTYPE,
 			'container_guid' => $this->guid,
 		];
 		
@@ -96,7 +98,7 @@ class ElggQuestion extends ElggObject {
 	 * @return void
 	 */
 	public function close() {
-		$this->status = 'closed';
+		$this->status = self::STATUS_CLOSED;
 	}
 	
 	/**
@@ -105,7 +107,7 @@ class ElggQuestion extends ElggObject {
 	 * @return void
 	 */
 	public function reopen() {
-		$this->status = 'open';
+		$this->status = self::STATUS_OPEN;
 	}
 	
 	/**
@@ -127,10 +129,10 @@ class ElggQuestion extends ElggObject {
 		
 		// make sure the status is correct
 		switch ($result) {
-			case 'open':
+			case self::STATUS_OPEN:
 				// is it still open, so no marked answer
 				if ($this->getMarkedAnswer()) {
-					$result = 'closed';
+					$result = self::STATUS_CLOSED;
 				}
 				break;
 		}

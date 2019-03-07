@@ -82,7 +82,7 @@ if (!empty($marked_answer)) {
 $answer_menu = '';
 
 // add answer form
-if (($question->getStatus() === 'open') && $question->canWriteToContainer(0, 'object', ElggAnswer::SUBTYPE)) {
+if (($question->getStatus() === ElggQuestion::STATUS_OPEN) && $question->canWriteToContainer(0, 'object', ElggAnswer::SUBTYPE)) {
 	
 	$class = [
 		'mtm',

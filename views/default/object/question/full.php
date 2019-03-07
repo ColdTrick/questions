@@ -20,7 +20,7 @@ $params = [
 	]),
 ];
 
-if ($question->getStatus() === 'closed') {
+if ($question->getStatus() === ElggQuestion::STATUS_CLOSED) {
 	// add an icon to show this question is closed
 	$params['imprint'][] = [
 		'icon_name' => 'lock-closed',
