@@ -53,12 +53,18 @@ class Menus {
 		if (!$entity instanceof \ElggAnswer) {
 			return;
 		}
-						
-		if (!$entity->canMarkAnswer()) {
-			return;
+		
+		/* @var $result MenuItems */
+		$result = $hook->getValue();
+		
+		$question = $entity->getContainerEntity();
+		if ($question instanceof \ElggQuestion && $question->getStatus() === \ElggQuestion::STATUS_CLOSED) {
+			$result->remove('edit');
 		}
 		
-		$result = $hook->getValue();
+		if (!$entity->canMarkAnswer()) {
+			return $result;
+		}
 		
 		$result[] = \ElggMenuItem::factory([
 			'name' => 'questions-mark',
