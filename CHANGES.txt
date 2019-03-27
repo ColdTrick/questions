@@ -1,6 +1,26 @@
 Version history
 ===============
 
+6.0 (2019-03-27):
+
+- added: num answers in search result
+- changed: canComment logic
+- changed: locked icon no longer in question title, but in imprint
+- changed: minimal Elgg requirement now is 3.0
+- changed: moved plugin initialisation to bootstrap and elgg-plugin.php
+- changed: updated entity views
+- changed: use route names instead of urls
+- changed: widget now has a grouppicker
+- fix: view more link on dashboard
+- fixed: entity tools integration
+- fixed: filter menu registration hook
+- fixed: no longer show edit menu item with answers if question closed
+- fixed: notification events
+- fixed: removed custom sql
+- fixed: search implementation
+- fixed: sql error
+- fixed: use correct variable
+
 5.4.2 (2018-05-31):
 
 - fixed: removing correct answer no reopens the question
