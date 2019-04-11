@@ -29,7 +29,7 @@ if ($correct_answer) {
 	$content = elgg_format_element('time', [
 		'datetime' => $date->format('c'),
 	], elgg_echo('questions:answer:checkmark:title', [
-		$date->format(elgg_echo('friendlytime:date_format')),
+		$date->formatLocale(elgg_echo('friendlytime:date_format')),
 	]));
 	
 	$params['imprint'][] = [
