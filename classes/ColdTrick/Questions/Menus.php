@@ -133,6 +133,13 @@ class Menus {
 		$route = false;
 		$route_params = [];
 		$tags = get_input('tags');
+		
+		
+		$session_key = "questions_tags";
+		if ($page_owner) {
+			$session_key .= "_{$page_owner->guid}";
+		}
+		
 		if (!empty($tags)) {
 			$route = 'collection:object:question:all';
 			if ($page_owner instanceof \ElggUser) {
@@ -143,13 +150,13 @@ class Menus {
 				$route_params['guid'] = $page_owner->guid;
 			}
 			
-			$session->set("questions_tags_{$page_owner->guid}", [
+			$session->set($session_key, [
 				'tags' => $tags,
 				'route' => $route,
 				'route_params' => $route_params,
 			]);
-		} elseif ($session->has("questions_tags_{$page_owner->guid}")) {
-			$settings = $session->get("questions_tags_{$page_owner->guid}");
+		} elseif ($session->has($session_key)) {
+			$settings = $session->get($session_key);
 			
 			$tags = elgg_extract('tags', $settings);
 			$route = elgg_extract('route', $settings);
