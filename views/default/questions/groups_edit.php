@@ -13,6 +13,8 @@ if (!$group->isToolEnabled('questions')) {
 	return;
 }
 
+$content = '';
+
 // default solution time
 if (elgg_get_plugin_setting('solution_time_group', 'questions') === 'yes') {
 	$solution_time = questions_get_solution_time($group);
