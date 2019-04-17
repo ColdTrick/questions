@@ -1,6 +1,11 @@
 Version history
 ===============
 
+6.0.1 (2019-04-17):
+
+- fixed: check correct notification action
+- fixed: output locale date on correct answer
+
 6.0 (2019-03-27):
 
 - added: num answers in search result
