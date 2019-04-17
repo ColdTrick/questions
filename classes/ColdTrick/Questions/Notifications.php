@@ -185,7 +185,7 @@ class Notifications {
 			return;
 		}
 		
-		if ($event->getAction() !== 'çreate') {
+		if ($event->getAction() !== 'create') {
 			return;
 		}
 		
