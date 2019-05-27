@@ -203,9 +203,10 @@ class Cron {
 			unset($question_options['metadata_name_value_pairs']);
 			unset($question_options['order_by_metadata']);
 			$question_options['wheres'] = [
+				$status_where,
 				$container_where,
 			];
-			$question_options['created_after'] = ($time - (24 * 60 *60));
+			$question_options['created_after'] = ($time - (24 * 60 * 60));
 			
 			$questions = elgg_get_entities($question_options);
 			if (!empty($questions)) {
