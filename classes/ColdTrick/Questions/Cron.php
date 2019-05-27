@@ -222,7 +222,7 @@ class Cron {
 			// is there content in the message
 			if (!empty($message)) {
 				// force to email
-				notify_user($expert->guid, $site->guid, $subject, $message, [], 'email');
+				notify_user($expert->guid, 0, $subject, $message, [], 'email');
 			}
 		}
 		
