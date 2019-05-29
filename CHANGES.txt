@@ -1,6 +1,10 @@
 Version history
 ===============
 
+6.0.2 (2019-05-29):
+
+- fixed: daily expert notification no longer contains new closed items
+
 6.0.1 (2019-04-17):
 
 - fixed: check correct notification action
