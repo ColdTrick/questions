@@ -497,44 +497,40 @@ function questions_get_expert_where_sql($user_guid = 0) {
 		return false;
 	}
 	
-	$site = elgg_get_site_entity();
-	
-	$wheres = [];
-	
-	// site expert
-	if (questions_is_expert($site, $user)) {
-		// filter all non group questions
-		$wheres[] = function (QueryBuilder $qb, $main_alias) {
+	return function (QueryBuilder $qb, $main_alias) use ($user) {
+		$site = elgg_get_site_entity();
+		
+		$wheres = [];
+		
+		// site expert
+		if (questions_is_expert($site, $user)) {
+			// filter all non group questions
 			$sub = $qb->subquery('entities')
 				->select('guid')
 				->where($qb->compare('type', '=', 'group', ELGG_VALUE_STRING))
 				->andWhere($qb->compare('enabled', '=', 'yes', ELGG_VALUE_STRING));
 			
-			return $qb->compare("{$main_alias}.container_guid", 'NOT IN', $sub->getSQL());
-		};
-	}
-	
-	// fetch groups where user is expert
-	$groups = elgg_get_entities([
-		'type' => 'group',
-		'limit' => false,
-		'relationship' => QUESTIONS_EXPERT_ROLE,
-		'relationship_guid' => $user->guid,
-		'callback' => function ($row) {
-			return (int) $row->guid;
-		},
-	]);
-	if (!empty($groups)) {
-		$wheres[] = function (QueryBuilder $qb, $main_alias) use ($groups) {
-			return $qb->compare("{$main_alias}.container_guid", 'IN', $groups);
-		};
-	}
-	
-	if (empty($wheres)) {
-		return false;
-	}
-	
-	return function (QueryBuilder $qb, $main_alias) use ($wheres) {
+			$wheres[] = $qb->compare("{$main_alias}.container_guid", 'NOT IN', $sub->getSQL());
+		}
+		
+		// fetch groups where user is expert
+		$groups = elgg_get_entities([
+			'type' => 'group',
+			'limit' => false,
+			'relationship' => QUESTIONS_EXPERT_ROLE,
+			'relationship_guid' => $user->guid,
+			'callback' => function ($row) {
+				return (int) $row->guid;
+			},
+		]);
+		if (!empty($groups)) {
+			$wheres[] = $qb->compare("{$main_alias}.container_guid", 'IN', $groups);
+		}
+		
+		if (empty($wheres)) {
+			return false;
+		}
+		
 		return $qb->merge($wheres, 'OR');
 	};
 }
