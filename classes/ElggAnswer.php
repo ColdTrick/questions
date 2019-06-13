@@ -112,7 +112,7 @@ class ElggAnswer extends ElggObject {
 	public function canMarkAnswer(\ElggUser $user = null) {
 		
 		// check if we have a user
-		if (empty($user) || !($user instanceof ElggUser)) {
+		if (empty($user)) {
 			$user = elgg_get_logged_in_user_entity();
 		}
 		
@@ -120,24 +120,24 @@ class ElggAnswer extends ElggObject {
 			return false;
 		}
 		
-		$container = $this->getContainerEntity();
+		$question = $this->getContainerEntity();
 		
 		// are experts enabled
 		if (!questions_experts_enabled()) {
 			// no, so only question owner can mark
-			return ($user->guid === $container->getOwnerGUID());
+			return ($user->guid === $question->owner_guid);
 		}
 		
 		// are only experts allowed to mark
 		if (elgg_get_plugin_setting('experts_mark', 'questions') !== 'yes') {
 			// no, so the owner of a question can also mark
-			if ($user->getGUID() == $container->getOwnerGUID()) {
+			if ($user->guid == $question->owner_guid) {
 				return true;
 			}
 		}
 		
 		// is the user an expert
-		return questions_is_expert($container->getContainerEntity(), $user);
+		return questions_is_expert($question->getContainerEntity(), $user);
 	}
 	
 	/**
