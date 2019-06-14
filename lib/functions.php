@@ -128,7 +128,7 @@ function questions_validate_access_id($access_id, $container_guid) {
 		} else {
 			// make sure access_id is not a group acl
 			$acl = get_access_collection($access_id);
-			if (!empty($acl) && ($acl->owner_guid != $container->getGUID())) {
+			if ($acl instanceof ElggAccessCollection && ($acl->owner_guid != $container->guid)) {
 				// this acl is a group acl, so set to something else
 				$access_id = ACCESS_LOGGED_IN;
 			}
@@ -139,17 +139,27 @@ function questions_validate_access_id($access_id, $container_guid) {
 		if ($group_access_id !== false) {
 			$access_id = $group_access_id;
 		} else {
+			$group_acl = $container->getOwnedAccessCollection('group_acl');
+			
 			// friends access not allowed in groups
 			if ($access_id === ACCESS_FRIENDS) {
-				// so set it to group access
-				$access_id = (int) $container->group_acl;
+				if ($group_acl instanceof ElggAccessCollection) {
+					// so set it to group access
+					$access_id = (int) $group_acl->id;
+				} else {
+					$access_id = ACCESS_LOGGED_IN;
+				}
 			}
 			
 			// check if access is an acl
 			$acl = get_access_collection($access_id);
-			if (!empty($acl) && ($acl->owner_guid != $container->getGUID())) {
+			if ($acl instanceof ElggAccessCollection && ($acl->owner_guid !== $container->guid)) {
 				// this acl is an acl, make sure it's the group acl
-				$access_id = (int) $container->group_acl;
+				if ($group_acl instanceof ElggAccessCollection) {
+					$access_id = (int) $group_acl->id;
+				} else {
+					$access_id = ACCESS_LOGGED_IN;
+				}
 			}
 		}
 	}
@@ -198,8 +208,11 @@ function questions_get_group_access_level(ElggGroup $group) {
 	}
 	
 	if ($plugin_setting) {
-		if ($plugin_setting == 'group_acl') {
-			$result = (int) $group->group_acl;
+		if ($plugin_setting === 'group_acl') {
+			$acl = $group->getOwnedAccessCollection('group_acl');
+			if ($acl instanceof ElggAccessCollection) {
+				$result = (int) $acl->id;
+			}
 		} else {
 			$result = (int) $plugin_setting;
 		}
