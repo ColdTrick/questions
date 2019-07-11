@@ -1,6 +1,11 @@
 Version history
 ===============
 
+6.0.3 (2019-07-11):
+
+- fixed: cron notification doesn't respect expert container limitations
+- fixed: using deprecated group_acl metadata
+
 6.0.2 (2019-05-29):
 
 - fixed: daily expert notification no longer contains new closed items
