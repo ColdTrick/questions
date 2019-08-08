@@ -23,50 +23,46 @@ class Cron {
 		echo "Starting Questions auto-close processing" . PHP_EOL;
 		elgg_log("Starting Questions auto-close processing", 'NOTICE');
 		
-		$site = elgg_get_site_entity();
-		
-		// ignore access
-		$ia = elgg_set_ignore_access(true);
-		
-		// get open questions last modified more than x days ago
-		$batch = elgg_get_entities([
-			'type' => 'object',
-			'subtype' => \ElggQuestion::SUBTYPE,
-			'limit' => false,
-			'metadata_name_value_pairs' => [
-				'status' => 'open',
-			],
-			'modified_before' => "-{$auto_close_days} days",
-			'batch' => true,
-			'batch_inc_offset' => false,
-		]);
-		/* @var $question \ElggQuestion */
-		foreach ($batch as $question) {
-			// close the question
-			$question->close();
+		elgg_call(ELGG_IGNORE_ACCESS, function() use ($auto_close_days) {
+			$site = elgg_get_site_entity();
 			
-			// notify the user that the question was closed
-			$owner = $question->getOwnerEntity();
-			
-			$subject = elgg_echo('questions:notification:auto_close:subject', [$question->getDisplayName()]);
-			$message = elgg_echo('questions:notification:auto_close:message', [
-				$owner->getDisplayName(),
-				$question->getDisplayName(),
-				$auto_close_days,
-				$question->getURL(),
+			// get open questions last modified more than x days ago
+			$batch = elgg_get_entities([
+				'type' => 'object',
+				'subtype' => \ElggQuestion::SUBTYPE,
+				'limit' => false,
+				'metadata_name_value_pairs' => [
+					'status' => 'open',
+				],
+				'modified_before' => "-{$auto_close_days} days",
+				'batch' => true,
+				'batch_inc_offset' => false,
 			]);
-			
-			$notification_params = [
-				'summary' => elgg_echo('questions:notification:auto_close:summary', [$question->getDisplayName()]),
-				'object' => $question,
-				'action' => 'close',
-			];
-			
-			notify_user($owner->getGUID(), $site->getGUID(), $subject, $message, $notification_params);
-		}
-		
-		// restore access
-		elgg_set_ignore_access($ia);
+			/* @var $question \ElggQuestion */
+			foreach ($batch as $question) {
+				// close the question
+				$question->close();
+				
+				// notify the user that the question was closed
+				$owner = $question->getOwnerEntity();
+				
+				$subject = elgg_echo('questions:notification:auto_close:subject', [$question->getDisplayName()]);
+				$message = elgg_echo('questions:notification:auto_close:message', [
+					$owner->getDisplayName(),
+					$question->getDisplayName(),
+					$auto_close_days,
+					$question->getURL(),
+				]);
+				
+				$notification_params = [
+					'summary' => elgg_echo('questions:notification:auto_close:summary', [$question->getDisplayName()]),
+					'object' => $question,
+					'action' => 'close',
+				];
+				
+				notify_user($owner->getGUID(), $site->getGUID(), $subject, $message, $notification_params);
+			}
+		});
 		
 		echo "Finished Questions auto-close processing" . PHP_EOL;
 		elgg_log("Finished Questions auto-close processing", 'NOTICE');

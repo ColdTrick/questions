@@ -52,57 +52,54 @@ if (!$topic->save()) {
 elgg_clear_sticky_form('question');
 
 // make sure we can copy all annotations
-$ia = elgg_set_ignore_access(true);
-
-// copy all answers on the question to topic replies
-$answer_options = [
-	'type' => 'object',
-	'subtype' => ElggAnswer::SUBTYPE,
-	'container_guid' => $entity->guid,
-	'limit' => false,
-	'batch' => true,
-	'batch_inc_offset' => false,
-];
-$answers = elgg_get_entities($answer_options);
-/* @var $answer ElggAnswer */
-foreach ($answers as $answer) {
-	// move answer to comment
-	$comment = new ElggComment();
-	$comment->owner_guid = $answer->owner_guid;
-	$comment->container_guid = $topic->guid;
-	$comment->access_id = $topic->access_id;
+elgg_call(ELGG_IGNORE_ACCESS, function() use ($entity, $topic) {
 	
-	$comment->description = $answer->description;
-	$comment->time_created = $answer->time_created;
-	
-	$comment->save();
-	
-	// move all comments on the answer to topic
-	$comment_options = [
+	// copy all answers on the question to topic replies
+	$answers = elgg_get_entities([
 		'type' => 'object',
-		'subtype' => 'comment',
-		'container_guid' => $answer->guid,
+		'subtype' => ElggAnswer::SUBTYPE,
+		'container_guid' => $entity->guid,
 		'limit' => false,
 		'batch' => true,
 		'batch_inc_offset' => false,
-	];
-	
-	$comments = elgg_get_entities($comment_options);
-	/* @var $comment ElggComment */
-	foreach ($comments as $comment) {
-		// change container to discussion
+	]);
+	/* @var $answer ElggAnswer */
+	foreach ($answers as $answer) {
+		// move answer to comment
+		$comment = new ElggComment();
+		$comment->owner_guid = $answer->owner_guid;
 		$comment->container_guid = $topic->guid;
+		$comment->access_id = $topic->access_id;
+		
+		$comment->description = $answer->description;
+		$comment->time_created = $answer->time_created;
+		
 		$comment->save();
+		
+		// move all comments on the answer to topic
+		$comment_options = [
+			'type' => 'object',
+			'subtype' => 'comment',
+			'container_guid' => $answer->guid,
+			'limit' => false,
+			'batch' => true,
+			'batch_inc_offset' => false,
+		];
+		
+		$comments = elgg_get_entities($comment_options);
+		/* @var $comment ElggComment */
+		foreach ($comments as $comment) {
+			// change container to discussion
+			$comment->container_guid = $topic->guid;
+			$comment->save();
+		}
+		
+		$answer->delete();
 	}
 	
-	$answer->delete();
-}
-
-// cleaup the old question
-$entity->delete();
-
-// restore access
-elgg_set_ignore_access($ia);
+	// cleaup the old question
+	$entity->delete();
+});
 
 // set correct forward url
 return elgg_ok_response('', elgg_echo('questions:action:question:move_to_discussions:success'), $topic->getURL());
