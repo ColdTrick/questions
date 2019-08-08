@@ -9,22 +9,19 @@ class Notifications {
 	/**
 	 * Set the correct message content for when a question is created
 	 *
-	 * @param string                           $hook         the name of the hook
-	 * @param string                           $type         the type of the hook
-	 * @param \Elgg\Notifications\Notification $return_value current return value
-	 * @param array                            $params       supplied params
+	 * @param \Elgg\Hook $hook 'prepare', 'notification:create:object:question'
 	 *
 	 * @return void|\Elgg\Notifications\Notification
 	 */
-	public static function createQuestion($hook, $type, $return_value, $params) {
-		
+	public static function createQuestion(\Elgg\Hook $hook) {
+		$return_value = $hook->getValue();
 		if (!$return_value instanceof \Elgg\Notifications\Notification) {
 			return;
 		}
 		
-		$event = elgg_extract('event', $params);
-		$recipient = elgg_extract('recipient', $params);
-		$language = elgg_extract('language', $params);
+		$event = $hook->getParam('event');
+		$recipient = $hook->getParam('recipient');
+		$language = $hook->getParam('language');
 		
 		if (!$event instanceof SubscriptionNotificationEvent || !$recipient instanceof \ElggUser) {
 			return;
@@ -47,22 +44,19 @@ class Notifications {
 	/**
 	 * Set the correct message content for when a question is moved
 	 *
-	 * @param string                           $hook         the name of the hook
-	 * @param string                           $type         the type of the hook
-	 * @param \Elgg\Notifications\Notification $return_value current return value
-	 * @param array                            $params       supplied params
+	 * @param \Elgg\Hook $hook 'prepare', 'notification:move:object:question'
 	 *
 	 * @return void|\Elgg\Notifications\Notification
 	 */
-	public static function moveQuestion($hook, $type, $return_value, $params) {
-		
+	public static function moveQuestion(\Elgg\Hook $hook) {
+		$return_value = $hook->getValue();
 		if (!$return_value instanceof \Elgg\Notifications\Notification) {
 			return;
 		}
 		
-		$event = elgg_extract('event', $params);
-		$recipient = elgg_extract('recipient', $params);
-		$language = elgg_extract('language', $params);
+		$event = $hook->getParam('event');
+		$recipient = $hook->getParam('recipient');
+		$language = $hook->getParam('language');
 		
 		if (!$event instanceof SubscriptionNotificationEvent || !$recipient instanceof \ElggUser) {
 			return;
@@ -85,22 +79,19 @@ class Notifications {
 	/**
 	 * Set the correct message content for when a answer is created
 	 *
-	 * @param string                           $hook         the name of the hook
-	 * @param string                           $type         the type of the hook
-	 * @param \Elgg\Notifications\Notification $return_value current return value
-	 * @param array                            $params       supplied params
+	 * @param \Elgg\Hook $hook 'prepare', 'notification:create:object:answer'
 	 *
 	 * @return void|\Elgg\Notifications\Notification
 	 */
-	public static function createAnswer($hook, $type, $return_value, $params) {
-		
+	public static function createAnswer(\Elgg\Hook $hook) {
+		$return_value = $hook->getValue();
 		if (!$return_value instanceof \Elgg\Notifications\Notification) {
 			return;
 		}
 		
-		$event = elgg_extract('event', $params);
-		$recipient = elgg_extract('recipient', $params);
-		$language = elgg_extract('language', $params);
+		$event = $hook->getParam('event');
+		$recipient = $hook->getParam('recipient');
+		$language = $hook->getParam('language');
 		
 		if (!$event instanceof SubscriptionNotificationEvent || !$recipient instanceof \ElggUser) {
 			return;
@@ -126,22 +117,19 @@ class Notifications {
 	/**
 	 * Set the correct message content for when a answer is marked as correct
 	 *
-	 * @param string                           $hook         the name of the hook
-	 * @param string                           $type         the type of the hook
-	 * @param \Elgg\Notifications\Notification $return_value current return value
-	 * @param array                            $params       supplied params
+	 * @param \Elgg\Hook $hook 'prepare', 'notification:correct:object:answer'
 	 *
 	 * @return void|\Elgg\Notifications\Notification
 	 */
-	public static function correctAnswer($hook, $type, $return_value, $params) {
-		
+	public static function correctAnswer(\Elgg\Hook $hook) {
+		$return_value = $hook->getValue();
 		if (!$return_value instanceof \Elgg\Notifications\Notification) {
 			return;
 		}
 		
-		$event = elgg_extract('event', $params);
-		$recipient = elgg_extract('recipient', $params);
-		$language = elgg_extract('language', $params);
+		$event = $hook->getParam('event');
+		$recipient = $hook->getParam('recipient');
+		$language = $hook->getParam('language');
 		
 		if (!$event instanceof SubscriptionNotificationEvent || !$recipient instanceof \ElggUser) {
 			return;
@@ -167,20 +155,17 @@ class Notifications {
 	/**
 	 * Change the notification message for comments on answers
 	 *
-	 * @param string                           $hook         the name of the hook
-	 * @param string                           $type         the type of the hook
-	 * @param \Elgg\Notifications\Notification $return_value the current return value
-	 * @param array                            $params       supplied values
+	 * @param \Elgg\Hook $hook 'prepare', 'notification:create:object:comment'
 	 *
 	 * @return void|\Elgg\Notifications\Notification
 	 */
-	public static function createCommentOnAnswer($hook, $type, $return_value, $params) {
-		
+	public static function createCommentOnAnswer(\Elgg\Hook $hook) {
+		$return_value = $hook->getValue();
 		if (!$return_value instanceof \Elgg\Notifications\Notification) {
 			return;
 		}
 		
-		$event = elgg_extract('event', $params);
+		$event = $hook->getParam('event');
 		if (!$event instanceof SubscriptionNotificationEvent) {
 			return;
 		}
@@ -201,8 +186,8 @@ class Notifications {
 		
 		$actor = $event->getActor();
 		$question = $object->getContainerEntity();
-		$language = elgg_extract('language', $params, get_current_language());
-		$recipient = elgg_extract('recipient', $params);
+		$language = $hook->getParam('language', get_current_language());
+		$recipient = $hook->getParam('recipient');
 	
 		$return_value->subject = elgg_echo('questions:notifications:answer:comment:subject', [], $language);
 		$return_value->summary = elgg_echo('questions:notifications:answer:comment:summary', [], $language);
@@ -220,16 +205,13 @@ class Notifications {
 	/**
 	 * Add experts to the subscribers for a question
 	 *
-	 * @param string $hook         the name of the hook
-	 * @param string $type         the type of the hook
-	 * @param array  $return_value current return value
-	 * @param array  $params       supplied params
+	 * @param \Elgg\Hook $hook 'get', 'subscriptions'
 	 *
 	 * @return void|array
 	 */
-	public static function addExpertsToSubscribers($hook, $type, $return_value, $params) {
+	public static function addExpertsToSubscribers(\Elgg\Hook $hook) {
 		
-		$event = elgg_extract('event', $params);
+		$event = $hook->getParam('event');
 		if (!$event instanceof SubscriptionNotificationEvent) {
 			return;
 		}
@@ -243,6 +225,7 @@ class Notifications {
 			return;
 		}
 		
+		$return_value = $hook->getValue();
 		$moving = ($event->getAction() === 'moving');
 		// when moving only notify experts
 		if ($moving) {
@@ -307,16 +290,13 @@ class Notifications {
 	/**
 	 * Add question owner to the subscribers for an answer
 	 *
-	 * @param string $hook         the name of the hook
-	 * @param string $type         the type of the hook
-	 * @param array  $return_value current return value
-	 * @param array  $params       supplied params
+	 * @param \Elgg\Hook $hook 'get', 'subscriptions'
 	 *
 	 * @return void|array
 	 */
-	public static function addQuestionOwnerToAnswerSubscribers($hook, $type, $return_value, $params) {
+	public static function addQuestionOwnerToAnswerSubscribers(\Elgg\Hook $hook) {
 		
-		$event = elgg_extract('event', $params);
+		$event = $hook->getParam('event');
 		if (!$event instanceof SubscriptionNotificationEvent) {
 			return;
 		}
@@ -352,6 +332,7 @@ class Notifications {
 			return;
 		}
 		
+		$return_value = $hook->getValue();
 		$return_value[$owner->guid] = $filtered_methods;
 		
 		return $return_value;
@@ -360,16 +341,13 @@ class Notifications {
 	/**
 	 * Add answer owner to the subscribers for an answer
 	 *
-	 * @param string $hook         the name of the hook
-	 * @param string $type         the type of the hook
-	 * @param array  $return_value current return value
-	 * @param array  $params       supplied params
+	 * @param \Elgg\Hook $hook 'get', 'subscriptions'
 	 *
 	 * @return void|array
 	 */
-	public static function addAnswerOwnerToAnswerSubscribers($hook, $type, $return_value, $params) {
+	public static function addAnswerOwnerToAnswerSubscribers(\Elgg\Hook $hook) {
 		
-		$event = elgg_extract('event', $params);
+		$event = $hook->getParam('event');
 		if (!$event instanceof SubscriptionNotificationEvent) {
 			return;
 		}
@@ -391,6 +369,7 @@ class Notifications {
 			return;
 		}
 		
+		$return_value = $hook->getValue();
 		$return_value[$owner->guid] = $filtered_methods;
 		
 		return $return_value;
@@ -399,16 +378,13 @@ class Notifications {
 	/**
 	 * Add question subscribers to the subscribers for an answer
 	 *
-	 * @param string $hook         the name of the hook
-	 * @param string $type         the type of the hook
-	 * @param array  $return_value current return value
-	 * @param array  $params       supplied params
+	 * @param \Elgg\Hook $hook 'get', 'subscriptions'
 	 *
 	 * @return void|array
 	 */
-	public static function addQuestionSubscribersToAnswerSubscribers($hook, $type, $return_value, $params) {
+	public static function addQuestionSubscribersToAnswerSubscribers(\Elgg\Hook $hook) {
 		
-		$event = elgg_extract('event', $params);
+		$event = $hook->getParam('event');
 		if (!$event instanceof SubscriptionNotificationEvent) {
 			return;
 		}
@@ -432,7 +408,7 @@ class Notifications {
 			return;
 		}
 		
-		return ($return_value + $subscribers);
+		return ($hook->getValue() + $subscribers);
 	}
 	
 	/**

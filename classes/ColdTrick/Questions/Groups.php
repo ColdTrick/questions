@@ -7,14 +7,12 @@ class Groups {
 	/**
 	 * When an expert leaves the group, remove the expert role
 	 *
-	 * @param string $event  the 'leave' event
-	 * @param string $type   for the 'group' type
-	 * @param array  $params the provided params
+	 * @param \Elgg\Event $event 'leave', 'group'
 	 *
 	 * @return void
 	 */
-	public static function leave($event, $type, $params) {
-		
+	public static function leave(\Elgg\Event $event) {
+		$params = $event->getObject();
 		$user = elgg_extract('user', $params);
 		$group = elgg_extract('group', $params);
 		if (!$user instanceof \ElggUser || !$group instanceof \ElggGroup) {

@@ -7,15 +7,12 @@ class ContentSubscriptions {
 	/**
 	 * Add questions to Content Subscriptions supported types
 	 *
-	 * @param string $hook         the name of the hook
-	 * @param string $type         the type of the hook
-	 * @param array  $return_value current return value
-	 * @param array  $params       supplied params
+	 * @param \Elgg\Hook $hook         the name of the hook
 	 *
 	 * @return void|array
 	 */
-	public static function getEntityTypes($hook, $type, $return_value, $params) {
-		
+	public static function getEntityTypes(\Elgg\Hook $hook) {
+		$return_value = $hook->getValue();
 		if (!is_array($return_value)) {
 			// someone blocked all
 			return;
@@ -29,19 +26,18 @@ class ContentSubscriptions {
 	/**
 	 * Subscribe to a question when you create an answer
 	 *
-	 * @param string      $event
-	 * @param string      $type
-	 * @param \ElggObject $object
+	 * @param \Elgg\Event $event 'create', 'object'
 	 *
 	 * @return void
 	 */
-	public static function createAnswer($event, $type, \ElggObject $object) {
+	public static function createAnswer(\Elgg\Event $event) {
 		
 		if (!elgg_is_active_plugin('content_subscriptions')) {
 			return;
 		}
 		
-		if (!($object instanceof \ElggAnswer)) {
+		$object = $event->getObject();
+		if (!$object instanceof \ElggAnswer) {
 			return;
 		}
 		
@@ -59,24 +55,23 @@ class ContentSubscriptions {
 	/**
 	 * Subscribe to a question when you create a comment on an answer
 	 *
-	 * @param string      $event
-	 * @param string      $type
-	 * @param \ElggObject $object
+	 * @param \Elgg\Event $event 'create', 'object'
 	 *
 	 * @return void
 	 */
-	public static function createCommentOnAnswer($event, $type, \ElggObject $object) {
+	public static function createCommentOnAnswer(\Elgg\Event $event) {
 		
 		if (!elgg_is_active_plugin('content_subscriptions')) {
 			return;
 		}
 		
-		if (!($object instanceof \ElggComment)) {
+		$object = $event->getObject();
+		if (!$object instanceof \ElggComment) {
 			return;
 		}
 		
 		$answer = $object->getContainerEntity();
-		if (!($answer instanceof \ElggAnswer)) {
+		if (!$answer instanceof \ElggAnswer) {
 			return;
 		}
 		

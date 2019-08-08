@@ -7,14 +7,12 @@ class Access {
 	/**
 	 * After the question is updated in the databse make sure the answers have the same access_id
 	 *
-	 * @param string      $event  the name of the event
-	 * @param string      $type   the type of the event
-	 * @param \ElggObject $entity the affected object
+	 * @param \Elgg\Event $event 'update:after', 'object'
 	 *
 	 * @return void
 	 */
-	public static function updateQuestion($event, $type, $entity) {
-		
+	public static function updateQuestion(\Elgg\Event $event) {
+		$entity = $event->getObject();
 		if (!$entity instanceof \ElggQuestion) {
 			return;
 		}

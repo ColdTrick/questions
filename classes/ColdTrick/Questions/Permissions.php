@@ -7,22 +7,19 @@ class Permissions {
 	/**
 	 * limit the container write permissions
 	 *
-	 * @param string $hook        the name of the hook
-	 * @param string $type        the type of the hook
-	 * @param bool   $returnvalue current return value
-	 * @param array  $params      supplied params
+	 * @param \Elgg\Hook $hook 'container_permissions_check', 'object'
 	 *
 	 * @return void|bool
 	 */
-	public static function questionsContainer($hook, $type, $returnvalue, $params) {
+	public static function questionsContainer(\Elgg\Hook $hook, $type, $returnvalue, $params) {
 		
-		$subtype = elgg_extract('subtype', $params);
+		$subtype = $hook->getParam('subtype');
 		if ($subtype !== \ElggQuestion::SUBTYPE) {
 			return;
 		}
 		
-		$user = elgg_extract('user', $params);
-		$container = elgg_extract('container', $params);
+		$user = $hook->getUserParam();
+		$container = $hook->getParam('container');
 		if (!$user instanceof \ElggUser || !$container instanceof \ElggEntity) {
 			return false;
 		}
@@ -54,18 +51,15 @@ class Permissions {
 	/**
 	 * Check if a user has permissions
 	 *
-	 * @param string $hook        the name of the hook
-	 * @param string $type        the type of the hook
-	 * @param bool   $returnvalue current return value
-	 * @param array  $params      supplied params
+	 * @param \Elgg\Hook $hook 'permissions_check', 'object'
 	 *
 	 * @return void|bool
 	 */
-	public static function objectPermissionsCheck($hook, $type, $returnvalue, $params) {
+	public static function objectPermissionsCheck(\Elgg\Hook $hook) {
 		
 		// get the provided data
-		$entity = elgg_extract('entity', $params);
-		$user = elgg_extract('user', $params);
+		$entity = $hook->getEntityParam();
+		$user = $hook->getUserParam();
 		
 		if (!$user instanceof \ElggUser) {
 			return;
@@ -74,6 +68,8 @@ class Permissions {
 		if (!$entity instanceof \ElggQuestion && !$entity instanceof \ElggAnswer) {
 			return;
 		}
+		
+		$returnvalue = $hook->getValue();
 		
 		// expert only changes
 		if (questions_experts_enabled()) {
@@ -127,22 +123,19 @@ class Permissions {
 	/**
 	 * Check if a user can write an answer
 	 *
-	 * @param string $hook        the name of the hook
-	 * @param string $type        the type of the hook
-	 * @param bool   $returnvalue current return value
-	 * @param array  $params      supplied params
+	 * @param \Elgg\Hook $hook 'container_permissions_check', 'object'
 	 *
 	 * @return void|bool
 	 */
-	public static function answerContainer($hook, $type, $returnvalue, $params) {
+	public static function answerContainer(\Elgg\Hook $hook) {
 		
-		if ($returnvalue) {
+		if ($hook->getValue()) {
 			return;
 		}
 		
-		$question = elgg_extract('container', $params);
-		$user = elgg_extract('user', $params);
-		$subtype = elgg_extract('subtype', $params);
+		$question = $hook->getParam('container');
+		$user = $hook->getUserParam();
+		$subtype = $hook->getParam('subtype');
 		
 		if (($subtype !== \ElggAnswer::SUBTYPE) || !$user instanceof \ElggUser || !$question instanceof \ElggQuestion) {
 			return;

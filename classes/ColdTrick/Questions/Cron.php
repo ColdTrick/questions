@@ -9,14 +9,11 @@ class Cron {
 	/**
 	 * Automaticly close open questions after x days
 	 *
-	 * @param string $hook         the name of the hook
-	 * @param string $type         the type of the hook
-	 * @param mixed  $return_value current return value
-	 * @param mixed  $params       supplied params
+	 * @param \Elgg\Hook $hook 'cron', 'daily'
 	 *
 	 * @return void
 	 */
-	public static function autoCloseQuestions($hook, $type, $return_value, $params) {
+	public static function autoCloseQuestions(\Elgg\Hook $hook) {
 		
 		$auto_close_days = (int) elgg_get_plugin_setting('auto_close_time', 'questions');
 		if ($auto_close_days < 1) {
@@ -78,14 +75,11 @@ class Cron {
 	/**
 	 * A plugin hook for the CRON, so we can send out notifications to the experts about their workload
 	 *
-	 * @param string $hook        the name of the hook
-	 * @param string $type        the type of the hook
-	 * @param string $returnvalue current return value
-	 * @param array  $params      supplied params
+	 * @param \Elgg\Hook $hook 'cron', 'daily'
 	 *
 	 * @return void
 	 */
-	public static function notifyQuestionExperts($hook, $type, $returnvalue, $params) {
+	public static function notifyQuestionExperts(\Elgg\Hook $hook) {
 	
 		// are experts enabled
 		if (!questions_experts_enabled()) {
@@ -95,7 +89,7 @@ class Cron {
 		echo "Starting Questions experts todo notifications" . PHP_EOL;
 		elgg_log("Starting Questions experts todo notifications", 'NOTICE');
 			
-		$time = (int) elgg_extract('time', $params, time());
+		$time = (int) $hook->getParam('time', time());
 		
 		// get all experts
 		$expert_options = [
