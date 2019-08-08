@@ -11,7 +11,7 @@ class Permissions {
 	 *
 	 * @return void|bool
 	 */
-	public static function questionsContainer(\Elgg\Hook $hook, $type, $returnvalue, $params) {
+	public static function questionsContainer(\Elgg\Hook $hook) {
 		
 		$subtype = $hook->getParam('subtype');
 		if ($subtype !== \ElggQuestion::SUBTYPE) {
