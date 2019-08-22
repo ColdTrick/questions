@@ -1,6 +1,10 @@
 Version history
 ===============
 
+6.0.4 (2019-08-22):
+
+- several small chores/fixes
+
 6.0.3 (2019-07-11):
 
 - fixed: cron notification doesn't respect expert container limitations
