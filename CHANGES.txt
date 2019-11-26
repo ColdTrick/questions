@@ -1,6 +1,10 @@
 Version history
 ===============
 
+6.0.5 (2019-11-26):
+
+- fixed: fatal exception on question detail page
+
 6.0.4 (2019-08-22):
 
 - several small chores/fixes
