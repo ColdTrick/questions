@@ -295,6 +295,11 @@ function questions_can_move_to_discussions(ElggEntity $container, ElggUser $user
 		return false;
 	}
 	
+	// is disabled in plugin settings
+	if (!elgg_get_plugin_setting('move_to_discussion_allowed', 'questions')) {
+		return false;
+	}
+	
 	// only experts can move
 	if (!questions_is_expert($container, $user)) {
 		return false;

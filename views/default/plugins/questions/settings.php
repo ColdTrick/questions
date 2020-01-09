@@ -92,6 +92,15 @@ $expert_settings .= elgg_view_field([
 	'value' => 'yes',
 ]);
 
+$expert_settings .= elgg_view_field([
+	'#type' => 'checkbox',
+	'#label' => elgg_echo('questions:settings:experts:move_to_discussion_allowed'),
+	'name' => 'params[move_to_discussion_allowed]',
+	'checked' => (bool) $plugin->move_to_discussion_allowed,
+	'switch' => true,
+	'value' => 1,
+]);
+
 echo elgg_view_module('info', elgg_echo('questions:settings:experts:title'), $expert_settings);
 
 // access options

@@ -159,6 +159,7 @@ To view the question, click here:
 	'questions:settings:experts:enable:description' => "Experts have special privileges and can be assigned by site administrators and group owners.",
 	'questions:settings:experts:answer' => "Only experts can answer a question",
 	'questions:settings:experts:mark' => "Only experts can mark an answer as the correct answer",
+	'questions:settings:experts:move_to_discussion_allowed' => "Allow experts to move questions to discussions",
 	
 	'questions:settings:access:title' => "Access settings",
 	'questions:settings:access:personal' => "What will be the access level for personal questions",

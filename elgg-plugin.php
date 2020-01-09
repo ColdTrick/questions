@@ -16,6 +16,7 @@ return [
 		'experts_enabled' => 'no',
 		'experts_answer' => 'no',
 		'experts_mark' => 'no',
+		'move_to_discussion_allowed' => true,
 	],
 	'entities' => [
 		[

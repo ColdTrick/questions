@@ -134,6 +134,7 @@ Klik hier om de vraag te beantwoorden:
   'questions:settings:experts:enable:description' => 'Experts hebben speciale rechten. Ze kunnen door de site/groepsbeheerder worden toegewezen.',
   'questions:settings:experts:answer' => 'Alleen experts kunnen antwoorden geven',
   'questions:settings:experts:mark' => 'Alleen experts kunnen aangeven of een antwoord het juiste antwoord is',
+  'questions:settings:experts:move_to_discussion_allowed' => 'Experts mogen vragen verplaatsen naar discussies',
   'questions:settings:access:title' => 'Toegankelijkheids instellingen',
   'questions:settings:access:personal' => 'Het toegangsniveau voor vragen in de persoonlijk context (niet in groep geplaatst)',
   'questions:settings:access:group' => 'Het toegangsniveau voor vragen die in groepen worden gesteld',
