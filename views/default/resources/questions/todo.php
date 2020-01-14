@@ -73,12 +73,18 @@ $tags = get_input('tags');
 if (!empty($tags)) {
 	if (is_string($tags)) {
 		$tags = string_to_tag_array($tags);
-
 	}
-	$options['metadata_name_value_pairs'] = [
-		'name' => 'tags',
-		'value' => $tags,
-	];
+	
+	$options['wheres'][] = function(\Elgg\Database\QueryBuilder $qb, $main_alias) use ($tags) {
+		$ands = [];
+		foreach ($tags as $index => $tag) {
+			$md = $qb->joinMetadataTable($main_alias, 'guid', 'tags', 'inner', "md{$index}");
+		
+			$ands[] = $qb->compare("{$md}.value", '=', $tag, ELGG_VALUE_STRING);
+		}
+		
+		return $qb->merge($ands);
+	};
 }
 
 // build page elements

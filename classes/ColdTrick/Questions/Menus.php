@@ -127,59 +127,7 @@ class Menus {
 				$items->add($all);
 			}
 		}
-		
-		// add tags search
-		$session = elgg_get_session();
-		$route = false;
-		$route_params = [];
-		$tags = get_input('tags');
-		
-		
-		$session_key = "questions_tags";
-		if ($page_owner) {
-			$session_key .= "_{$page_owner->guid}";
-		}
-		
-		if (!empty($tags)) {
-			$route = 'collection:object:question:all';
-			if ($page_owner instanceof \ElggUser) {
-				$route = 'collection:object:question:owner';
-				$route_params['username'] = $page_owner->username;
-			} elseif ($page_owner instanceof \ElggGroup) {
-				$route = 'collection:object:question:group';
-				$route_params['guid'] = $page_owner->guid;
-			}
-			
-			$session->set($session_key, [
-				'tags' => $tags,
-				'route' => $route,
-				'route_params' => $route_params,
-			]);
-		} elseif ($session->has($session_key)) {
-			$settings = $session->get($session_key);
-			
-			$tags = elgg_extract('tags', $settings);
-			$route = elgg_extract('route', $settings);
-			$route_params = (array) elgg_extract('route_params', $settings, []);
-		}
-		
-		if (!empty($tags) && !empty($route)) {
-			$tags_string = $tags;
-			if (is_array($tags_string)) {
-				$tags_string = implode(', ', $tags_string);
-			}
-			
-			$route_params['tags'] = $tags;
-			
-			$items[] = \ElggMenuItem::factory([
-				'name' => 'questions_tags',
-				'text' => elgg_echo('questions:menu:filter:tags', [$tags_string]),
-				'href' => elgg_generate_url($route, $route_params),
-				'is_trusted' => true,
-				'priority' => 600,
-			]);
-		}
-		
+				
 		if (questions_is_expert()) {
 			$items[] = \ElggMenuItem::factory([
 				'name' => 'todo',

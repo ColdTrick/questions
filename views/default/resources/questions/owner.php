@@ -24,29 +24,38 @@ $options = [
 	'full_view' => false,
 	'list_type_toggle' => false,
 	'no_results' => elgg_echo('questions:none'),
+	'wheres' => [],
 ];
 
 $tags = get_input('tags');
 if (!empty($tags)) {
 	if (is_string($tags)) {
 		$tags = string_to_tag_array($tags);
-
 	}
-	$options['metadata_name_value_pairs'] = [
-		'name' => 'tags',
-		'value' => $tags,
-	];
+	
+	$options['wheres'][] = function(\Elgg\Database\QueryBuilder $qb, $main_alias) use ($tags) {
+		$ands = [];
+		foreach ($tags as $index => $tag) {
+			$md = $qb->joinMetadataTable($main_alias, 'guid', 'tags', 'inner', "md{$index}");
+		
+			$ands[] = $qb->compare("{$md}.value", '=', $tag, ELGG_VALUE_STRING);
+		}
+		
+		return $qb->merge($ands);
+	};
 }
 
 // build page elements
 $title = elgg_echo('questions:owner', [$page_owner->getDisplayName()]);
+
+$filter = elgg_view('questions/filter', ['options' => $options]);
 
 $content = elgg_list_entities($options);
 
 // build page
 $body = elgg_view_layout('content', [
 	'title' => $title,
-	'content' => $content,
+	'content' => $filter . $content,
 	'filter_context' => ($page_owner->guid === elgg_get_logged_in_user_guid()) ? 'mine' : '',
 ]);
 

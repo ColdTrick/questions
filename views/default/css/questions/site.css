@@ -1,4 +1,24 @@
 /* questions css */
+.elgg-menu-item-show-tags {
+	margin-left: auto !important;	
+}
+
+.questions-tags-filter {
+	
+	> .elgg-menu-container {
+		display: inline-block;
+	}
+	
+	li {
+		border: 1px solid $(border-color-strong);
+	    padding: 0 .5rem;
+	    border-radius: 4px;
+	    
+	    a {
+	    	text-decoration: none;
+	    }
+	}	    
+}
 
 .question-solution-time {
 	border: 1px solid #CCC;
