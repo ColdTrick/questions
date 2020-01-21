@@ -1,6 +1,11 @@
 Version history
 ===============
 
+6.1 (2020-01-21):
+
+- added: filter by tag options to listing resources
+- added: plugin setting to control if experts can move questions to forum
+
 6.0.5 (2019-11-26):
 
 - fixed: fatal exception on question detail page
