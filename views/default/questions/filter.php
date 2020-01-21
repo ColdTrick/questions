@@ -25,14 +25,6 @@ $options['wheres'][] = function(\Elgg\Database\QueryBuilder $qb, $main_alias) us
 	return $qb->compare("{$main_alias}.entity_guid", 'in', $subquery->getSQL());
 };
 
-$menu_options = [
-	'class' => ['elgg-menu-hz'],
-];
-
-$content_options = [
-	'class' => ['questions-tags-filter'],
-];
-
 $items = [];
 foreach ($tags as $tag) {
 	$new_tags = $tags;
@@ -71,24 +63,17 @@ if (count($tags) < 5) {
 	}
 }
 
-if (empty($tags) && !empty($items)) {
-	// add show filter
-	$content_options['class'][] = 'hidden';
-	
-	elgg_register_menu_item('filter:questions', [
-		'name' => 'show_tags',
-		'icon' => 'filter',
-		'text' => elgg_echo('filter'),
-		'href' => false,
-		'priority' => 9999,
-		'data-toggle-selector' => '.questions-tags-filter',
-		'rel' => 'toggle',
-	]);
+if (empty($items)) {
+	return;
 }
 
-$menu_options['items'] = $items;
+$content = elgg_format_element('strong', [], elgg_echo('questions:filter_by_tag') . ': ');
+$content .= elgg_view_menu('questions_tags', [
+	'class' => ['elgg-menu-hz'],
+	'items' => $items,
+	'item_class' => 'elgg-tag',
+]);
 
-$content = elgg_format_element('strong', [], elgg_echo('filter') . ': ');
-$content .= elgg_view_menu('questions_tags', $menu_options);
-
-echo elgg_format_element('div', $content_options, $content);
+echo elgg_format_element('div', [
+	'class' => ['questions-tags-filter', 'elgg-tags'],
+], $content);

@@ -9,13 +9,9 @@
 		display: inline-block;
 	}
 	
-	li {
-		border: 1px solid $(border-color-strong);
-	    padding: 0 .5rem;
-	    border-radius: 4px;
-	    
-	    a {
-	    	text-decoration: none;
+	li.elgg-tag {
+		a {
+	    	line-height: inherit;
 	    }
 	}	    
 }

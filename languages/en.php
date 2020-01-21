@@ -29,7 +29,6 @@ return [
 	'questions:menu:filter:todo' => "Todo",
 	'questions:menu:filter:todo_group' => "Group Todo",
 	'questions:menu:filter:experts' => "Experts",
-	'questions:menu:filter:tags' => "Tags: %s",
 	
 	'river:object:question:create' => '%s asked question %s',
 	'river:object:question:comment' => '%s commented on the question %s',
@@ -38,6 +37,8 @@ return [
 		
 	'questions' => 'Questions',
 	'questions:marked:correct' => 'Correct answer provided',
+	
+	'questions:filter_by_tag' => 'Filter by tag',
 	
 	'questions:everyone' => 'All Questions',
 	'questions:add' => 'Add a Question',

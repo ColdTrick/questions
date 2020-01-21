@@ -12,6 +12,7 @@ return array (
   'collection:object:answer' => 'Antwoorden',
   'questions:marked:correct' => 'Juiste antwoord is gegeven',
   'widget:questions:edit:group' => 'Beperk de vragen tot de opgegeven groep',
+  'questions:filter_by_tag' => 'Verfijn met tags',
   'questions:menu:filter:tags' => 'Tags: %s',
   'questions:notification:auto_close:subject' => 'De vraag \'%s\' is gesloten vanwege inactiviteit',
   'questions:notification:auto_close:summary' => 'De vraag \'%s\' is gesloten vanwege inactiviteit',
