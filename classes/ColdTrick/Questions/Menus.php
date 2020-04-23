@@ -105,6 +105,12 @@ class Menus {
 		
 		$page_owner = elgg_get_page_owner_entity();
 		
+		// add default filter tabs since we're using a custom ID
+		$defaults = elgg_get_filter_tabs($hook->getParam('filter_id'), $hook->getParam('filter_value'));
+		if (!empty($defaults)) {
+			$items->merge($defaults);
+		}
+		
 		// remove friends
 		$items->remove('friend');
 		
@@ -127,7 +133,7 @@ class Menus {
 				$items->add($all);
 			}
 		}
-				
+		
 		if (questions_is_expert()) {
 			$items[] = \ElggMenuItem::factory([
 				'name' => 'todo',
@@ -135,7 +141,7 @@ class Menus {
 				'href' => elgg_generate_url('collection:object:question:todo'),
 				'priority' => 700,
 			]);
-	
+			
 			if ($page_owner instanceof \ElggGroup && questions_is_expert($page_owner)) {
 				$items[] = \ElggMenuItem::factory([
 					'name' => 'todo_group',
@@ -147,13 +153,13 @@ class Menus {
 				]);
 			}
 		}
-	
+		
 		if (questions_experts_enabled()) {
 			$route_params = [];
 			if ($page_owner instanceof \ElggGroup) {
 				$route_params['group_guid'] = $page_owner->guid;
 			}
-	
+			
 			$items[] = \ElggMenuItem::factory([
 				'name' => 'experts',
 				'text' => elgg_echo('questions:menu:filter:experts'),
@@ -161,7 +167,7 @@ class Menus {
 				'priority' => 800,
 			]);
 		}
-	
+		
 		return $items;
 	}
 	

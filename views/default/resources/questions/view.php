@@ -117,11 +117,8 @@ if (!empty($answers)) {
 	]);
 }
 
-$body = elgg_view_layout('content', [
+// draw page
+echo elgg_view_page($title, [
 	'entity' => $question,
-	'title' => $title,
 	'content' => $content,
-	'filter' => false,
 ]);
-
-echo elgg_view_page($title, $body);

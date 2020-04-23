@@ -11,6 +11,7 @@ use Elgg\EntityPermissionsException;
 if (!questions_is_expert()) {
 	$e = new EntityPermissionsException();
 	$e->setRedirectUrl(elgg_generate_url('collection:object:question:all'));
+	throw $e;
 }
 
 // check for a group filter
@@ -24,6 +25,7 @@ if (!empty($group_guid)) {
 			$e->setRedirectUrl(elgg_generate_url('collection:object:question:group', [
 				'guid' => $group->guid,
 			]));
+			throw $e;
 		}
 		$page_owner = $group;
 	}
@@ -64,7 +66,7 @@ $options = [
 ];
 
 if ($page_owner instanceof ElggGroup) {
-	$options['container_guid'] = $page_owner->getGUID();
+	$options['container_guid'] = $page_owner->guid;
 } else {
 	$options['wheres'][] = questions_get_expert_where_sql();
 }
@@ -92,12 +94,9 @@ $title = elgg_echo('questions:todo');
 
 $content = elgg_list_entities($options);
 
-// build page
-$body = elgg_view_layout('content', [
-	'title' => $title,
-	'content' => $content,
-	'filter_context' => '',
-]);
-
 // draw page
-echo elgg_view_page($title, $body);
+echo elgg_view_page($title, [
+	'content' => $content,
+	'filter_id' => 'questions',
+	'filter_value' => ($page_owner instanceof ElggGroup) ? 'todo_group' : 'todo',
+]);

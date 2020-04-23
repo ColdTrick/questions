@@ -41,12 +41,9 @@ $user_list = elgg_list_entities([
 	'no_results' => elgg_echo('questions:experts:none', [$container->getDisplayName()]),
 ]);
 
-// build page
-$page_data = elgg_view_layout('content', [
-	'title' => $title_text,
-	'content' => $desciption . $user_list,
-	'filter_context' => '',
-]);
-
 // draw page
-echo elgg_view_page($title_text, $page_data);
+echo elgg_view_page($title_text, [
+	'content' => $desciption . $user_list,
+	'filter_id' => 'questions',
+	'filter_value' => 'experts',
+]);

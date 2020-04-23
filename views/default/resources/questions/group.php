@@ -18,7 +18,7 @@ elgg_register_title_button('questions', 'add', 'object', ElggQuestion::SUBTYPE);
 // prepare options
 $options = [
 	'type' => 'object',
-	'subtype' => 'question',
+	'subtype' => ElggQuestion::SUBTYPE,
 	'container_guid' => $page_owner->guid,
 	'full_view' => false,
 	'list_type_toggle' => false,
@@ -51,11 +51,9 @@ $filter = elgg_view('questions/filter', ['options' => $options]);
 
 $content = elgg_list_entities($options);
 
-// build page
-$body = elgg_view_layout('content', [
-	'title' => $title,
-	'content' => $filter . $content,
-]);
-
 // draw page
-echo elgg_view_page($title, $body);
+echo elgg_view_page($title, [
+	'content' => $filter . $content,
+	'filter_id' => 'questions',
+	'filter_value' => 'all',
+]);
