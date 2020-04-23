@@ -6,12 +6,12 @@
 	<category>content</category>
 	<description>Adds ability for users to ask questions to each other and get answers.</description>
 	<website>http://evanwinslow.com/</website>
-	<copyright>(C) 2011 Evan Winslow, 2015-2018 ColdTrick IT Solutions</copyright>
+	<copyright>(C) 2011 Evan Winslow, 2015-2020 ColdTrick IT Solutions</copyright>
 	<license>GNU Public License version 2</license>
 	
 	<requires>
 		<type>elgg_release</type>
-		<version>3.0</version>
+		<version>3.3</version>
 	</requires>
 	
 	<suggests>
