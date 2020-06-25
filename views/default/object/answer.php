@@ -73,6 +73,8 @@ $params['body'] = elgg_view('output/longtext', [
 
 $params['responses'] = elgg_view_comments($answer, true, [
 	'inline' => true,
+	'limit' => false,
+	'offset' => 0,
 ]);
 
 $params = $params + $vars;
