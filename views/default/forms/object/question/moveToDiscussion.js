@@ -6,7 +6,6 @@ define(function() {
 	$(document).on('click', '#questions-move-to-discussions', function() {
 		
 		var text = $(this).attr('rel');
-		console.log(text);
 		if (!confirm(text)) {
 			return false;
 		}
