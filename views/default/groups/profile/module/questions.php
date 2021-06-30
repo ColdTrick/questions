@@ -19,15 +19,16 @@ $all_link = elgg_view('output/url', [
 ]);
 
 elgg_push_context('widgets');
-$options = [
+
+$content = elgg_list_entities([
 	'type' => 'object',
 	'subtype' => ElggQuestion::SUBTYPE,
 	'container_guid' => $group->guid,
 	'limit' => 6,
 	'full_view' => false,
 	'pagination' => false,
-];
-$content = elgg_list_entities($options);
+]);
+
 elgg_pop_context();
 
 if (!$content) {
@@ -40,7 +41,7 @@ if ($group->canWriteToContainer(0, 'object', ElggQuestion::SUBTYPE)) {
 		'href' => elgg_generate_url('add:object:question', [
 			'guid' => $group->guid,
 		]),
-		'text' => elgg_echo('questions:add'),
+		'text' => elgg_echo('add:object:question'),
 		'is_trusted' => true,
 	]);
 }

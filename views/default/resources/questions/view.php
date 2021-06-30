@@ -121,4 +121,5 @@ if (!empty($answers)) {
 echo elgg_view_page($title, [
 	'entity' => $question,
 	'content' => $content,
+	'filter_id' => 'question/view',
 ]);

@@ -5,7 +5,7 @@
  * @package Questions
  */
 
-use Elgg\EntityNotFoundException;
+use Elgg\Exceptions\Http\EntityNotFoundException;
 
 $page_owner = elgg_get_page_owner_entity();
 if (!$page_owner instanceof ElggUser) {

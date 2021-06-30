@@ -42,8 +42,7 @@ function questions_experts_only_answer() {
 		return $result;
 	}
 	
-	$setting = elgg_get_plugin_setting('experts_answer', 'questions');
-	if ($setting === 'yes') {
+	if (elgg_get_plugin_setting('experts_answer', 'questions') === 'yes') {
 		$result = true;
 	}
 	
@@ -65,7 +64,7 @@ function questions_is_expert(ElggEntity $container = null, ElggUser $user = null
 	}
 	
 	// make sure we have a user
-	if (!($user instanceof ElggUser)) {
+	if (!$user instanceof ElggUser) {
 		$user = elgg_get_logged_in_user_entity();
 	}
 	
@@ -78,7 +77,7 @@ function questions_is_expert(ElggEntity $container = null, ElggUser $user = null
 			$container = elgg_get_site_entity();
 		}
 		
-		if (($container instanceof ElggSite) || ($container instanceof ElggGroup)) {
+		if ($container instanceof ElggSite || $container instanceof ElggGroup) {
 			if (check_entity_relationship($user->guid, QUESTIONS_EXPERT_ROLE, $container->guid)) {
 				// user has the expert role
 				return true;
@@ -86,8 +85,7 @@ function questions_is_expert(ElggEntity $container = null, ElggUser $user = null
 		}
 	} else {
 		// check if user has any expert relationship with entity on this site
-		return (bool) elgg_get_entities([
-			'count' => true,
+		return (bool) elgg_count_entities([
 			'relationship' => QUESTIONS_EXPERT_ROLE,
 			'relationship_guid' => $user->guid,
 		]);
@@ -104,9 +102,8 @@ function questions_is_expert(ElggEntity $container = null, ElggUser $user = null
  *
  * @return int
  */
-function questions_validate_access_id($access_id, $container_guid) {
+function questions_validate_access_id(int $access_id, int $container_guid) {
 	
-	$access_id = sanitise_int($access_id);
 	if ($access_id === ACCESS_DEFAULT) {
 		$access_id = get_default_access();
 	}
@@ -179,7 +176,7 @@ function questions_get_personal_access_level() {
 		$result = false;
 		
 		$setting = elgg_get_plugin_setting('access_personal', 'questions');
-		if (!empty($setting) && ($setting !== 'user_defined')) {
+		if (!empty($setting) && $setting !== 'user_defined') {
 			$result = (int) $setting;
 		}
 	}
@@ -202,7 +199,7 @@ function questions_get_group_access_level(ElggGroup $group) {
 		$plugin_setting = false;
 		
 		$setting = elgg_get_plugin_setting('access_group', 'questions');
-		if (!empty($setting) && ($setting != 'user_defined')) {
+		if (!empty($setting) && $setting != 'user_defined') {
 			$plugin_setting = $setting;
 		}
 	}
@@ -239,10 +236,10 @@ function questions_get_solution_time(ElggEntity $container) {
 	$result = $plugin_setting;
 	
 	// check is group
-	if (($container instanceof ElggGroup) && (elgg_get_plugin_setting('solution_time_group', 'questions') === 'yes')) {
+	if ($container instanceof ElggGroup && elgg_get_plugin_setting('solution_time_group', 'questions') === 'yes') {
 		// get group setting
 		$group_setting = $container->getPrivateSetting('questions_solution_time');
-		if (($group_setting !== false) && ($group_setting !== null)) {
+		if (!elgg_is_empty($group_setting)) {
 			// we have a valid group setting
 			$result = (int) $group_setting;
 		}
@@ -356,13 +353,8 @@ function questions_can_ask_question(ElggEntity $container = null, ElggUser $user
 function questions_can_answer_question(ElggQuestion $question, ElggUser $user = null) {
 	static $general_experts_only;
 	
-	// default to page owner
-	if (!($question instanceof ElggQuestion)) {
-		return false;
-	}
-	
 	// default to current user
-	if (!($user instanceof ElggUser)) {
+	if (!$user instanceof ElggUser) {
 		$user = elgg_get_logged_in_user_entity();
 	}
 	
@@ -396,7 +388,7 @@ function questions_can_answer_question(ElggQuestion $question, ElggUser $user = 
 		return false;
 	}
 	
-	if (!($container instanceof ElggGroup)) {
+	if (!$container instanceof ElggGroup) {
 		return true;
 	}
 	
@@ -411,7 +403,7 @@ function questions_can_answer_question(ElggQuestion $question, ElggUser $user = 
 	}
 	
 	// are you a group member or can you edit the group
-	return ($container->isMember($user) || $container->canEdit($user->getGUID()));
+	return ($container->isMember($user) || $container->canEdit($user->guid));
 }
 
 /**
@@ -426,16 +418,16 @@ function questions_can_answer_question(ElggQuestion $question, ElggUser $user = 
  */
 function questions_auto_mark_answer_correct(ElggEntity $container, ElggUser $user = null) {
 	
-	if (!($container instanceof ElggGroup)) {
+	if (!$container instanceof ElggGroup) {
 		// for now only supported in groups
 		return false;
 	}
 	
-	if (!($user instanceof ElggUser)) {
+	if (!$user instanceof ElggUser) {
 		$user = elgg_get_logged_in_user_entity();
 	}
 	
-	if (!($user instanceof ElggUser)) {
+	if (!$user instanceof ElggUser) {
 		return false;
 	}
 	
@@ -503,9 +495,8 @@ function questions_prepare_question_form_vars($question = null) {
  *
  * @return false|callable
  */
-function questions_get_expert_where_sql($user_guid = 0) {
+function questions_get_expert_where_sql(int $user_guid = 0) {
 	
-	$user_guid = (int) $user_guid;
 	if ($user_guid < 1) {
 		$user_guid = elgg_get_logged_in_user_guid();
 	}

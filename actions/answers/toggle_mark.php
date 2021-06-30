@@ -26,7 +26,7 @@ if (empty($answer)) {
 	$entity->markAsCorrect();
 	
 	return elgg_ok_response('', elgg_echo('questions:action:answer:toggle_mark:success:mark'));
-} elseif ($answer->getGUID() == $entity->getGUID()) {
+} elseif ($answer->guid == $entity->guid) {
 	// the marked answer is this answer, so unmark
 	$entity->undoMarkAsCorrect();
 	

@@ -43,25 +43,19 @@ return array (
   'questions:experts:description:site' => 'Abajo esta el listado de usuarios expertos. Estas personas asisten con respuestas a las preguntas.',
   'questions:notifications:create:subject' => 'Han publicado una nueva pregunta',
   'questions:notifications:create:summary' => 'Han publicado una nueva pregunta',
-  'questions:notifications:create:message' => 'Hola %s
-
-Han publicado la siguiente pregunta: %s.
+  'questions:notifications:create:message' => 'Han publicado la siguiente pregunta: %s.
 
 Para responderla ingresa a:
 %s',
   'questions:notifications:move:subject' => 'Una pregunta fue movida',
   'questions:notifications:move:summary' => 'Una pregunta fue movida',
-  'questions:notifications:move:message' => 'Hola %s
-
-La pregunta: %s ha sido movida, por lo que tendrás que responderla.
+  'questions:notifications:move:message' => 'La pregunta: %s ha sido movida, por lo que tendrás que responderla.
 
 Para responderla ingresa a:
 %s',
   'questions:notifications:answer:create:subject' => 'Hay una respuesta para la pregunta: %s',
   'questions:notifications:answer:create:summary' => 'Hay una respuesta para la pregunta: %s',
-  'questions:notifications:answer:create:message' => 'Hola %s
-
-%s publicó una respuesta a la pregunta \'%s\'.
+  'questions:notifications:answer:create:message' => '%s publicó una respuesta a la pregunta \'%s\'.
 
 %s
 
@@ -69,9 +63,7 @@ Para ver la respuesta ingresa en:
 %s',
   'questions:notifications:answer:correct:subject' => 'Una respuesta fue marcada como correcta para la pregunta %s',
   'questions:notifications:answer:correct:summary' => 'Una respuesta fue marcada como correcta para la pregunta %s',
-  'questions:notifications:answer:correct:message' => 'Hola %s
-
-%s marcó una respuesta como correcta para la pregunta \'%s\'.
+  'questions:notifications:answer:correct:message' => '%s marcó una respuesta como correcta para la pregunta \'%s\'.
 
 %s
 
@@ -79,9 +71,7 @@ Para ver la respuesta ingresa en:
 %s',
   'questions:notifications:answer:comment:subject' => 'Nuevo comentario en una respuesta',
   'questions:notifications:answer:comment:summary' => 'Nuevo comentario en una respuesta',
-  'questions:notifications:answer:comment:message' => 'Hola %s
-
-%s hizo un comentario en una respuesta a la pregunta \'%s\'.
+  'questions:notifications:answer:comment:message' => '%s hizo un comentario en una respuesta a la pregunta \'%s\'.
 
 %s
 
@@ -94,9 +84,7 @@ Para ver el comentario ingresa en:
   'questions:daily:notification:message:new' => 'Nuevas preguntas',
   'questions:notification:auto_close:subject' => 'La pregunta \'%s\' se cerró por inactividad',
   'questions:notification:auto_close:summary' => 'La pregunta \'%s\' se cerró por inactividad',
-  'questions:notification:auto_close:message' => 'Hola %s,
-
-tu pregunta \'%s\' ha estado inactiva por %s días. Por esa razón, la misma ha sido cerrada y ya no recibirá respuestas.
+  'questions:notification:auto_close:message' => 'tu pregunta \'%s\' ha estado inactiva por %s días. Por esa razón, la misma ha sido cerrada y ya no recibirá respuestas.
 
 Para ver la pregunta, ingresa en:
 %s',

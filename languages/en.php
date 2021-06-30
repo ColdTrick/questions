@@ -13,6 +13,8 @@ return [
 	'collection:object:question' => "Questions",
 	'collection:object:answer' => "Answers",
 	
+	'add:object:question' => "Ask a question",
+	
 	// admin
 	'admin:upgrades:set_question_status' => "Set status on all questions",
 	'admin:upgrades:set_question_status:description' => "Make sure all questions have a status metadata field. Older questions don't have this by default.",
@@ -41,7 +43,6 @@ return [
 	'questions:filter_by_tag' => 'Filter by tag',
 	
 	'questions:everyone' => 'All Questions',
-	'questions:add' => 'Add a Question',
 	'questions:todo' => 'Todo',
 	'questions:todo:none' => 'There is nothing Todo, keep up the good work!',
 	'questions:owner' => "%s's Questions",
@@ -71,26 +72,20 @@ return [
 	 */
 	'questions:notifications:create:subject' => "A new question was asked",
 	'questions:notifications:create:summary' => "A new question was asked",
-	'questions:notifications:create:message' => "Hi %s
-
-The question: %s was asked.
+	'questions:notifications:create:message' => "The question: %s was asked.
 
 To answer the question go here:
 %s",
 	'questions:notifications:move:subject' => "A question was moved",
 	'questions:notifications:move:summary' => "A question was moved",
-	'questions:notifications:move:message' => "Hi %s
-
-The question: %s was moved so you'll have to answer it.
+	'questions:notifications:move:message' => "The question: %s was moved so you'll have to answer it.
 
 To answer the question go here:
 %s",
 	
 	'questions:notifications:answer:create:subject' => "An answer was provided on %s",
 	'questions:notifications:answer:create:summary' => "An answer was provided on %s",
-	'questions:notifications:answer:create:message' => "Hi %s
-
-%s provided an answer to the question '%s'.
+	'questions:notifications:answer:create:message' => "%s provided an answer to the question '%s'.
 
 %s
 
@@ -98,9 +93,7 @@ To view the answer click here:
 %s",
 	'questions:notifications:answer:correct:subject' => "An answer was marked as the correct answer on %s",
 	'questions:notifications:answer:correct:summary' => "An answer was marked as the correct answer on %s",
-	'questions:notifications:answer:correct:message' => "Hi %s
-
-%s marked an answer as the correct answer on the question '%s'.
+	'questions:notifications:answer:correct:message' => "%s marked an answer as the correct answer on the question '%s'.
 
 %s
 
@@ -108,9 +101,7 @@ To view the answer click here:
 %s",
 	'questions:notifications:answer:comment:subject' => "New comment on an answer",
 	'questions:notifications:answer:comment:summary' => "New comment on an answer",
-	'questions:notifications:answer:comment:message' => "Hi %s
-
-%s commented on an answer to the question '%s'.
+	'questions:notifications:answer:comment:message' => "%s commented on an answer to the question '%s'.
 
 %s
 
@@ -125,9 +116,7 @@ To view the comment click here:
 	
 	'questions:notification:auto_close:subject' => "The question '%s' was closed due to inactivity",
 	'questions:notification:auto_close:summary' => "The question '%s' was closed due to inactivity",
-	'questions:notification:auto_close:message' => "Hi %s,
-
-Your question '%s' has been inactive for more than %s days. For this reason the question was closed.
+	'questions:notification:auto_close:message' => "Your question '%s' has been inactive for more than %s days. For this reason the question was closed.
 
 To view the question, click here:
 %s",

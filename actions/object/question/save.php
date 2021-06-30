@@ -1,5 +1,7 @@
 <?php
 
+use Elgg\Values;
+
 elgg_make_sticky_form('question');
 
 $guid = (int) get_input('guid');
@@ -16,7 +18,7 @@ if (empty($guid)) {
 	}
 }
 
-$adding = !$question->getGUID();
+$adding = empty($question->guid);
 $editing = !$adding;
 $moving = false;
 
@@ -38,7 +40,7 @@ if (questions_limited_to_groups() && ($container_guid == $question->getOwnerGUID
 	return elgg_error_response(elgg_echo('questions:action:question:save:error:limited_to_groups'));
 }
 
-$title = get_input('title');
+$title = elgg_get_title_input();
 $description = get_input('description');
 $tags = string_to_tag_array(get_input('tags', ''));
 $access_id = (int) get_input('access_id');
@@ -78,7 +80,7 @@ try {
 		$solution_time = questions_get_solution_time($question->getContainerEntity());
 		if ($solution_time) {
 			// add x number of days when the question should be solved
-			$question->solution_time = (time() + ($solution_time * 24 * 60 * 60));
+			$question->solution_time = Values::normalizeTimestamp("+{$solution_time} days");
 		}
 	} elseif ($moving) {
 		elgg_trigger_event('move', 'object', $question);
@@ -92,9 +94,13 @@ elgg_clear_sticky_form('question');
 if (!$adding) {
 	$forward_url = $question->getURL();
 } elseif ($container instanceof ElggUser) {
-	$forward_url = "questions/owner/{$container->username}";
+	$forward_url = elgg_generate_url('collection:object:question:owner', [
+		'username' => $container->username,
+	]);
 } else {
-	$forward_url = "questions/group/{$container->getGUID()}/all";
+	$forward_url = elgg_generate_url('collection:object:question:group', [
+		'guid' => $container->guid,
+	]);
 }
 
 return elgg_ok_response('', elgg_echo('save:success'), $forward_url);

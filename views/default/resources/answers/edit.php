@@ -5,7 +5,7 @@
  * @package ElggQuestions
  */
 
-use Elgg\EntityPermissionsException;
+use Elgg\Exceptions\Http\EntityPermissionsException;
 
 $answer_guid = (int) elgg_extract('guid', $vars);
 elgg_entity_gatekeeper($answer_guid, 'object', ElggAnswer::SUBTYPE);
@@ -21,14 +21,9 @@ $question = $answer->getContainerEntity();
 elgg_set_page_owner_guid($question->container_guid);
 elgg_push_entity_breadcrumbs($question);
 
-$title = elgg_echo('questions:answer:edit');
-
 $content = elgg_view_form('object/answer/edit', [], ['entity' => $answer]);
 
-$body = elgg_view_layout('content', [
-	'title' => $title,
+echo elgg_view_page(elgg_echo('questions:answer:edit'), [
 	'content' => $content,
-	'filter' => '',
+	'filter_id' => 'answer/edit',
 ]);
-
-echo elgg_view_page($title, $body);

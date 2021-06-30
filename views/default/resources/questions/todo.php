@@ -6,7 +6,7 @@
  */
 
 use Elgg\Database\QueryBuilder;
-use Elgg\EntityPermissionsException;
+use Elgg\Exceptions\Http\EntityPermissionsException;
 
 if (!questions_is_expert()) {
 	$e = new EntityPermissionsException();

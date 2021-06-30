@@ -1,27 +1,8 @@
 <?php
 
-namespace ColdTrick\Questions;
+namespace ColdTrick\Questions\Notifications;
 
-class ContentSubscriptions {
-	
-	/**
-	 * Add questions to Content Subscriptions supported types
-	 *
-	 * @param \Elgg\Hook $hook         the name of the hook
-	 *
-	 * @return void|array
-	 */
-	public static function getEntityTypes(\Elgg\Hook $hook) {
-		$return_value = $hook->getValue();
-		if (!is_array($return_value)) {
-			// someone blocked all
-			return;
-		}
-		
-		$return_value['object'][] = \ElggQuestion::SUBTYPE;
-		
-		return $return_value;
-	}
+class Subscriptions {
 	
 	/**
 	 * Subscribe to a question when you create an answer

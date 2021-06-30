@@ -5,9 +5,10 @@ if (!is_array($tags)) {
 	$tags = [$tags];
 }
 
-$options = elgg_extract('options', $vars);
+$options = (array) elgg_extract('options', $vars, []);
 $options['threshold'] = 2;
 $options['limit'] = 10;
+$options['tag_names'] = 'tags';
 
 $options['wheres'] = [];
 $options['wheres'][] = function(\Elgg\Database\QueryBuilder $qb, $main_alias) use ($tags) {

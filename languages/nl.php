@@ -16,9 +16,7 @@ return array (
   'questions:menu:filter:tags' => 'Tags: %s',
   'questions:notification:auto_close:subject' => 'De vraag \'%s\' is gesloten vanwege inactiviteit',
   'questions:notification:auto_close:summary' => 'De vraag \'%s\' is gesloten vanwege inactiviteit',
-  'questions:notification:auto_close:message' => 'Beste %s,
-
-Je vraag \'%s\' heeft al meer dan %s dagen geen reactie gehad. Daarom is deze vraag gesloten.
+  'questions:notification:auto_close:message' => 'Je vraag \'%s\' heeft al meer dan %s dagen geen reactie gehad. Daarom is deze vraag gesloten.
 
 Om de vraag te bekijken, klik hier:
 %s',
@@ -27,9 +25,7 @@ Om de vraag te bekijken, klik hier:
   'questions:object:answer:title' => 'Antwoord op vraag %s',
   'questions:notifications:answer:create:subject' => 'Er is een antwoord gegeven op %s',
   'questions:notifications:answer:create:summary' => 'Er is een antwoord gegeven op %s',
-  'questions:notifications:answer:create:message' => 'Beste %s,
-
-%s heeft een antwoord gegeven op de vraag \'%s\'.
+  'questions:notifications:answer:create:message' => '%s heeft een antwoord gegeven op de vraag \'%s\'.
 
 %s
 
@@ -37,9 +33,7 @@ Om het antwoord te bekijken, klik hier:
 %s',
   'questions:notifications:answer:correct:subject' => 'Een antwoord is gemarkeerd als het correcte antwoord op %s',
   'questions:notifications:answer:correct:summary' => 'Een antwoord is gemarkeerd als het correcte antwoord op %s',
-  'questions:notifications:answer:correct:message' => 'Beste %s,
-
-%s heeft een antwoord gemarkeerd als het correcte antwoord op de vraag \'%s\'.
+  'questions:notifications:answer:correct:message' => '%s heeft een antwoord gemarkeerd als het correcte antwoord op de vraag \'%s\'.
 
 %s
 
@@ -47,9 +41,7 @@ Om het antwoord te bekijken, klik hier:
 %s',
   'questions:notifications:answer:comment:subject' => 'Nieuwe reactie op een antwoord',
   'questions:notifications:answer:comment:summary' => 'Nieuwe reactie op een antwoord',
-  'questions:notifications:answer:comment:message' => 'Beste %s,
-
-%s reageerde op een antwoord bij de vraag \'%s\'.
+  'questions:notifications:answer:comment:message' => '%s reageerde op een antwoord bij de vraag \'%s\'.
 
 %s
 
@@ -102,17 +94,13 @@ Om de reactie te bekijken, klik hier:
   'questions:experts:none' => 'Er zijn nog geen experts toegekend aan %s.',
   'questions:notifications:create:subject' => 'Er is een nieuwe vraag gesteld',
   'questions:notifications:create:summary' => 'Er is een nieuwe vraag gesteld',
-  'questions:notifications:create:message' => 'Beste %s,
-
-De vraag: %s is gesteld.
+  'questions:notifications:create:message' => 'De vraag: %s is gesteld.
 
 Klik hier om de vraag te beantwoorden:
 %s',
   'questions:notifications:move:subject' => 'Een vraag is verplaatst',
   'questions:notifications:move:summary' => 'Een vraag is verplaatst',
-  'questions:notifications:move:message' => 'Beste %s,
-
-De vraag: %s is verplaatst. U moet hem nu beantwoorden.
+  'questions:notifications:move:message' => 'De vraag: %s is verplaatst. U moet hem nu beantwoorden.
 
 Klik hier om de vraag te beantwoorden:
 %s',

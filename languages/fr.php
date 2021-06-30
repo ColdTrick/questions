@@ -42,25 +42,19 @@ return array (
   'questions:experts:description:site' => 'Vous trouverez ci-dessous une liste des experts du site. Ces personnes aideront à répondre aux questions, tant sur le site que dans les groupes.',
   'questions:notifications:create:subject' => 'Une nouvelle question a été posée',
   'questions:notifications:create:summary' => 'Une nouvelle question a été posée',
-  'questions:notifications:create:message' => 'Bonjour %s
-
-La question: %s a été possée.
+  'questions:notifications:create:message' => 'La question: %s a été possée.
 
 Pour répondre, visitez:
 %s',
   'questions:notifications:move:subject' => 'Une question a été déplacée',
   'questions:notifications:move:summary' => 'Une question a été déplacée',
-  'questions:notifications:move:message' => 'Bonjour %s
-
-La question: %s a été déplacee et vous devriez répondre.
+  'questions:notifications:move:message' => 'La question: %s a été déplacee et vous devriez répondre.
 
 Pour répondre, visitez:
 %s',
   'questions:notifications:answer:create:subject' => 'Une réponse a été fournie sur %s',
   'questions:notifications:answer:create:summary' => 'Une réponse a été fournie sur %s',
-  'questions:notifications:answer:create:message' => 'Bonjour %s
-
-%s a fourni une réponse pour la question \'%s\'.
+  'questions:notifications:answer:create:message' => '%s a fourni une réponse pour la question \'%s\'.
 
 %s
 
@@ -68,9 +62,7 @@ Pour répondre, visitez:
 %s',
   'questions:notifications:answer:correct:subject' => 'Une réponse a été marquée comme la réponse correcte pour la question %s',
   'questions:notifications:answer:correct:summary' => 'Une réponse a été marquée comme la réponse correcte pour la question %s',
-  'questions:notifications:answer:correct:message' => 'Bonjour %s
-
-%s a marqué une réponse comme la réponse correcte pour la question \'%s\'.
+  'questions:notifications:answer:correct:message' => '%s a marqué une réponse comme la réponse correcte pour la question \'%s\'.
 
 %s
 
@@ -78,9 +70,7 @@ Pour répondre, visitez:
 %s',
   'questions:notifications:answer:comment:subject' => 'Nouveau commentaire sur une réponse',
   'questions:notifications:answer:comment:summary' => 'Nouveau commentaire sur une réponse',
-  'questions:notifications:answer:comment:message' => 'Bonjour %s
-
-%s a fourni une commentaire pour la réponse \'%s\'.
+  'questions:notifications:answer:comment:message' => '%s a fourni une commentaire pour la réponse \'%s\'.
 
 %s
 
@@ -93,9 +83,7 @@ Pour répondre, visitez:
   'questions:daily:notification:message:new' => 'Nouvelles questions posées',
   'questions:notification:auto_close:subject' => 'La question \'%s\' est fermée en raison de l\'inactivité',
   'questions:notification:auto_close:summary' => 'La question \'%s\' est fermée en raison de l\'inactivité',
-  'questions:notification:auto_close:message' => 'Bonjour %s,
-
-Votre question \'%s\' est inactive depuis plus que %s jours. Pour cette raison, la question est fermée.
+  'questions:notification:auto_close:message' => 'Votre question \'%s\' est inactive depuis plus que %s jours. Pour cette raison, la question est fermée.
 
 Pour répondre, visitez:
 %s',

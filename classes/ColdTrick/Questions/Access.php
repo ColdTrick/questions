@@ -11,7 +11,7 @@ class Access {
 	 *
 	 * @return void
 	 */
-	public static function updateQuestion(\Elgg\Event $event) {
+	public static function updateAnswerAccessToQuestionAccess(\Elgg\Event $event) {
 		$entity = $event->getObject();
 		if (!$entity instanceof \ElggQuestion) {
 			return;
@@ -26,10 +26,10 @@ class Access {
 		// ignore access for this part
 		elgg_call(ELGG_IGNORE_ACCESS, function() use ($entity) {
 			
-			$answers = $entity->getAnswers(['limit' => false]);
-			if (empty($answers)) {
-				return;
-			}
+			$answers = $entity->getAnswers([
+				'limit' => false,
+				'batch' => true,
+			]);
 			
 			/* @var $answer \ElggAnswer */
 			foreach ($answers as $answer) {
