@@ -42,7 +42,6 @@ class Notifications {
 		$return_value->subject = elgg_echo('questions:notifications:answer:comment:subject', [], $language);
 		$return_value->summary = elgg_echo('questions:notifications:answer:comment:summary', [], $language);
 		$return_value->body = elgg_echo('questions:notifications:answer:comment:message', [
-			$recipient->getDisplayName(),
 			$actor->getDisplayName(),
 			$question->getDisplayName(),
 			$comment->description,

@@ -180,15 +180,13 @@ $footer_fields[] = [
 ];
 
 if ($editing && questions_can_move_to_discussions($container)) {
-	elgg_require_js('forms/object/question/moveToDiscussion');
-	
 	$footer_fields[] = [
-		'#type' => 'button',
+		'#type' => 'submit',
 		'icon' => 'exchange-alt',
 		'value' => elgg_echo('questions:edit:question:move_to_discussions'),
 		'class' => ['elgg-button-action'],
-		'id' => 'questions-move-to-discussions',
-		'rel' => elgg_echo('questions:edit:question:move_to_discussions:confirm'),
+		'formaction' => elgg_generate_action_url('object/question/move_to_discussions', [], false),
+		'confirm' => elgg_echo('questions:edit:question:move_to_discussions:confirm'),
 	];
 }
 

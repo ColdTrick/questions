@@ -32,6 +32,20 @@ $entity->access_id = $access_id;
 
 $entity->save();
 
+// make sure we have permission
+$permission = function (\Elgg\Hook $hook) use ($entity) {
+	$subtype = $hook->getParam('subtype');
+	$user = $hook->getUserParam();
+	$container = $hook->getParam('container');
+	
+	if ($subtype !== 'discussion' || $user->guid !== elgg_get_logged_in_user_guid() || $container->guid !== $entity->owner_guid) {
+		return;
+	}
+	
+	return true;
+};
+elgg_register_plugin_hook_handler('container_permissions_check', 'object', $permission);
+
 // create new discussion
 $topic = new ElggDiscussion();
 $topic->owner_guid = $entity->owner_guid;
@@ -45,14 +59,40 @@ $topic->tags = $entity->tags;
 $topic->status = 'open';
 
 if (!$topic->save()) {
+	elgg_unregister_plugin_hook_handler('container_permissions_check', 'object', $permission);
 	return elgg_error_response(elgg_echo('questions:action:question:move_to_discussions:error:topic'));
 }
+
+elgg_unregister_plugin_hook_handler('container_permissions_check', 'object', $permission);
 
 // cleanup sticky form
 elgg_clear_sticky_form('question');
 
 // make sure we can copy all annotations
 elgg_call(ELGG_IGNORE_ACCESS, function() use ($entity, $topic) {
+	
+	// helper to move comments
+	$move_comments = function (ElggEntity $from_container) use ($topic) {
+		$comment_options = [
+			'type' => 'object',
+			'subtype' => 'comment',
+			'container_guid' => $from_container->guid,
+			'limit' => false,
+			'batch' => true,
+			'batch_inc_offset' => false,
+		];
+		
+		$comments = elgg_get_entities($comment_options);
+		/* @var $comment ElggComment */
+		foreach ($comments as $comment) {
+			// change container to discussion
+			$comment->container_guid = $topic->guid;
+			$comment->save();
+		}
+	};
+	
+	// move question comments
+	$move_comments($entity);
 	
 	// copy all answers on the question to topic replies
 	$answers = elgg_get_entities([
@@ -66,34 +106,20 @@ elgg_call(ELGG_IGNORE_ACCESS, function() use ($entity, $topic) {
 	/* @var $answer ElggAnswer */
 	foreach ($answers as $answer) {
 		// move answer to comment
-		$comment = new ElggComment();
-		$comment->owner_guid = $answer->owner_guid;
-		$comment->container_guid = $topic->guid;
-		$comment->access_id = $topic->access_id;
+		$answer_comment = new ElggComment();
+		$answer_comment->owner_guid = $answer->owner_guid;
+		$answer_comment->container_guid = $topic->guid;
+		$answer_comment->access_id = $topic->access_id;
 		
-		$comment->description = $answer->description;
-		$comment->time_created = $answer->time_created;
+		$answer_comment->description = $answer->description;
+		$answer_comment->time_created = $answer->time_created;
 		
-		$comment->save();
+		$answer_comment->save();
 		
 		// move all comments on the answer to topic
-		$comment_options = [
-			'type' => 'object',
-			'subtype' => 'comment',
-			'container_guid' => $answer->guid,
-			'limit' => false,
-			'batch' => true,
-			'batch_inc_offset' => false,
-		];
+		$move_comments($answer);
 		
-		$comments = elgg_get_entities($comment_options);
-		/* @var $comment ElggComment */
-		foreach ($comments as $comment) {
-			// change container to discussion
-			$comment->container_guid = $topic->guid;
-			$comment->save();
-		}
-		
+		// remove answer
 		$answer->delete();
 	}
 	
