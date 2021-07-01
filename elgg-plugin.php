@@ -4,6 +4,7 @@ use ColdTrick\Questions\Notifications\CreateQuestionNotificationEventHandler;
 use ColdTrick\Questions\Notifications\MoveQuestionNotificationEventHandler;
 use ColdTrick\Questions\Notifications\CreateAnswerNotificationEventHandler;
 use ColdTrick\Questions\Notifications\CorrectAnswerNotificationEventHandler;
+use ColdTrick\Questions\Upgrades\MigrateGroupSettings;
 use Elgg\Router\Middleware\Gatekeeper;
 
 if (!defined('QUESTIONS_EXPERT_ROLE')) {
@@ -227,6 +228,9 @@ return [
 			'path' => '/questions',
 			'resource' => 'questions/all',
 		],
+	],
+	'upgrades' => [
+		MigrateGroupSettings::class,
 	],
 	'view_extensions' => [
 		'elgg.css' => [

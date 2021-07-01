@@ -225,7 +225,7 @@ function questions_get_group_access_level(ElggGroup $group) {
  *
  * @return int
  */
-function questions_get_solution_time(ElggEntity $container) {
+function questions_get_solution_time(ElggEntity $container = null) {
 	static $plugin_setting;
 	
 	if (!isset($plugin_setting)) {
@@ -238,7 +238,7 @@ function questions_get_solution_time(ElggEntity $container) {
 	// check is group
 	if ($container instanceof ElggGroup && elgg_get_plugin_setting('solution_time_group', 'questions') === 'yes') {
 		// get group setting
-		$group_setting = $container->getPrivateSetting('questions_solution_time');
+		$group_setting = $container->getPluginSetting('questions', 'solution_time');
 		if (!elgg_is_empty($group_setting)) {
 			// we have a valid group setting
 			$result = (int) $group_setting;

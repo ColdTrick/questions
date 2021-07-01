@@ -48,7 +48,7 @@ return [
 	'questions:owner' => "%s's Questions",
 	'questions:none' => "No questions have been submitted yet.",
 	'questions:group' => 'Group questions',
-	'questions:enable' => 'Enable group questions',
+	'groups:tool:questions' => 'Enable group questions',
 
 	'questions:edit:question:title' => 'Question',
 	'questions:edit:question:description' => "Details",
@@ -210,4 +210,10 @@ To view the question, click here:
 	'questions:action:toggle_expert:success:remove' => "%s is no longer a questions expert for %s",
 	
 	'questions:action:group_settings:success' => "The group settings were saved",
+	
+	/**
+	 * Upgrades
+	 */
+	'questions:upgrade:2021070101:title' => "Migrate Questions group settings",
+	'questions:upgrade:2021070101:description' => "Group settings are stored differently in Elgg 4.0, migrate the existing settings to the new storage.",
 ];
