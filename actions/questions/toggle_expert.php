@@ -13,7 +13,7 @@ if (empty($user_guid) || empty($page_owner_guid)) {
 $user = get_user($user_guid);
 $page_owner = get_entity($page_owner_guid);
 if (empty($user) || empty($page_owner) || (!$page_owner instanceof ElggSite && !$page_owner instanceof ElggGroup) || !$page_owner->canEdit()) {
-	return elgg_error_response(elgg_echo('pageownerunavailable', [$page_owner_guid]));
+	return elgg_error_response(elgg_echo('actionunauthorized'));
 }
 
 // check if the user is an expert
