@@ -90,4 +90,11 @@ class MoveQuestionNotificationEventHandler extends NotificationEventHandler {
 	protected function getQuestion(): \ElggQuestion {
 		return $this->event->getObject();
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function isConfigurableByUser(): bool {
+		return false;
+	}
 }

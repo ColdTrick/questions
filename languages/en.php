@@ -15,6 +15,9 @@ return [
 	
 	'add:object:question' => "Ask a question",
 	
+	'notification:object:answer:create' => "Send a notification when an Answer is created",
+	'notification:object:question:create' => "Send a notification when a Questions is created",
+	
 	// admin
 	'admin:upgrades:set_question_status' => "Set status on all questions",
 	'admin:upgrades:set_question_status:description' => "Make sure all questions have a status metadata field. Older questions don't have this by default.",
