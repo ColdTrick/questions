@@ -15,8 +15,8 @@ return [
 	
 	'add:object:question' => "Ask a question",
 	
-	'notification:object:answer:create' => "Send a notification when an Answer is created",
-	'notification:object:question:create' => "Send a notification when a Questions is created",
+	'notification:object:answer:create' => "Send a notification when an answer is created",
+	'notification:object:question:create' => "Send a notification when a questions is created",
 	
 	// admin
 	'admin:upgrades:set_question_status' => "Set status on all questions",
