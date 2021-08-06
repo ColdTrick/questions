@@ -1,10 +1,16 @@
 <?php
 /**
- * This file was created by Translation Editor v7.0-beta
- * On 2019-03-01 15:43
+ * This file was created by Translation Editor v8.0
+ * On 2021-08-06 10:38
  */
 
 return array (
+  'add:object:question' => 'Stel een vraag',
+  'notification:object:answer:create' => 'Verstuur een notificatie als er een antwoord wordt aangemaakt',
+  'notification:object:question:create' => 'Verstuur een notificatie als er een vraag wordt aangemaakt',
+  'groups:tool:questions' => 'Schakel vragen voor groepen in',
+  'questions:upgrade:2021070101:title' => 'Migreer de Questions groepsinstellingen',
+  'questions:upgrade:2021070101:description' => 'De groepsinstellingen worden in Elgg 4.0 anders opgeslagen, migreer alle bestaande instellingen naar de nieuwe locatie.',
   'river:object:question:comment' => '%s reageerde op de vraag %s',
   'river:object:answer:create' => '%s heeft een antwoord gegeven op de vraag %s',
   'river:object:answer:comment' => '%s reageerde op %s',
@@ -13,7 +19,6 @@ return array (
   'questions:marked:correct' => 'Juiste antwoord is gegeven',
   'widget:questions:edit:group' => 'Beperk de vragen tot de opgegeven groep',
   'questions:filter_by_tag' => 'Verfijn met tags',
-  'questions:menu:filter:tags' => 'Tags: %s',
   'questions:notification:auto_close:subject' => 'De vraag \'%s\' is gesloten vanwege inactiviteit',
   'questions:notification:auto_close:summary' => 'De vraag \'%s\' is gesloten vanwege inactiviteit',
   'questions:notification:auto_close:message' => 'Je vraag \'%s\' heeft al meer dan %s dagen geen reactie gehad. Daarom is deze vraag gesloten.
@@ -80,12 +85,10 @@ Om de reactie te bekijken, klik hier:
   'river:object:question:create' => '%s stelde vraag %s',
   'questions' => 'Vragen',
   'questions:everyone' => 'Alle Vragen',
-  'questions:add' => 'Stel een vraag',
   'questions:todo' => 'Todo',
   'questions:owner' => '%s\'s Vragen',
   'questions:none' => 'Er zijn nog geen vragen gesteld.',
   'questions:group' => 'Groep vragen',
-  'questions:enable' => 'Groep vragen inschakelen',
   'questions:edit:question:title' => 'Vraag',
   'questions:edit:question:description' => 'Toelichting',
   'questions:edit:question:container' => 'Waar moet deze vraag gesteld worden',
