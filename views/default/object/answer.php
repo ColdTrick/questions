@@ -62,6 +62,7 @@ if (!$full_view) {
 	
 	$params = $params + $vars;
 	echo elgg_view('object/elements/summary', $params);
+	return;
 }
 
 // full view
