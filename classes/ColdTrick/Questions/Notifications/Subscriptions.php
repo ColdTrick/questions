@@ -27,7 +27,7 @@ class Subscriptions {
 		}
 		
 		// subscribe to the question
-		$content_preferences = $owner->getNotificationSettings('content_create');
+		$content_preferences = $owner->getNotificationSettings('create_comment');
 		$enabled_methods = array_keys(array_filter($content_preferences));
 		if (empty($enabled_methods)) {
 			return;
@@ -64,7 +64,7 @@ class Subscriptions {
 		}
 		
 		// subscribe to the question
-		$content_preferences = $owner->getNotificationSettings('content_create');
+		$content_preferences = $owner->getNotificationSettings('create_comment');
 		$enabled_methods = array_keys(array_filter($content_preferences));
 		if (empty($enabled_methods)) {
 			return;
