@@ -13,24 +13,27 @@ class Subscriptions {
 	 */
 	public static function createAnswer(\Elgg\Event $event) {
 		
-		if (!elgg_is_active_plugin('content_subscriptions')) {
-			return;
-		}
-		
 		$object = $event->getObject();
 		if (!$object instanceof \ElggAnswer) {
 			return;
 		}
 		
+		/* @var $owner \ElggUser */
 		$owner = $object->getOwnerEntity();
 		$question = $object->getContainerEntity();
 		
-		if (!content_subscriptions_can_subscribe($question, $owner->getGUID())) {
+		if ($question->hasMutedNotifications($owner->guid)) {
 			return;
 		}
 		
 		// subscribe to the question
-		content_subscriptions_autosubscribe($question->getGUID(), $owner->getGUID());
+		$content_preferences = $owner->getNotificationSettings('content_create');
+		$enabled_methods = array_keys(array_filter($content_preferences));
+		if (empty($enabled_methods)) {
+			return;
+		}
+		
+		$question->addSubscription($owner->guid, $enabled_methods);
 	}
 	
 	/**
@@ -42,10 +45,6 @@ class Subscriptions {
 	 */
 	public static function createCommentOnAnswer(\Elgg\Event $event) {
 		
-		if (!elgg_is_active_plugin('content_subscriptions')) {
-			return;
-		}
-		
 		$object = $event->getObject();
 		if (!$object instanceof \ElggComment) {
 			return;
@@ -56,13 +55,21 @@ class Subscriptions {
 			return;
 		}
 		
+		/* @var $owner \ElggUser */
 		$owner = $object->getOwnerEntity();
-		$question = $answer->getContainerEntity();
-		if (!content_subscriptions_can_subscribe($question, $owner->getGUID())) {
+		$question = $object->getContainerEntity();
+		
+		if ($question->hasMutedNotifications($owner->guid)) {
 			return;
 		}
 		
 		// subscribe to the question
-		content_subscriptions_autosubscribe($question->getGUID(), $owner->getGUID());
+		$content_preferences = $owner->getNotificationSettings('content_create');
+		$enabled_methods = array_keys(array_filter($content_preferences));
+		if (empty($enabled_methods)) {
+			return;
+		}
+		
+		$question->addSubscription($owner->guid, $enabled_methods);
 	}
 }
