@@ -38,7 +38,7 @@ return array (
   'questions:object:answer:title' => 'Réponse à question %s',
   'questions:experts:title' => 'Experts',
   'questions:experts:none' => 'Aucun expert n\'a encore été assigné pour %s.',
-  'questions:experts:description:group' => 'Veuillez trouver ci-dessus un liste des experts pour% s. Ces personnes ressources aideront à répondre aux questions',
+  'questions:experts:description:group' => 'Veuillez trouver ci-dessus un liste des experts pour %s. Ces personnes ressources aideront à répondre aux questions',
   'questions:experts:description:site' => 'Vous trouverez ci-dessous une liste des experts du site. Ces personnes aideront à répondre aux questions, tant sur le site que dans les groupes.',
   'questions:notifications:create:subject' => 'Une nouvelle question a été posée',
   'questions:notifications:create:summary' => 'Une nouvelle question a été posée',
