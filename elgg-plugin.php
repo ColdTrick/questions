@@ -128,7 +128,7 @@ return [
 				'\ColdTrick\Questions\Menus\Site::registerQuestions' => [],
 			],
 			'menu:social' => [
-				'\ColdTrick\Questions\Menus\Social::removeCommentsLinkForAnswers' => [],
+				'\ColdTrick\Questions\Menus\Social::removeCommentsLinkForAnswers' => ['priority' => 600],
 			],
 			'menu:title:object:question' => [
 				\Elgg\Notifications\RegisterSubscriptionMenuItemsHandler::class => [],
