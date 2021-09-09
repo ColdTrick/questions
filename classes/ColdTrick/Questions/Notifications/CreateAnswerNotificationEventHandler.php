@@ -40,4 +40,11 @@ class CreateAnswerNotificationEventHandler extends NotificationEventHandler {
 	protected function getQuestion(): \ElggQuestion {
 		return $this->event->getObject()->getContainerEntity();
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function isConfigurableByUser(): bool {
+		return false;
+	}
 }
