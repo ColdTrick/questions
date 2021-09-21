@@ -45,10 +45,9 @@ class CreateQuestionNotificationEventHandler extends NotificationEventHandler {
 		];
 		$experts = elgg_trigger_plugin_hook('notify_experts', 'questions', $params, $experts);
 		if (!is_array($experts)) {
-			return [];
+			return $result;
 		}
 		
-		$result = [];
 		foreach ($experts as $expert) {
 			if (!$expert instanceof \ElggUser) {
 				continue;
