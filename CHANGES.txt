@@ -1,6 +1,13 @@
 Version history
 ===============
 
+8.0 (2021-09-27):
+
+- changed: answer notification no longer user configurable
+- changed: update for Elgg 4.0
+- fixed: answer listing view layout
+- fixed: question subscribers with experts enabled
+
 7.0.2 (2021-06-08):
 
 - several small chores/fixes
