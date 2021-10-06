@@ -442,7 +442,7 @@ function questions_auto_mark_answer_correct(ElggEntity $container, ElggUser $use
 	}
 	
 	// check group setting
-	$group_setting = $container->getPrivateSetting('questions_auto_mark_correct');
+	$group_setting = $container->getPluginSetting('questions', 'auto_mark_correct');
 	
 	return ($group_setting === 'yes');
 }
