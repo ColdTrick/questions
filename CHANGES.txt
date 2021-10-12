@@ -1,6 +1,10 @@
 Version history
 ===============
 
+8.0.1 (2021-10-12):
+
+- fixed: check correct setting for auto mark correct
+
 8.0 (2021-09-27):
 
 - changed: answer notification no longer user configurable
