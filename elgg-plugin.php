@@ -31,13 +31,21 @@ return [
 			'type' => 'object',
 			'subtype' => 'question',
 			'class' => ElggQuestion::class,
-			'searchable' => true,
+			'capabilities' => [
+				'commentable' => true,
+				'searchable' => true,
+				'likable' => true,
+			],
 		],
 		[
 			'type' => 'object',
 			'subtype' => 'answer',
 			'class' => ElggAnswer::class,
-			'searchable' => true,
+			'capabilities' => [
+				'commentable' => true,
+				'searchable' => true,
+				'likable' => true,
+			],
 		],
 	],
 	'actions' => [
@@ -93,14 +101,6 @@ return [
 			'subscriptions' => [
 				'\ColdTrick\Questions\Notifications::addQuestionOwnerToCommentSubscribers' => [],
 				'\ColdTrick\Questions\Notifications::addQuestionSubscribersToCommentSubscribers' => [],
-			],
-		],
-		'likes:is_likable' => [
-			'object:answer' => [
-				'\Elgg\Values::getTrue' => [],
-			],
-			'object:question' => [
-				'\Elgg\Values::getTrue' => [],
 			],
 		],
 		'permissions_check' => [
