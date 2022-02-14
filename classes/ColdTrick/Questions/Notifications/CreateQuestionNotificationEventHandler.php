@@ -95,4 +95,11 @@ class CreateQuestionNotificationEventHandler extends NotificationEventHandler {
 	protected function getQuestion(): \ElggQuestion {
 		return $this->event->getObject();
 	}
+			
+	/**
+	 * {@inheritDoc}
+	 */
+	protected static function isConfigurableForGroup(\ElggGroup $group): bool {
+		return $group->isToolEnabled('questions');
+	}
 }
