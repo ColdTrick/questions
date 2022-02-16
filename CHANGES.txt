@@ -1,6 +1,12 @@
 Version history
 ===============
 
+9.0 (2022-02-16):
+
+- changed: create question notification is now group tool dependent
+- changed: updated entity configuration for new capabilities
+- changed: updated entity configuration for new capabilities
+
 8.0.1 (2021-10-12):
 
 - fixed: check correct setting for auto mark correct
