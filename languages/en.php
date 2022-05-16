@@ -18,6 +18,8 @@ return [
 	'notification:object:answer:create' => "Send a notification when an answer is created",
 	'notification:object:question:create' => "Send a notification when a questions is created",
 	
+	'input:container_guid:object:question:info' => "This question will be posted in %s",
+	
 	// admin
 	'admin:upgrades:set_question_status' => "Set status on all questions",
 	'admin:upgrades:set_question_status:description' => "Make sure all questions have a status metadata field. Older questions don't have this by default.",

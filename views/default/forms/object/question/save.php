@@ -164,15 +164,17 @@ if (!$editing || (questions_experts_enabled() && questions_is_expert($container)
 	}
 }
 
+if (!$container_options) {
+	echo elgg_view_field([
+		'#type' => 'container_guid',
+		'entity_type' => 'object',
+		'entity_subtype' => \ElggQuestion::SUBTYPE,
+		'value' => elgg_extract('container_guid', $vars),
+	]);
+}
+
 // end of the form
 $footer_fields = [];
-if (!$container_options) {
-	$footer_fields[] = [
-		'#type' => 'hidden',
-		'name' => 'container_guid',
-		'value' => elgg_extract('container_guid', $vars),
-	];
-}
 
 $footer_fields[] = [
 	'#type' => 'submit',
