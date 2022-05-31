@@ -1,10 +1,11 @@
 <?php
 /**
- * This file was created by Translation Editor v8.0
- * On 2021-08-06 10:38
+ * This file was created by Translation Editor v9.0.2
+ * On 2022-05-31 13:49
  */
 
 return array (
+  'input:container_guid:object:question:info' => 'Deze vraag zal worden geplaatst in %s',
   'add:object:question' => 'Stel een vraag',
   'notification:object:answer:create' => 'Verstuur een notificatie als er een antwoord wordt aangemaakt',
   'notification:object:question:create' => 'Verstuur een notificatie als er een vraag wordt aangemaakt',
