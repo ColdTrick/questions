@@ -1,6 +1,10 @@
 Version history
 ===============
 
+9.1 (2022-06-01):
+
+- added: container info to questions edit form
+
 9.0 (2022-02-16):
 
 - changed: create question notification is now group tool dependent
