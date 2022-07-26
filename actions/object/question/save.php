@@ -42,7 +42,7 @@ if (questions_limited_to_groups() && ($container_guid == $question->getOwnerGUID
 
 $title = elgg_get_title_input();
 $description = get_input('description');
-$tags = string_to_tag_array(get_input('tags', ''));
+$tags = elgg_string_to_array( (string) get_input('tags', ''));
 $access_id = (int) get_input('access_id');
 $comments_enabled = get_input('comments_enabled');
 

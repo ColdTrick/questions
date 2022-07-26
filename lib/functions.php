@@ -57,14 +57,14 @@ function questions_experts_only_answer() {
  *
  * @return bool
  */
-function questions_is_expert(ElggEntity $container = null, ElggUser $user = null) {
+function questions_is_expert(\ElggEntity $container = null, \ElggUser $user = null) {
 	
 	if (!questions_experts_enabled()) {
 		return false;
 	}
 	
 	// make sure we have a user
-	if (!$user instanceof ElggUser) {
+	if (!$user instanceof \ElggUser) {
 		$user = elgg_get_logged_in_user_entity();
 	}
 	
@@ -72,13 +72,13 @@ function questions_is_expert(ElggEntity $container = null, ElggUser $user = null
 		return false;
 	}
 	
-	if ($container instanceof ElggEntity) {
-		if ($container instanceof ElggUser) {
+	if ($container instanceof \ElggEntity) {
+		if ($container instanceof \ElggUser) {
 			$container = elgg_get_site_entity();
 		}
 		
-		if ($container instanceof ElggSite || $container instanceof ElggGroup) {
-			if (check_entity_relationship($user->guid, QUESTIONS_EXPERT_ROLE, $container->guid)) {
+		if ($container instanceof \ElggSite || $container instanceof \ElggGroup) {
+			if ($user->hasRelationship($container->guid, QUESTIONS_EXPERT_ROLE)) {
 				// user has the expert role
 				return true;
 			}
@@ -105,7 +105,7 @@ function questions_is_expert(ElggEntity $container = null, ElggUser $user = null
 function questions_validate_access_id(int $access_id, int $container_guid) {
 	
 	if ($access_id === ACCESS_DEFAULT) {
-		$access_id = get_default_access();
+		$access_id = elgg_get_default_access();
 	}
 	
 	if (empty($container_guid)) {
@@ -117,20 +117,20 @@ function questions_validate_access_id(int $access_id, int $container_guid) {
 		return $access_id;
 	}
 	
-	if ($container instanceof ElggUser) {
+	if ($container instanceof \ElggUser) {
 		// is a default level defined in the plugin settings
 		$personal_access_id = questions_get_personal_access_level();
 		if ($personal_access_id !== false) {
 			$access_id = $personal_access_id;
 		} else {
 			// make sure access_id is not a group acl
-			$acl = get_access_collection($access_id);
-			if ($acl instanceof ElggAccessCollection && ($acl->owner_guid != $container->guid)) {
+			$acl = elgg_get_access_collection($access_id);
+			if ($acl instanceof \ElggAccessCollection && ($acl->owner_guid != $container->guid)) {
 				// this acl is a group acl, so set to something else
 				$access_id = ACCESS_LOGGED_IN;
 			}
 		}
-	} elseif ($container instanceof ElggGroup) {
+	} elseif ($container instanceof \ElggGroup) {
 		// is a default level defined in the plugin settings
 		$group_access_id = questions_get_group_access_level($container);
 		if ($group_access_id !== false) {
@@ -140,7 +140,7 @@ function questions_validate_access_id(int $access_id, int $container_guid) {
 			
 			// friends access not allowed in groups
 			if ($access_id === ACCESS_FRIENDS) {
-				if ($group_acl instanceof ElggAccessCollection) {
+				if ($group_acl instanceof \ElggAccessCollection) {
 					// so set it to group access
 					$access_id = (int) $group_acl->id;
 				} else {
@@ -149,10 +149,10 @@ function questions_validate_access_id(int $access_id, int $container_guid) {
 			}
 			
 			// check if access is an acl
-			$acl = get_access_collection($access_id);
-			if ($acl instanceof ElggAccessCollection && ($acl->owner_guid !== $container->guid)) {
+			$acl = elgg_get_access_collection($access_id);
+			if ($acl instanceof \ElggAccessCollection && ($acl->owner_guid !== $container->guid)) {
 				// this acl is an acl, make sure it's the group acl
-				if ($group_acl instanceof ElggAccessCollection) {
+				if ($group_acl instanceof \ElggAccessCollection) {
 					$access_id = (int) $group_acl->id;
 				} else {
 					$access_id = ACCESS_LOGGED_IN;

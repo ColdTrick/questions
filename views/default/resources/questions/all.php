@@ -20,7 +20,7 @@ $options = [
 $tags = get_input('tags');
 if (!empty($tags)) {
 	if (is_string($tags)) {
-		$tags = string_to_tag_array($tags);
+		$tags = elgg_string_to_array($tags);
 	}
 	
 	$options['wheres'][] = function(\Elgg\Database\QueryBuilder $qb, $main_alias) use ($tags) {

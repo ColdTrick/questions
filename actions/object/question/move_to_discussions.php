@@ -20,7 +20,7 @@ if (!$entity->canEdit() || !questions_can_move_to_discussions($container)) {
 
 $title = get_input('title');
 $description = get_input('description');
-$tags = string_to_tag_array(get_input('tags', ''));
+$tags = elgg_string_to_array((string) get_input('tags', ''));
 $access_id = (int) get_input('access_id');
 $access_id = questions_validate_access_id($access_id, $container->guid);
 

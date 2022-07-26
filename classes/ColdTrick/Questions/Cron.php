@@ -153,12 +153,12 @@ class Cron {
 			];
 			$question_options['wheres'] = [
 				$status_where,
-				$container_where
+				$container_where,
 			];
-			$question_options['order_by_metadata'] = [
-				'name' => 'solution_time',
+			$question_options['sort_by'] = [
+				'property' => 'solution_time',
 				'direction' => 'ASC',
-				'as' => 'integer'
+				'signed' => true,
 			];
 			$questions = elgg_get_entities($question_options);
 			if (!empty($questions)) {
@@ -202,7 +202,7 @@ class Cron {
 			// get new questions
 			// eg: time_created >= ($time - 1 day)
 			unset($question_options['metadata_name_value_pairs']);
-			unset($question_options['order_by_metadata']);
+			unset($question_options['sort_by']);
 			$question_options['wheres'] = [
 				$status_where,
 				$container_where,

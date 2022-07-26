@@ -20,11 +20,11 @@ class Groups {
 		}
 		
 		// is the user an expert in this group
-		if (!check_entity_relationship($user->guid, QUESTIONS_EXPERT_ROLE, $group->guid)) {
+		if (!$user->hasRelationship($group->guid, QUESTIONS_EXPERT_ROLE)) {
 			return;
 		}
 		
 		// remove the expert role
-		remove_entity_relationship($user->guid, QUESTIONS_EXPERT_ROLE, $group->guid);
+		$user->removeRelationship($group->guid, QUESTIONS_EXPERT_ROLE);
 	}
 }

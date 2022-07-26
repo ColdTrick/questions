@@ -96,8 +96,8 @@ if (!$editing || (questions_experts_enabled() && questions_is_expert($container)
 				'name' => 'questions_enable',
 				'value' => 'yes'
 			],
-			'order_by_metadata' => [
-				'name' => 'name',
+			'sort_by' => [
+				'property' => 'name',
 				'direction' => 'ASC',
 			],
 			'batch' => true,

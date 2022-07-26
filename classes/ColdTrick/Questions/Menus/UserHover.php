@@ -41,7 +41,7 @@ class UserHover {
 		/* @var $items MenuItems */
 		$items = $hook->getValue();
 		
-		$is_expert = check_entity_relationship($user->guid, QUESTIONS_EXPERT_ROLE, $page_owner->guid);
+		$is_expert = $user->hasRelationship($page_owner->guid, QUESTIONS_EXPERT_ROLE);
 		
 		$items[] = \ElggMenuItem::factory([
 			'name' => 'questions_expert',

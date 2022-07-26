@@ -40,7 +40,7 @@ foreach ($tags as $tag) {
 		'text' => $tag,
 		'class' => 'elgg-state-active',
 		'icon_alt' => 'delete',
-		'href' => elgg_http_add_url_query_elements(current_page_url(), ['tags' => $new_tags]),
+		'href' => elgg_http_add_url_query_elements(elgg_get_current_url(), ['tags' => $new_tags]),
 	]);
 }
 
@@ -59,7 +59,7 @@ if (count($tags) < 5) {
 		$items[] = ElggMenuItem::factory([
 			'name' => $tag->tag,
 			'text' => $tag->tag,
-			'href' => elgg_http_add_url_query_elements(current_page_url(), ['tags' => $new_tags]),
+			'href' => elgg_http_add_url_query_elements(elgg_get_current_url(), ['tags' => $new_tags]),
 		]);
 	}
 }

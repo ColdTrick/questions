@@ -17,14 +17,14 @@ if (empty($user) || empty($page_owner) || (!$page_owner instanceof ElggSite && !
 }
 
 // check if the user is an expert
-if (check_entity_relationship($user->guid, QUESTIONS_EXPERT_ROLE, $page_owner->guid)) {
+if ($user->hasRelationship($page_owner->guid, QUESTIONS_EXPERT_ROLE)) {
 	// yes, so remove
-	remove_entity_relationship($user->guid, QUESTIONS_EXPERT_ROLE, $page_owner->guid);
+	$user->removeRelationship($page_owner->guid, QUESTIONS_EXPERT_ROLE);
 	
 	return elgg_ok_response('', elgg_echo('questions:action:toggle_expert:success:remove', [$user->getDisplayName(), $page_owner->getDisplayName()]));
 }
 
 // no, so add
-add_entity_relationship($user->guid, QUESTIONS_EXPERT_ROLE, $page_owner->guid);
+$user->addRelationship($page_owner->guid, QUESTIONS_EXPERT_ROLE);
 
 return elgg_ok_response('', elgg_echo('questions:action:toggle_expert:success:make', [$user->getDisplayName(), $page_owner->getDisplayName()]));

@@ -19,6 +19,7 @@ $options = [
 	'limit' => $limit,
 	'full_view' => false,
 	'pagination' => false,
+	'no_results' => elgg_echo('questions:none'),
 ];
 
 $route = 'collection:object:question:all';
@@ -60,7 +61,10 @@ switch ($widget->context) {
 					},
 					questions_get_expert_where_sql(),
 				];
-				$options['order_by_metadata'] = ['name' => 'solution_time'];
+				$options['sort_by'] = [
+					'property' => 'solution_time',
+					'signed' => true,
+				];
 				break;
 			case 'all':
 				// just get all questions
@@ -97,7 +101,7 @@ if (!empty($groups)) {
 // add tags filter
 $filter_tags = $widget->filter_tags;
 if (!empty($filter_tags)) {
-	$filter_tags = string_to_tag_array($filter_tags);
+	$filter_tags = is_string($filter_tags) ? elgg_string_to_array($filter_tags) : $filter_tags;
 	
 	$options['metadata_name_value_pairs'] = [
 		'name' => 'tags',
@@ -107,15 +111,9 @@ if (!empty($filter_tags)) {
 	$route_params['tags'] = $filter_tags;
 }
 
-$content = elgg_list_entities($options);
-if (empty($content)) {
-	$content = elgg_view('output/longtext', ['value' => elgg_echo('questions:none')]);
-} else {
-	$content .= elgg_format_element('div', ['class' => 'elgg-widget-more'], elgg_view('output/url', [
-		'text' => elgg_echo('widget:questions:more'),
-		'href' => elgg_generate_url($route, $route_params),
-		'is_trusted' => true,
-	]));
+$url = elgg_generate_url($route, $route_params);
+if (!empty($url)) {
+	$options['widget_more'] = elgg_view_url($url, elgg_echo('widget:questions:more'));
 }
 
-echo $content;
+echo elgg_list_entities($options);

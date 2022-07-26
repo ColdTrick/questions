@@ -103,8 +103,7 @@ if (($question->getStatus() === ElggQuestion::STATUS_OPEN) && $question->canWrit
 			'icon' => 'plus',
 			'text' => elgg_echo('answers:addyours'),
 			'href' => false,
-			'rel' => 'toggle',
-			'class' => ['elgg-button', 'elgg-button-action'],
+			'class' => ['elgg-button', 'elgg-button-action', 'elgg-toggle'],
 			'data-toggle-selector' => '.elgg-form-object-answer-add',
 		]);
 	}
