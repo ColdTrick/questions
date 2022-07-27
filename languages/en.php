@@ -54,6 +54,7 @@ return [
 	'questions:none' => "No questions have been submitted yet.",
 	'questions:group' => 'Group questions',
 	'groups:tool:questions' => 'Enable group questions',
+	'groups:tool:questions:description' => 'Allow group members to ask questions in this group.',
 
 	'questions:edit:question:title' => 'Question',
 	'questions:edit:question:description' => "Details",
