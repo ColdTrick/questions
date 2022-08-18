@@ -1,10 +1,11 @@
 <?php
 /**
- * This file was created by Translation Editor v9.0.2
- * On 2022-05-31 13:49
+ * This file was created by Translation Editor v10.1.1
+ * On 2022-08-18 12:41
  */
 
 return array (
+  'groups:tool:questions:description' => 'Laat groepsleden vragen stellen in deze groep.',
   'input:container_guid:object:question:info' => 'Deze vraag zal worden geplaatst in %s',
   'add:object:question' => 'Stel een vraag',
   'notification:object:answer:create' => 'Verstuur een notificatie als er een antwoord wordt aangemaakt',
