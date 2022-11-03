@@ -83,8 +83,12 @@ class Notifications {
 		
 		/* @var $owner \ElggUser */
 		$owner = $question->getOwnerEntity();
+		if ($object->owner_guid === $owner->guid) {
+			// don't add question owner if it's the comment owner
+			return;
+		}
 		
-		$filtered_methods = array_keys(array_filter($owner->getNotificationSettings()));
+		$filtered_methods = array_keys(array_filter($owner->getNotificationSettings('create_comment')));
 		if (empty($filtered_methods)) {
 			return;
 		}
@@ -109,17 +113,17 @@ class Notifications {
 			return;
 		}
 		
-		$object = $event->getObject();
-		if (!$object instanceof \ElggComment) {
+		$comment = $event->getObject();
+		if (!$comment instanceof \ElggComment) {
 			return;
 		}
 		
-		$container = $object->getContainerEntity();
-		if (!$container instanceof \ElggAnswer) {
+		$answer = $comment->getContainerEntity();
+		if (!$answer instanceof \ElggAnswer) {
 			return;
 		}
 		
-		$question = $container->getContainerEntity();
+		$question = $answer->getContainerEntity();
 		if (!$question instanceof \ElggQuestion) {
 			// something went wrong, maybe access
 			return;
@@ -128,6 +132,11 @@ class Notifications {
 		$subscribers = elgg_get_subscriptions_for_container($question->guid);
 		if (empty($subscribers)) {
 			return;
+		}
+		
+		if (isset($subscribers[$comment->owner_guid])) {
+			// remove the comment owner from the subscribers
+			unset($subscribers[$comment->owner_guid]);
 		}
 		
 		return ($hook->getValue() + $subscribers);

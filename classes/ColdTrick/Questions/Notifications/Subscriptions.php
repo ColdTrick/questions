@@ -21,6 +21,9 @@ class Subscriptions {
 		/* @var $owner \ElggUser */
 		$owner = $object->getOwnerEntity();
 		$question = $object->getContainerEntity();
+		if (!$question instanceof \ElggQuestion) {
+			return;
+		}
 		
 		if ($question->hasMutedNotifications($owner->guid)) {
 			return;
@@ -57,7 +60,10 @@ class Subscriptions {
 		
 		/* @var $owner \ElggUser */
 		$owner = $object->getOwnerEntity();
-		$question = $object->getContainerEntity();
+		$question = $answer->getContainerEntity();
+		if (!$question instanceof \ElggQuestion) {
+			return;
+		}
 		
 		if ($question->hasMutedNotifications($owner->guid)) {
 			return;
