@@ -1,14 +1,12 @@
 <?php
 /**
  * Question entity view
- *
- * @package Questions
-*/
+ */
 
 use Elgg\Values;
 
 $question = elgg_extract('entity', $vars);
-if (!$question instanceof ElggQuestion) {
+if (!$question instanceof \ElggQuestion) {
 	return;
 }
 
@@ -57,8 +55,8 @@ if ($num_answers > 0) {
 	$imprint[] = [
 		'icon_name' => 'comments',
 		'content' => elgg_view('output/url', [
-			'href' => "{$question->getURL()}#question-answers",
 			'text' => elgg_echo('answers'),
+			'href' => "{$question->getURL()}#question-answers",
 			'badge' => $num_answers,
 		]),
 	];

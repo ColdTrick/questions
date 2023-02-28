@@ -5,24 +5,26 @@ namespace ColdTrick\Questions;
 use Elgg\Database\QueryBuilder;
 use Elgg\Values;
 
+/**
+ * Cron handler
+ */
 class Cron {
 	
 	/**
-	 * Automaticly close open questions after x days
+	 * Automatically close open questions after x days
 	 *
-	 * @param \Elgg\Hook $hook 'cron', 'daily'
+	 * @param \Elgg\Event $event 'cron', 'daily'
 	 *
 	 * @return void
 	 */
-	public static function autoCloseQuestions(\Elgg\Hook $hook) {
-		
+	public static function autoCloseQuestions(\Elgg\Event $event): void {
 		$auto_close_days = (int) elgg_get_plugin_setting('auto_close_time', 'questions');
 		if ($auto_close_days < 1) {
 			return;
 		}
 		
-		echo "Starting Questions auto-close processing" . PHP_EOL;
-		elgg_log("Starting Questions auto-close processing", 'NOTICE');
+		echo 'Starting Questions auto-close processing' . PHP_EOL;
+		elgg_log('Starting Questions auto-close processing', 'NOTICE');
 		
 		elgg_call(ELGG_IGNORE_ACCESS, function() use ($auto_close_days) {
 			$site = elgg_get_site_entity();
@@ -32,6 +34,7 @@ class Cron {
 			$session = elgg_get_session();
 			
 			// get open questions last modified more than x days ago
+			/* @var $batch \ElggBatch */
 			$batch = elgg_get_entities([
 				'type' => 'object',
 				'subtype' => \ElggQuestion::SUBTYPE,
@@ -76,28 +79,27 @@ class Cron {
 			}
 		});
 		
-		echo "Finished Questions auto-close processing" . PHP_EOL;
-		elgg_log("Finished Questions auto-close processing", 'NOTICE');
+		echo 'Finished Questions auto-close processing' . PHP_EOL;
+		elgg_log('Finished Questions auto-close processing', 'NOTICE');
 	}
 	
 	/**
 	 * A plugin hook for the CRON, so we can send out notifications to the experts about their workload
 	 *
-	 * @param \Elgg\Hook $hook 'cron', 'daily'
+	 * @param \Elgg\Event $event 'cron', 'daily'
 	 *
 	 * @return void
 	 */
-	public static function notifyQuestionExperts(\Elgg\Hook $hook) {
-	
+	public static function notifyQuestionExperts(\Elgg\Event $event): void {
 		// are experts enabled
 		if (!questions_experts_enabled()) {
 			return;
 		}
 		
-		echo "Starting Questions experts todo notifications" . PHP_EOL;
-		elgg_log("Starting Questions experts todo notifications", 'NOTICE');
+		echo 'Starting Questions experts todo notifications' . PHP_EOL;
+		elgg_log('Starting Questions experts todo notifications', 'NOTICE');
 			
-		$time = (int) $hook->getParam('time', time());
+		$time = (int) $event->getParam('time', time());
 		
 		// get all experts
 		$experts = elgg_get_entities([
@@ -135,7 +137,7 @@ class Cron {
 			// fake a logged in user
 			$session->setLoggedInUser($expert);
 			
-			$subject = elgg_echo('questions:daily:notification:subject');
+			$subject = elgg_echo('questions:daily:notification:subject', [], $expert->getLanguage());
 			$message = '';
 			
 			$container_where = questions_get_expert_where_sql($expert->guid);
@@ -150,6 +152,7 @@ class Cron {
 				'name' => 'solution_time',
 				'value' => $time,
 				'operand' => '<',
+				'as' => 'integer',
 			];
 			$question_options['wheres'] = [
 				$status_where,
@@ -162,13 +165,13 @@ class Cron {
 			];
 			$questions = elgg_get_entities($question_options);
 			if (!empty($questions)) {
-				$message .= elgg_echo('questions:daily:notification:message:overdue') . PHP_EOL;
+				$message .= elgg_echo('questions:daily:notification:message:overdue', [], $expert->getLanguage()) . PHP_EOL;
 				
 				foreach ($questions as $question) {
 					$message .= " - {$question->getDisplayName()} ({$question->getURL()})" . PHP_EOL;
 				}
 				
-				$message .= elgg_echo('questions:daily:notification:message:more');
+				$message .= elgg_echo('questions:daily:notification:message:more', [], $expert->getLanguage());
 				$message .= ' ' . elgg_generate_url('collection:object:question:todo') . PHP_EOL . PHP_EOL;
 			}
 			
@@ -179,23 +182,25 @@ class Cron {
 					'name' => 'solution_time',
 					'value' => $time,
 					'operand' => '>=',
+					'as' => 'integer',
 				],
 				[
 					'name' => 'solution_time',
-					'value' => Values::normalizeTime($time)->modify("+1 day")->getTimestamp(),
+					'value' => Values::normalizeTime($time)->modify('+1 day')->getTimestamp(),
 					'operand' => '<',
+					'as' => 'integer',
 				],
 			];
 			
 			$questions = elgg_get_entities($question_options);
 			if (!empty($questions)) {
-				$message .= elgg_echo('questions:daily:notification:message:due') . PHP_EOL;
+				$message .= elgg_echo('questions:daily:notification:message:due', [], $expert->getLanguage()) . PHP_EOL;
 				
 				foreach ($questions as $question) {
 					$message .= " - {$question->getDisplayName()} ({$question->getURL()})" . PHP_EOL;
 				}
 				
-				$message .= elgg_echo('questions:daily:notification:message:more');
+				$message .= elgg_echo('questions:daily:notification:message:more', [], $expert->getLanguage());
 				$message .= ' ' . elgg_generate_url('collection:object:question:todo') . PHP_EOL . PHP_EOL;
 			}
 			
@@ -207,17 +212,17 @@ class Cron {
 				$status_where,
 				$container_where,
 			];
-			$question_options['created_after'] = Values::normalizeTime($time)->modify("-1 day")->getTimestamp();
+			$question_options['created_after'] = Values::normalizeTime($time)->modify('-1 day')->getTimestamp();
 			
 			$questions = elgg_get_entities($question_options);
 			if (!empty($questions)) {
-				$message .= elgg_echo('questions:daily:notification:message:new') . PHP_EOL;
+				$message .= elgg_echo('questions:daily:notification:message:new', [], $expert->getLanguage()) . PHP_EOL;
 				
 				foreach ($questions as $question) {
 					$message .= " - {$question->getDisplayName()} ({$question->getURL()})" . PHP_EOL;
 				}
 				
-				$message .= elgg_echo('questions:daily:notification:message:more');
+				$message .= elgg_echo('questions:daily:notification:message:more', [], $expert->getLanguage());
 				$message .= ' ' . elgg_generate_url('collection:object:question:all') . PHP_EOL . PHP_EOL;
 			}
 			
@@ -234,7 +239,7 @@ class Cron {
 			$session->invalidate();
 		}
 		
-		echo "Finished Questions experts todo notifications" . PHP_EOL;
-		elgg_log("Finished Questions experts todo notifications", 'NOTICE');
+		echo 'Finished Questions experts todo notifications' . PHP_EOL;
+		elgg_log('Finished Questions experts todo notifications', 'NOTICE');
 	}
 }

@@ -2,6 +2,9 @@
 
 namespace ColdTrick\Questions\Plugins;
 
+/**
+ * Groups support
+ */
 class Groups {
 	
 	/**
@@ -11,7 +14,7 @@ class Groups {
 	 *
 	 * @return void
 	 */
-	public static function removeExpertRoleOnLeave(\Elgg\Event $event) {
+	public static function removeExpertRoleOnLeave(\Elgg\Event $event): void {
 		$params = $event->getObject();
 		$user = elgg_extract('user', $params);
 		$group = elgg_extract('group', $params);

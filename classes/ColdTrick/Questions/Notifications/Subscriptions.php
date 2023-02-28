@@ -2,6 +2,9 @@
 
 namespace ColdTrick\Questions\Notifications;
 
+/**
+ * Change notification subscribers
+ */
 class Subscriptions {
 	
 	/**
@@ -11,8 +14,7 @@ class Subscriptions {
 	 *
 	 * @return void
 	 */
-	public static function createAnswer(\Elgg\Event $event) {
-		
+	public static function createAnswer(\Elgg\Event $event): void {
 		$object = $event->getObject();
 		if (!$object instanceof \ElggAnswer) {
 			return;
@@ -46,8 +48,7 @@ class Subscriptions {
 	 *
 	 * @return void
 	 */
-	public static function createCommentOnAnswer(\Elgg\Event $event) {
-		
+	public static function createCommentOnAnswer(\Elgg\Event $event): void {
 		$object = $event->getObject();
 		if (!$object instanceof \ElggComment) {
 			return;

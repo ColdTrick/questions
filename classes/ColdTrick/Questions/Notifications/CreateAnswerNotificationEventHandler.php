@@ -4,6 +4,9 @@ namespace ColdTrick\Questions\Notifications;
 
 use Elgg\Notifications\NotificationEventHandler;
 
+/**
+ * Notification handler for when an answer is created
+ */
 class CreateAnswerNotificationEventHandler extends NotificationEventHandler {
 	
 	/**

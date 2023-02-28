@@ -4,24 +4,26 @@ namespace ColdTrick\Questions\Menus;
 
 use Elgg\Menu\MenuItems;
 
+/**
+ * Add menu items to the entity menu
+ */
 class Entity {
 	
 	/**
 	 * Add menu items to the answer entity menu
 	 *
-	 * @param \Elgg\Hook $hook 'register', 'menu:entity'
+	 * @param \Elgg\Event $event 'register', 'menu:entity'
 	 *
-	 * @return void|MenuItems
+	 * @return null|MenuItems
 	 */
-	public static function registerAnswer(\Elgg\Hook $hook) {
-		
-		$entity = $hook->getEntityParam();
+	public static function registerAnswer(\Elgg\Event $event): ?MenuItems {
+		$entity = $event->getEntityParam();
 		if (!$entity instanceof \ElggAnswer) {
-			return;
+			return null;
 		}
 		
 		/* @var $result MenuItems */
-		$result = $hook->getValue();
+		$result = $event->getValue();
 		
 		$question = $entity->getContainerEntity();
 		if ($question instanceof \ElggQuestion && $question->getStatus() === \ElggQuestion::STATUS_CLOSED) {

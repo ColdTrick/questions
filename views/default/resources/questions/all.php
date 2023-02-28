@@ -1,18 +1,16 @@
 <?php
 /**
  * Elgg questions plugin everyone page
- *
- * @package ElggQuestions
  */
 
-elgg_push_collection_breadcrumbs('object', ElggQuestion::SUBTYPE);
+elgg_push_collection_breadcrumbs('object', \ElggQuestion::SUBTYPE);
 
-elgg_register_title_button('questions', 'add', 'object', ElggQuestion::SUBTYPE);
+elgg_register_title_button('add', 'object', \ElggQuestion::SUBTYPE);
 
 // prepare options
 $options = [
 	'type' => 'object',
-	'subtype' => ElggQuestion::SUBTYPE,
+	'subtype' => \ElggQuestion::SUBTYPE,
 	'no_results' => elgg_echo('questions:none'),
 	'wheres' => [],
 ];
@@ -27,7 +25,7 @@ if (!empty($tags)) {
 		$ands = [];
 		foreach ($tags as $index => $tag) {
 			$md = $qb->joinMetadataTable($main_alias, 'guid', 'tags', 'inner', "md{$index}");
-		
+			
 			$ands[] = $qb->compare("{$md}.value", '=', $tag, ELGG_VALUE_STRING);
 		}
 		

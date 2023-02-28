@@ -4,8 +4,9 @@ use ColdTrick\Questions\Notifications\CreateQuestionNotificationEventHandler;
 use ColdTrick\Questions\Notifications\MoveQuestionNotificationEventHandler;
 use ColdTrick\Questions\Notifications\CreateAnswerNotificationEventHandler;
 use ColdTrick\Questions\Notifications\CorrectAnswerNotificationEventHandler;
-use ColdTrick\Questions\Upgrades\MigrateGroupSettings;
 use Elgg\Router\Middleware\Gatekeeper;
+use Elgg\Router\Middleware\GroupPageOwnerGatekeeper;
+use Elgg\Router\Middleware\UserPageOwnerGatekeeper;
 
 if (!defined('QUESTIONS_EXPERT_ROLE')) {
 	define('QUESTIONS_EXPERT_ROLE', 'questions_expert');
@@ -24,13 +25,12 @@ return [
 		'experts_enabled' => 'no',
 		'experts_answer' => 'no',
 		'experts_mark' => 'no',
-		'move_to_discussion_allowed' => true,
 	],
 	'entities' => [
 		[
 			'type' => 'object',
 			'subtype' => 'question',
-			'class' => ElggQuestion::class,
+			'class' => \ElggQuestion::class,
 			'capabilities' => [
 				'commentable' => true,
 				'searchable' => true,
@@ -40,7 +40,7 @@ return [
 		[
 			'type' => 'object',
 			'subtype' => 'answer',
-			'class' => ElggAnswer::class,
+			'class' => \ElggAnswer::class,
 			'capabilities' => [
 				'commentable' => true,
 				'searchable' => true,
@@ -51,39 +51,20 @@ return [
 	'actions' => [
 		'answers/toggle_mark' => [],
 		'object/answer/edit' => [],
-		'object/question/move_to_discussions' => [],
 		'object/question/save' => [],
-		'questions/group_settings' => [],
 		'questions/toggle_expert' => [],
 	],
 	'events' => [
-		'create' => [
-			'object' => [
-				'\ColdTrick\Questions\Notifications\Subscriptions::createAnswer' => [],
-				'\ColdTrick\Questions\Notifications\Subscriptions::createCommentOnAnswer' => [],
-			],
-		],
-		'leave' => [
-			'group' => [
-				'\ColdTrick\Questions\Plugins\Groups::removeExpertRoleOnLeave' => [],
-			],
-		],
-		'update:after' => [
-			'object' => [
-				'\ColdTrick\Questions\Access::updateAnswerAccessToQuestionAccess' => [],
-			],
-		],
-	],
-	'group_tools' => [
-		'questions' => [
-			'default_on' => false,
-		],
-	],
-	'hooks' => [
 		'container_permissions_check' => [
 			'object' => [
 				'\ColdTrick\Questions\Permissions::answerContainer' => [],
 				'\ColdTrick\Questions\Permissions::questionsContainer' => [],
+			],
+		],
+		'create' => [
+			'object' => [
+				'\ColdTrick\Questions\Notifications\Subscriptions::createAnswer' => [],
+				'\ColdTrick\Questions\Notifications\Subscriptions::createCommentOnAnswer' => [],
 			],
 		],
 		'cron' => [
@@ -97,10 +78,23 @@ return [
 				'\ColdTrick\Questions\Widgets::getURL' => [],
 			],
 		],
+		'form:prepare:fields' => [
+			'object/answer/edit' => [
+				\ColdTrick\Questions\Forms\PrepareAnswerFields::class => [],
+			],
+			'object/question/save' => [
+				\ColdTrick\Questions\Forms\PrepareQuestionFields::class => [],
+			],
+		],
 		'get' => [
 			'subscriptions' => [
 				'\ColdTrick\Questions\Notifications::addQuestionOwnerToCommentSubscribers' => [],
 				'\ColdTrick\Questions\Notifications::addQuestionSubscribersToCommentSubscribers' => [],
+			],
+		],
+		'leave' => [
+			'group' => [
+				'\ColdTrick\Questions\Plugins\Groups::removeExpertRoleOnLeave' => [],
 			],
 		],
 		'permissions_check' => [
@@ -120,6 +114,9 @@ return [
 			'menu:filter:questions' => [
 				'\Elgg\Menus\Filter::registerFilterTabs' => [],
 				'\ColdTrick\Questions\Menus\Filter::registerQuestions' => [],
+			],
+			'menu:filter:questions/groups' => [
+				'\ColdTrick\Questions\Menus\Filter::registerQuestionsGroups' => [],
 			],
 			'menu:owner_block' => [
 				'\ColdTrick\Questions\Menus\OwnerBlock::registerQuestions' => [],
@@ -152,6 +149,16 @@ return [
 				'\ColdTrick\Questions\Plugins\EntityTools::registerQuestions' => [],
 			],
 		],
+		'update:after' => [
+			'object' => [
+				'\ColdTrick\Questions\Access::updateAnswerAccessToQuestionAccess' => [],
+			],
+		],
+	],
+	'group_tools' => [
+		'questions' => [
+			'default_on' => false,
+		],
 	],
 	'notifications' => [
 		'object' => [
@@ -167,7 +174,7 @@ return [
 	],
 	'routes' => [
 		'add:object:question' => [
-			'path' => '/questions/add/{guid?}',
+			'path' => '/questions/add/{guid}',
 			'resource' => 'questions/add',
 			'middleware' => [
 				Gatekeeper::class,
@@ -180,12 +187,9 @@ return [
 				Gatekeeper::class,
 			],
 		],
-		'add:object:answer' => [
-			'path' => '/answers/add/{guid?}',
-			'resource' => 'answers/add',
-			'middleware' => [
-				Gatekeeper::class,
-			],
+		'view:object:question' => [
+			'path' => '/questions/view/{guid}/{title?}',
+			'resource' => 'questions/view',
 		],
 		'edit:object:answer' => [
 			'path' => '/answers/edit/{guid}',
@@ -193,10 +197,6 @@ return [
 			'middleware' => [
 				Gatekeeper::class,
 			],
-		],
-		'view:object:question' => [
-			'path' => '/questions/view/{guid}/{title?}',
-			'resource' => 'questions/view',
 		],
 		'collection:object:question:todo' => [
 			'path' => '/questions/todo/{group_guid?}',
@@ -212,13 +212,19 @@ return [
 		'collection:object:question:group' => [
 			'path' => '/questions/group/{guid}/{subpage?}',
 			'resource' => 'questions/group',
-			'defau lts' => [
+			'defaults' => [
 				'subpage' => 'all',
+			],
+			'middleware' => [
+				GroupPageOwnerGatekeeper::class,
 			],
 		],
 		'collection:object:question:owner' => [
-			'path' => '/questions/owner/{username?}',
+			'path' => '/questions/owner/{username}',
 			'resource' => 'questions/owner',
+			'middleware' => [
+				UserPageOwnerGatekeeper::class,
+			],
 		],
 		'collection:object:question:all' => [
 			'path' => '/questions/all',
@@ -228,9 +234,6 @@ return [
 			'path' => '/questions',
 			'resource' => 'questions/all',
 		],
-	],
-	'upgrades' => [
-		MigrateGroupSettings::class,
 	],
 	'view_extensions' => [
 		'elgg.css' => [
@@ -247,4 +250,3 @@ return [
 		],
 	],
 ];
-		

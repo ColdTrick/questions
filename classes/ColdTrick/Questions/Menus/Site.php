@@ -4,19 +4,21 @@ namespace ColdTrick\Questions\Menus;
 
 use Elgg\Menu\MenuItems;
 
+/**
+ * Add menu items to the site menu
+ */
 class Site {
 	
 	/**
 	 * Register menu item to questions
 	 *
-	 * @param \Elgg\Hook $hook 'register', 'menu:site'
+	 * @param \Elgg\Event $event 'register', 'menu:site'
 	 *
 	 * @return MenuItems
 	 */
-	public static function registerQuestions(\Elgg\Hook $hook): MenuItems {
-		
+	public static function registerQuestions(\Elgg\Event $event): MenuItems {
 		/* @var $result MenuItems */
-		$result = $hook->getValue();
+		$result = $event->getValue();
 		
 		$result[] = \ElggMenuItem::factory([
 			'name' => 'questions',

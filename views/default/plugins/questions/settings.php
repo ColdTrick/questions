@@ -20,12 +20,12 @@ $general_settings = elgg_view_field([
 ]);
 
 $general_settings .= elgg_view_field([
-	'#type' => 'select',
+	'#type' => 'number',
 	'#label' => elgg_echo('questions:settings:general:solution_time'),
 	'#help' => elgg_echo('questions:settings:general:solution_time:description'),
 	'name' => 'params[site_solution_time]',
 	'value' => $plugin->site_solution_time,
-	'options' => range(0, 30),
+	'min' => 0,
 ]);
 
 $general_settings .= elgg_view_field([
@@ -34,6 +34,7 @@ $general_settings .= elgg_view_field([
 	'#help' => elgg_echo('questions:settings:general:auto_close_time:description'),
 	'name' => 'params[auto_close_time]',
 	'value' => $plugin->auto_close_time,
+	'min' => 0,
 ]);
 
 $general_settings .= elgg_view_field([
@@ -90,15 +91,6 @@ $expert_settings .= elgg_view_field([
 	'switch' => true,
 	'default' => 'no',
 	'value' => 'yes',
-]);
-
-$expert_settings .= elgg_view_field([
-	'#type' => 'checkbox',
-	'#label' => elgg_echo('questions:settings:experts:move_to_discussion_allowed'),
-	'name' => 'params[move_to_discussion_allowed]',
-	'checked' => (bool) $plugin->move_to_discussion_allowed,
-	'switch' => true,
-	'value' => 1,
 ]);
 
 echo elgg_view_module('info', elgg_echo('questions:settings:experts:title'), $expert_settings);

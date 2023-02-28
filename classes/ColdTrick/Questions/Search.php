@@ -2,18 +2,20 @@
 
 namespace ColdTrick\Questions;
 
+/**
+ * Search changes
+ */
 class Search {
 	
 	/**
-	 * Remove answers from the searchable types, to prevent an menu item
+	 * Remove answers from the searchable types, to prevent a menu item
 	 *
-	 * @param \Elgg\Hook $hook 'search:config', 'type_subtype_pairs'
+	 * @param \Elgg\Event $event 'search:config', 'type_subtype_pairs'
 	 *
-	 * @return void|mixed
+	 * @return mixed
 	 */
-	public static function typeSubtypePairsConfig(\Elgg\Hook $hook) {
-		
-		$types = $hook->getValue();
+	public static function typeSubtypePairsConfig(\Elgg\Event $event) {
+		$types = $event->getValue();
 		$objects = elgg_extract('object', $types);
 		if (empty($objects)) {
 			return;
@@ -33,13 +35,12 @@ class Search {
 	/**
 	 * Add answers to the question searches
 	 *
-	 * @param \Elgg\Hook $hook 'search:options', 'all'
+	 * @param \Elgg\Event $event 'search:options', 'all'
 	 *
-	 * @return void|mixed
+	 * @return mixed
 	 */
-	public static function optionsAddAnswers(\Elgg\Hook $hook) {
-		
-		$search_params = $hook->getValue();
+	public static function optionsAddAnswers(\Elgg\Event $event) {
+		$search_params = $event->getValue();
 		
 		$type_subtype_pairs = false;
 		$subtypes = (array) elgg_extract('subtypes', $search_params, elgg_extract('subtype', $search_params));

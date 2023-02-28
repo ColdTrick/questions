@@ -4,26 +4,28 @@ namespace ColdTrick\Questions\Menus;
 
 use Elgg\Menu\MenuItems;
 
+/**
+ * Add menu items to the user_hover menu
+ */
 class UserHover {
 	
 	/**
 	 * Add menu items to the user_hover menu
 	 *
-	 * @param \Elgg\Hook $hook 'register', 'menu:user_hover'
+	 * @param \Elgg\Event $event 'register', 'menu:user_hover'
 	 *
-	 * @return void|MenuItems
+	 * @return null|MenuItems
 	 */
-	public static function registerToggleExpert(\Elgg\Hook $hook) {
-		
+	public static function registerToggleExpert(\Elgg\Event $event): ?MenuItems {
 		// are experts enabled
 		if (!questions_experts_enabled()) {
-			return;
+			return null;
 		}
 		
 		// get the user for this menu
-		$user = $hook->getEntityParam();
+		$user = $event->getEntityParam();
 		if (!$user instanceof \ElggUser) {
-			return;
+			return null;
 		}
 		
 		// get page owner
@@ -35,11 +37,11 @@ class UserHover {
 		// can the current person edit the page owner, to assign the role
 		// and is the current user not the owner of this page owner
 		if (!$page_owner->canEdit()) {
-			return;
+			return null;
 		}
 		
 		/* @var $items MenuItems */
-		$items = $hook->getValue();
+		$items = $event->getValue();
 		
 		$is_expert = $user->hasRelationship($page_owner->guid, QUESTIONS_EXPERT_ROLE);
 		

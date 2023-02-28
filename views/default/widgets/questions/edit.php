@@ -3,7 +3,7 @@
  * Questions widget settings
  */
 
-/* @var $widget ElggWidget */
+/* @var $widget \ElggWidget */
 $widget = elgg_extract('entity', $vars);
 
 if ($widget->context === 'dashboard') {
@@ -23,7 +23,6 @@ if ($widget->context === 'dashboard') {
 		'options_values' => $content_type_options,
 	]);
 } else {
-	
 	$groups = [];
 	if ($widget->context === 'groups') {
 		$groups = [$widget->owner_guid];

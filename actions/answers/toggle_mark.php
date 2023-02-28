@@ -9,7 +9,7 @@ if (empty($guid)) {
 }
 
 $entity = get_entity($guid);
-if (!$entity instanceof ElggAnswer) {
+if (!$entity instanceof \ElggAnswer) {
 	return elgg_error_response(elgg_echo('error:missing_data'));
 }
 
@@ -26,7 +26,7 @@ if (empty($answer)) {
 	$entity->markAsCorrect();
 	
 	return elgg_ok_response('', elgg_echo('questions:action:answer:toggle_mark:success:mark'));
-} elseif ($answer->guid == $entity->guid) {
+} elseif ($answer->guid === $entity->guid) {
 	// the marked answer is this answer, so unmark
 	$entity->undoMarkAsCorrect();
 	

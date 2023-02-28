@@ -1,14 +1,12 @@
 <?php
 /**
  * List most recent questions on group profile page
- *
- * @package Questions
  */
 
 $params = [
 	'title' => elgg_echo('questions:group'),
 	'entity_type' => 'object',
-	'entity_subtype' => ElggQuestion::SUBTYPE,
+	'entity_subtype' => \ElggQuestion::SUBTYPE,
 	'no_results' => elgg_echo('questions:none'),
 ];
 $params = $params + $vars;

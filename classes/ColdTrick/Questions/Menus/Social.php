@@ -4,23 +4,26 @@ namespace ColdTrick\Questions\Menus;
 
 use Elgg\Menu\MenuItems;
 
+/**
+ * Add menu items to the social menu
+ */
 class Social {
 	
 	/**
 	 * Removes comments link for answers
 	 *
-	 * @param \Elgg\Hook $hook 'register', 'menu:social'
+	 * @param \Elgg\Event $event 'register', 'menu:social'
 	 *
-	 * @return void|MenuItems
+	 * @return null|MenuItems
 	 */
-	public static function removeCommentsLinkForAnswers(\Elgg\Hook $hook) {
-		
-		if (!$hook->getEntityParam() instanceof \ElggAnswer) {
-			return;
+	public static function removeCommentsLinkForAnswers(\Elgg\Event $event): ?MenuItems {
+		if (!$event->getEntityParam() instanceof \ElggAnswer) {
+			return null;
 		}
 		
 		/* @var $items MenuItems */
-		$items = $hook->getValue();
+		$items = $event->getValue();
+		
 		$items->remove('comment');
 		
 		return $items;

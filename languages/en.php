@@ -60,8 +60,6 @@ return [
 	'questions:edit:question:description' => "Details",
 	'questions:edit:question:container' => "Where should this question be listed",
 	'questions:edit:question:container:select' => "Please select a group",
-	'questions:edit:question:move_to_discussions' => "Move to discussions",
-	'questions:edit:question:move_to_discussions:confirm' => "Are you sure you wish to move this questions to the discussions? This can't be undone!!",
 	
 	'questions:object:answer:title' => "Answer to question %s",
 	
@@ -155,7 +153,6 @@ To view the question, click here:
 	'questions:settings:experts:enable:description' => "Experts have special privileges and can be assigned by site administrators and group owners.",
 	'questions:settings:experts:answer' => "Only experts can answer a question",
 	'questions:settings:experts:mark' => "Only experts can mark an answer as the correct answer",
-	'questions:settings:experts:move_to_discussion_allowed' => "Allow experts to move questions to discussions",
 	
 	'questions:settings:access:title' => "Access settings",
 	'questions:settings:access:personal' => "What will be the access level for personal questions",
@@ -208,18 +205,8 @@ To view the question, click here:
 	'questions:action:question:save:error:save' => "There was a problem saving your question!",
 	'questions:action:question:save:error:limited_to_groups' => "Questions are limited to group, please select a group",
 	
-	'questions:action:question:move_to_discussions:error:move' => "You're not allowed to move questions to discussions",
-	'questions:action:question:move_to_discussions:error:topic' => "An error occurred while creating the discussion topic, please try again",
-	'questions:action:question:move_to_discussions:success' => "The questions was moved to a discussion topic",
-	
 	'questions:action:toggle_expert:success:make' => "%s is now a questions expert for %s",
 	'questions:action:toggle_expert:success:remove' => "%s is no longer a questions expert for %s",
 	
 	'questions:action:group_settings:success' => "The group settings were saved",
-	
-	/**
-	 * Upgrades
-	 */
-	'questions:upgrade:2021070101:title' => "Migrate Questions group settings",
-	'questions:upgrade:2021070101:description' => "Group settings are stored differently in Elgg 4.0, migrate the existing settings to the new storage.",
 ];

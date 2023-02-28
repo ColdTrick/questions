@@ -16,10 +16,8 @@ $options['wheres'][] = function(\Elgg\Database\QueryBuilder $qb, $main_alias) us
 	$subquery->select('md_sub.entity_guid');
 	
 	foreach ($tags as $index => $tag) {
-
-		$md = $subquery->joinMetadataTable('md_sub', 'entity_guid', null, 'inner', "mdf{$index}");
-	
-		$subquery->andWhere($qb->compare("{$md}.name", '=', 'tags', ELGG_VALUE_STRING));
+		$md = $subquery->joinMetadataTable('md_sub', 'entity_guid', 'tags', 'inner', "mdf{$index}");
+		
 		$subquery->andWhere($qb->compare("{$md}.value", '=', $tag, ELGG_VALUE_STRING));
 	}
 	
@@ -35,12 +33,12 @@ foreach ($tags as $tag) {
 		$new_tags = null;
 	}
 	
-	$items[] = ElggMenuItem::factory([
+	$items[] = \ElggMenuItem::factory([
 		'name' => $tag,
 		'text' => $tag,
+		'href' => elgg_http_add_url_query_elements(elgg_get_current_url(), ['tags' => $new_tags]),
 		'class' => 'elgg-state-active',
 		'icon_alt' => 'delete',
-		'href' => elgg_http_add_url_query_elements(elgg_get_current_url(), ['tags' => $new_tags]),
 	]);
 }
 
@@ -56,7 +54,7 @@ if (count($tags) < 5) {
 		$new_tags[] = $tag->tag;
 		$new_tags = array_unique($new_tags);
 		
-		$items[] = ElggMenuItem::factory([
+		$items[] = \ElggMenuItem::factory([
 			'name' => $tag->tag,
 			'text' => $tag->tag,
 			'href' => elgg_http_add_url_query_elements(elgg_get_current_url(), ['tags' => $new_tags]),

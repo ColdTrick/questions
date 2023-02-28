@@ -5,7 +5,7 @@
 
 use Elgg\Database\QueryBuilder;
 
-/* @var $widget ElggWidget */
+/* @var $widget \ElggWidget */
 $widget = elgg_extract('entity', $vars);
 
 $limit = (int) $widget->limit;
@@ -15,7 +15,7 @@ if ($limit < 1) {
 
 $options = [
 	'type' => 'object',
-	'subtype' => 'question',
+	'subtype' => \ElggQuestion::SUBTYPE,
 	'limit' => $limit,
 	'full_view' => false,
 	'pagination' => false,
@@ -50,12 +50,11 @@ switch ($widget->context) {
 				// prepare options
 				$options['wheres'] = [
 					function (QueryBuilder $qb, $main_alias) {
-						$sub = $qb->subquery('entities', 'a')
-							->select('a.container_guid')
-							->join('a', 'metadata', 'asmd', $qb->compare('a.guid', '=', 'asmd.entity_guid'))
-							->where($qb->compare('asmd.name', '=', 'correct_answer', ELGG_VALUE_STRING))
+						$sub = $qb->subquery('entities', 'a');
+						$sub->joinMetadataTable('a', 'guid', 'correct_answer');
+						$sub->select('a.container_guid')
 							->andWhere($qb->compare('a.type', '=', 'object', ELGG_VALUE_STRING))
-							->andWhere($qb->compare('a.subtype', '=', ElggAnswer::SUBTYPE, ELGG_VALUE_STRING));
+							->andWhere($qb->compare('a.subtype', '=', \ElggAnswer::SUBTYPE, ELGG_VALUE_STRING));
 						
 						return $qb->compare("{$main_alias}.guid", 'NOT IN', $sub->getSQL());
 					},
@@ -77,7 +76,6 @@ switch ($widget->context) {
 				$options['owner_guid'] = $widget->owner_guid;
 				break;
 		}
-		
 		break;
 	case 'groups':
 		$route = 'collection:object:question:group';

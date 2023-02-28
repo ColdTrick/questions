@@ -4,11 +4,12 @@ namespace ColdTrick\Questions\Notifications;
 
 use Elgg\Notifications\NotificationEventHandler;
 
+/**
+ * Notification handler for when a Question is moved to a different container (group)
+ */
 class MoveQuestionNotificationEventHandler extends NotificationEventHandler {
 	
 	/**
-	 * Only experts get this notification
-	 *
 	 * {@inheritDoc}
 	 */
 	public function getSubscriptions(): array {
@@ -41,7 +42,7 @@ class MoveQuestionNotificationEventHandler extends NotificationEventHandler {
 			'experts' => $experts,
 			'moving' => true,
 		];
-		$experts = elgg_trigger_plugin_hook('notify_experts', 'questions', $params, $experts);
+		$experts = elgg_trigger_event_results('notify_experts', 'questions', $params, $experts);
 		if (!is_array($experts)) {
 			return [];
 		}

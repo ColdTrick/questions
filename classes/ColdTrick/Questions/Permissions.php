@@ -2,24 +2,26 @@
 
 namespace ColdTrick\Questions;
 
+/**
+ * Change permissions
+ */
 class Permissions {
 	
 	/**
 	 * limit the container write permissions
 	 *
-	 * @param \Elgg\Hook $hook 'container_permissions_check', 'object'
+	 * @param \Elgg\Event $event 'container_permissions_check', 'object'
 	 *
-	 * @return void|bool
+	 * @return null|bool
 	 */
-	public static function questionsContainer(\Elgg\Hook $hook) {
-		
-		$subtype = $hook->getParam('subtype');
+	public static function questionsContainer(\Elgg\Event $event): ?bool {
+		$subtype = $event->getParam('subtype');
 		if ($subtype !== \ElggQuestion::SUBTYPE) {
-			return;
+			return null;
 		}
 		
-		$user = $hook->getUserParam();
-		$container = $hook->getParam('container');
+		$user = $event->getUserParam();
+		$container = $event->getParam('container');
 		if (!$user instanceof \ElggUser || !$container instanceof \ElggEntity) {
 			return false;
 		}
@@ -31,7 +33,7 @@ class Permissions {
 			}
 			
 			// personal
-			return;
+			return null;
 		}
 		
 		// group
@@ -40,9 +42,9 @@ class Permissions {
 			return false;
 		}
 		
-		if (!questions_experts_enabled() || ($container->getPrivateSetting('questions_who_can_ask') !== 'experts')) {
+		if (!questions_experts_enabled() || ($container->getPluginSetting('questions', 'who_can_ask') !== 'experts')) {
 			// no experts enabled, or not limited to experts
-			return;
+			return null;
 		}
 		
 		return questions_is_expert($container, $user);
@@ -51,25 +53,24 @@ class Permissions {
 	/**
 	 * Check if a user has permissions
 	 *
-	 * @param \Elgg\Hook $hook 'permissions_check', 'object'
+	 * @param \Elgg\Event $event 'permissions_check', 'object'
 	 *
-	 * @return void|bool
+	 * @return null|bool
 	 */
-	public static function objectPermissionsCheck(\Elgg\Hook $hook) {
-		
+	public static function objectPermissionsCheck(\Elgg\Event $event): ?bool {
 		// get the provided data
-		$entity = $hook->getEntityParam();
-		$user = $hook->getUserParam();
-		
+		$user = $event->getUserParam();
 		if (!$user instanceof \ElggUser) {
-			return;
+			return null;
 		}
 		
+		$entity = $event->getEntityParam();
 		if (!$entity instanceof \ElggQuestion && !$entity instanceof \ElggAnswer) {
-			return;
+			return null;
 		}
 		
-		$returnvalue = $hook->getValue();
+		/* @var $returnvalue bool */
+		$returnvalue = $event->getValue();
 		
 		// expert only changes
 		if (questions_experts_enabled()) {
@@ -106,7 +107,7 @@ class Permissions {
 			}
 		}
 		
-		// questions can't be editted by owner if it is closed
+		// questions can't be edited by owner if it is closed
 		if ($returnvalue && $entity instanceof \ElggQuestion) {
 			// is the question closed
 			if ($entity->getStatus() === \ElggQuestion::STATUS_CLOSED) {
@@ -123,22 +124,21 @@ class Permissions {
 	/**
 	 * Check if a user can write an answer
 	 *
-	 * @param \Elgg\Hook $hook 'container_permissions_check', 'object'
+	 * @param \Elgg\Event $event 'container_permissions_check', 'object'
 	 *
-	 * @return void|bool
+	 * @return null|bool
 	 */
-	public static function answerContainer(\Elgg\Hook $hook) {
-		
-		if ($hook->getValue()) {
-			return;
+	public static function answerContainer(\Elgg\Event $event): ?bool {
+		if ($event->getValue()) {
+			return null;
 		}
 		
-		$question = $hook->getParam('container');
-		$user = $hook->getUserParam();
-		$subtype = $hook->getParam('subtype');
+		$question = $event->getParam('container');
+		$user = $event->getUserParam();
+		$subtype = $event->getParam('subtype');
 		
-		if (($subtype !== \ElggAnswer::SUBTYPE) || !$user instanceof \ElggUser || !$question instanceof \ElggQuestion) {
-			return;
+		if ($subtype !== \ElggAnswer::SUBTYPE || !$user instanceof \ElggUser || !$question instanceof \ElggQuestion) {
+			return null;
 		}
 		
 		return questions_can_answer_question($question, $user);

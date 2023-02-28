@@ -4,6 +4,9 @@ namespace ColdTrick\Questions\Notifications;
 
 use Elgg\Notifications\NotificationEventHandler;
 
+/**
+ * Notification handler for when a correct answer is given
+ */
 class CorrectAnswerNotificationEventHandler extends NotificationEventHandler {
 	
 	/**

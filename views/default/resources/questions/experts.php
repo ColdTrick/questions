@@ -1,33 +1,31 @@
 <?php
 /**
  * List all the experts of the page_owner (or site if missing)
- *
- * @package ElggQuestions
  */
 
 $group_guid = (int) elgg_extract('group_guid', $vars);
 
 $container = get_entity($group_guid);
-if ($container instanceof ElggGroup) {
-	elgg_push_collection_breadcrumbs('object', ElggQuestion::SUBTYPE, $container);
+if ($container instanceof \ElggGroup) {
+	elgg_push_collection_breadcrumbs('object', \ElggQuestion::SUBTYPE, $container);
 } else {
-	elgg_push_collection_breadcrumbs('object', ElggQuestion::SUBTYPE);
+	elgg_push_collection_breadcrumbs('object', \ElggQuestion::SUBTYPE);
 	
 	$container = elgg_get_site_entity();
 }
 
-elgg_set_page_owner_guid($container->getGUID());
+elgg_set_page_owner_guid($container->guid);
 
 // build page elements
 $title_text = elgg_echo('questions:experts:title');
 
 // expert description
-if ($container instanceof ElggGroup) {
-	$desciption = elgg_view('output/longtext', [
+if ($container instanceof \ElggGroup) {
+	$description = elgg_view('output/longtext', [
 		'value' => elgg_echo('questions:experts:description:group', [$container->getDisplayName()]),
 	]);
 } else {
-	$desciption = elgg_view('output/longtext', [
+	$description = elgg_view('output/longtext', [
 		'value' => elgg_echo('questions:experts:description:site'),
 	]);
 }
@@ -43,7 +41,7 @@ $user_list = elgg_list_entities([
 
 // draw page
 echo elgg_view_page($title_text, [
-	'content' => $desciption . $user_list,
+	'content' => $description . $user_list,
 	'filter_id' => 'questions',
 	'filter_value' => 'experts',
 ]);

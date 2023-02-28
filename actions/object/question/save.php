@@ -2,14 +2,12 @@
 
 use Elgg\Values;
 
-elgg_make_sticky_form('question');
-
 $guid = (int) get_input('guid');
 if (empty($guid)) {
-	$question = new ElggQuestion();
+	$question = new \ElggQuestion();
 } else {
 	$question = get_entity($guid);
-	if (!$question instanceof ElggQuestion) {
+	if (!$question instanceof \ElggQuestion) {
 		return elgg_error_response(elgg_echo('error:missing_data'));
 	}
 	
@@ -36,7 +34,7 @@ if ($adding && !questions_can_ask_question($container)) {
 	return elgg_error_response(elgg_echo('questions:action:question:save:error:container'));
 }
 
-if (questions_limited_to_groups() && ($container_guid == $question->getOwnerGUID())) {
+if (questions_limited_to_groups() && ($container_guid === $question->owner_guid)) {
 	return elgg_error_response(elgg_echo('questions:action:question:save:error:limited_to_groups'));
 }
 
@@ -62,38 +60,34 @@ $question->container_guid = $container_guid;
 $question->tags = $tags;
 $question->comments_enabled = $comments_enabled;
 
-try {
-	$question->save();
-	
-	if ($adding) {
-		// add river event
-		elgg_create_river_item([
-			'view' => 'river/object/question/create',
-			'action_type' => 'create',
-			'subject_guid' => elgg_get_logged_in_user_guid(),
-			'object_guid' => $question->getGUID(),
-			'target_guid' => $container->getGUID(),
-			'access_id' => $question->access_id,
-		]);
-		
-		// check for a solution time limit
-		$solution_time = questions_get_solution_time($question->getContainerEntity());
-		if ($solution_time) {
-			// add x number of days when the question should be solved
-			$question->solution_time = Values::normalizeTimestamp("+{$solution_time} days");
-		}
-	} elseif ($moving) {
-		elgg_trigger_event('move', 'object', $question);
-	}
-} catch (Exception $e) {
+if (!$question->save()) {
 	return elgg_error_response(elgg_echo('questions:action:question:save:error:save'));
 }
 
-elgg_clear_sticky_form('question');
+if ($adding) {
+	// add river event
+	elgg_create_river_item([
+		'view' => 'river/object/question/create',
+		'action_type' => 'create',
+		'subject_guid' => elgg_get_logged_in_user_guid(),
+		'object_guid' => $question->guid,
+		'target_guid' => $container->guid,
+		'access_id' => $question->access_id,
+	]);
+	
+	// check for a solution time limit
+	$solution_time = questions_get_solution_time($question->getContainerEntity());
+	if ($solution_time) {
+		// add x number of days when the question should be solved
+		$question->solution_time = Values::normalizeTimestamp("+{$solution_time} days");
+	}
+} elseif ($moving) {
+	elgg_trigger_event('move', 'object', $question);
+}
 
 if (!$adding) {
 	$forward_url = $question->getURL();
-} elseif ($container instanceof ElggUser) {
+} elseif ($container instanceof \ElggUser) {
 	$forward_url = elgg_generate_url('collection:object:question:owner', [
 		'username' => $container->username,
 	]);

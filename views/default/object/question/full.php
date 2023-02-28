@@ -1,14 +1,12 @@
 <?php
 /**
  * Question entity full view
- *
- * @package Questions
-*/
+ */
 
 use Elgg\Values;
 
 $question = elgg_extract('entity', $vars);
-if (!$question instanceof ElggQuestion) {
+if (!$question instanceof \ElggQuestion) {
 	return;
 }
 

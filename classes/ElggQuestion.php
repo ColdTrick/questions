@@ -2,6 +2,9 @@
 
 use Elgg\Database\Clauses\OrderByClause;
 
+/**
+ * Question entity class
+ */
 class ElggQuestion extends ElggObject {
 	
 	const SUBTYPE = 'question';
@@ -9,8 +12,7 @@ class ElggQuestion extends ElggObject {
 	const STATUS_CLOSED = 'closed';
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see ElggObject::initializeAttributes()
+	 * {@inheritDoc}
 	 */
 	protected function initializeAttributes() {
 		parent::initializeAttributes();
@@ -21,16 +23,14 @@ class ElggQuestion extends ElggObject {
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see ElggObject::canComment()
+	 * {@inheritDoc}
 	 */
-	public function canComment($user_guid = 0, $default = null) {
-		
+	public function canComment(int $user_guid = 0): bool {
 		if (!$this->commentsEnabled()) {
 			return false;
 		}
 		
-		return parent::canComment($user_guid, $default);
+		return parent::canComment($user_guid);
 	}
 	
 	/**
@@ -39,6 +39,7 @@ class ElggQuestion extends ElggObject {
 	 * @param array $options accepts all elgg_get_entities options
 	 *
 	 * @return false|int|ElggAnswer[]
+	 * @see elgg_get_entities()
 	 */
 	public function getAnswers(array $options = []) {
 		$defaults = [
@@ -47,7 +48,7 @@ class ElggQuestion extends ElggObject {
 		
 		$overrides = [
 			'type' => 'object',
-			'subtype' => ElggAnswer::SUBTYPE,
+			'subtype' => \ElggAnswer::SUBTYPE,
 			'container_guid' => $this->guid,
 		];
 		
@@ -62,22 +63,21 @@ class ElggQuestion extends ElggObject {
 	 * @param array $options accepts all elgg_list_entities options
 	 *
 	 * @return string
+	 * @see elgg_list_entities()
 	 */
-	public function listAnswers(array $options = []) {
+	public function listAnswers(array $options = []): string {
 		return elgg_list_entities($options, [$this, 'getAnswers']);
 	}
 	
 	/**
 	 * Get the answer that was marked as the correct answer.
 	 *
-	 * @return false|ElggAnswer
+	 * @return null|\ElggAnswer
 	 */
-	public function getMarkedAnswer() {
-		$result = false;
-		
+	public function getMarkedAnswer(): ?\ElggAnswer {
 		$answers = elgg_get_entities([
 			'type' => 'object',
-			'subtype' => ElggAnswer::SUBTYPE,
+			'subtype' => \ElggAnswer::SUBTYPE,
 			'limit' => 1,
 			'container_guid' => $this->guid,
 			'metadata_name_value_pairs' => [
@@ -85,11 +85,11 @@ class ElggQuestion extends ElggObject {
 				'value' => true,
 			],
 		]);
-		if (!empty($answers)) {
-			$result = $answers[0];
+		if (empty($answers)) {
+			return null;
 		}
 		
-		return $result;
+		return $answers[0];
 	}
 	
 	/**
@@ -97,7 +97,7 @@ class ElggQuestion extends ElggObject {
 	 *
 	 * @return void
 	 */
-	public function close() {
+	public function close(): void {
 		$this->status = self::STATUS_CLOSED;
 	}
 	
@@ -106,7 +106,7 @@ class ElggQuestion extends ElggObject {
 	 *
 	 * @return void
 	 */
-	public function reopen() {
+	public function reopen(): void {
 		$this->status = self::STATUS_OPEN;
 	}
 	
@@ -119,7 +119,7 @@ class ElggQuestion extends ElggObject {
 	 *
 	 * @return string the current status
 	 */
-	public function getStatus() {
+	public function getStatus(): string {
 		$result = $this->status;
 		
 		// should we check if the status is correct
@@ -145,7 +145,7 @@ class ElggQuestion extends ElggObject {
 	 *
 	 * @return bool
 	 */
-	public function commentsEnabled() {
+	public function commentsEnabled(): bool {
 		return $this->comments_enabled !== 'off';
 	}
 }

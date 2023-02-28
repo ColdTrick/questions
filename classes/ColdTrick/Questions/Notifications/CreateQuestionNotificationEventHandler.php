@@ -4,11 +4,12 @@ namespace ColdTrick\Questions\Notifications;
 
 use Elgg\Notifications\NotificationEventHandler;
 
+/**
+ * Notification handler for when a question is created
+ */
 class CreateQuestionNotificationEventHandler extends NotificationEventHandler {
 	
 	/**
-	 * Add experts to the notification
-	 *
 	 * {@inheritDoc}
 	 */
 	public function getSubscriptions(): array {
@@ -43,7 +44,7 @@ class CreateQuestionNotificationEventHandler extends NotificationEventHandler {
 			'experts' => $experts,
 			'moving' => true,
 		];
-		$experts = elgg_trigger_plugin_hook('notify_experts', 'questions', $params, $experts);
+		$experts = elgg_trigger_event_results('notify_experts', 'questions', $params, $experts);
 		if (!is_array($experts)) {
 			return $result;
 		}

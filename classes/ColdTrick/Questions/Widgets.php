@@ -2,39 +2,36 @@
 
 namespace ColdTrick\Questions;
 
+/**
+ * Changes to widgets
+ */
 class Widgets {
 	
 	/**
 	 * Return the widget title url
 	 *
-	 * @param \Elgg\Hook $hook 'entity:url', 'object'
+	 * @param \Elgg\Event $event 'entity:url', 'object'
 	 *
-	 * @return void|string
+	 * @return null|string
 	 */
-	public static function getURL(\Elgg\Hook $hook) {
-		
-		if ($hook->getValue()) {
+	public static function getURL(\Elgg\Event $event): ?string {
+		if ($event->getValue()) {
 			// already set
-			return;
+			return null;
 		}
 		
-		$entity = $hook->getEntityParam();
-		if (!$entity instanceof \ElggWidget) {
-			return;
-		}
-		
-		if ($entity->handler !== 'questions') {
-			return;
+		$entity = $event->getEntityParam();
+		if (!$entity instanceof \ElggWidget || $entity->handler !== 'questions') {
+			return null;
 		}
 		
 		$owner = $entity->getOwnerEntity();
-		
 		if ($owner instanceof \ElggUser) {
 			if ($entity->context === 'dashboard') {
 				switch ($entity->content_type) {
 					case 'all':
 						return elgg_generate_url('collection:object:question:all');
-						break;
+						
 					case 'todo':
 						if (questions_is_expert()) {
 							return elgg_generate_url('collection:object:question:todo');

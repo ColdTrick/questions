@@ -1,25 +1,25 @@
 <?php
 
-class ElggAnswer extends ElggObject {
+/**
+ * Answer entity class
+ */
+class ElggAnswer extends \ElggObject {
 	
 	const SUBTYPE = 'answer';
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see ElggObject::initializeAttributes()
+	 * {@inheritDoc}
 	 */
-	function initializeAttributes() {
+	protected function initializeAttributes() {
 		parent::initializeAttributes();
 		
 		$this->attributes['subtype'] = self::SUBTYPE;
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see ElggEntity::getURL()
+	 * {@inheritDoc}
 	 */
-	public function getURL() {
-		
+	public function getURL(): string {
 		// make sure we can get the container
 		$base_url = elgg_call(ELGG_IGNORE_ACCESS, function() {
 			$container_entity = $this->getContainerEntity();
@@ -33,26 +33,23 @@ class ElggAnswer extends ElggObject {
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see ElggObject::canComment()
+	 * {@inheritDoc}
 	 */
-	public function canComment($user_guid = 0, $default = null) {
-		
+	public function canComment($user_guid = 0): bool {
 		$container = $this->getContainerEntity();
-		if ($container instanceof ElggQuestion) {
+		if ($container instanceof \ElggQuestion) {
 			if (!$container->commentsEnabled()) {
 				return false;
 			}
 		}
 		
-		return parent::canComment($user_guid, $default);
+		return parent::canComment($user_guid);
 	}
 	
 	/**
 	 * {@inheritDoc}
-	 * @see ElggObject::getDisplayName()
 	 */
-	public function getDisplayName() {
+	public function getDisplayName(): string {
 		$question = $this->getContainerEntity();
 		
 		return elgg_echo('questions:object:answer:title', [$question->getDisplayName()]);
@@ -61,8 +58,7 @@ class ElggAnswer extends ElggObject {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function delete($recursive = true) {
-		
+	public function delete(bool $recursive = true): bool {
 		// make sure the question gets reopened
 		if ($this->isCorrectAnswer()) {
 			// only if this is the correct answer
@@ -77,20 +73,18 @@ class ElggAnswer extends ElggObject {
 	/**
 	 * Get the metadata object for the correct answer
 	 *
-	 * @return false|ElggMetadata
+	 * @return null|\ElggMetadata
 	 */
-	public function getCorrectAnswerMetadata() {
-		$result = false;
-		
+	public function getCorrectAnswerMetadata(): ?\ElggMetadata {
 		$metadata = elgg_get_metadata([
 			'metadata_name' => 'correct_answer',
 			'guid' => $this->guid,
 		]);
-		if ($metadata) {
-			$result = $metadata[0];
+		if (empty($metadata)) {
+			return null;
 		}
 		
-		return $result;
+		return $metadata[0];
 	}
 	
 	/**
@@ -98,19 +92,18 @@ class ElggAnswer extends ElggObject {
 	 *
 	 * @return bool
 	 */
-	public function isCorrectAnswer() {
+	public function isCorrectAnswer(): bool {
 		return !empty($this->getCorrectAnswerMetadata());
 	}
 	
 	/**
 	 * Check if the user can mark this answer as the correct one
 	 *
-	 * @param \ElggUser $user user to check the ability for
+	 * @param \ElggUser $user (optional) user to check the ability for (default: current user)
 	 *
 	 * @return bool
 	 */
-	public function canMarkAnswer(\ElggUser $user = null) {
-		
+	public function canMarkAnswer(\ElggUser $user = null): bool {
 		// check if we have a user
 		if (empty($user)) {
 			$user = elgg_get_logged_in_user_entity();
@@ -131,7 +124,7 @@ class ElggAnswer extends ElggObject {
 		// are only experts allowed to mark
 		if (elgg_get_plugin_setting('experts_mark', 'questions') !== 'yes') {
 			// no, so the owner of a question can also mark
-			if ($user->guid == $question->owner_guid) {
+			if ($user->guid === $question->owner_guid) {
 				return true;
 			}
 		}
@@ -145,15 +138,16 @@ class ElggAnswer extends ElggObject {
 	 *
 	 * @return void
 	 */
-	public function markAsCorrect() {
+	public function markAsCorrect(): void {
 		// first set the mark
 		$this->correct_answer = true;
 		
 		// trigger event for notifications
 		elgg_trigger_event('correct', 'object', $this);
 		
-		// depending of the plugin settings, we also need to close the question
+		// depending on the plugin settings, we also need to close the question
 		if (elgg_get_plugin_setting('close_on_marked_answer', 'questions') === 'yes') {
+			/* @var $question \ElggQuestion */
 			$question = $this->getContainerEntity();
 			
 			$question->close();
@@ -165,12 +159,13 @@ class ElggAnswer extends ElggObject {
 	 *
 	 * @return void
 	 */
-	public function undoMarkAsCorrect() {
+	public function undoMarkAsCorrect(): void {
 		$this->correct_answer = null;
 		
 		// don't forget to reopen the question
+		/* @var $question \ElggQuestion */
 		$question = $this->getContainerEntity();
-			
+		
 		$question->reopen();
 	}
 	
@@ -181,9 +176,7 @@ class ElggAnswer extends ElggObject {
 	 *
 	 * @return void
 	 */
-	public function checkAutoMarkCorrect($creating = false) {
-		
-		$creating = (bool) $creating;
+	public function checkAutoMarkCorrect(bool $creating = false): void {
 		if (empty($creating)) {
 			// only on new entities
 			return;

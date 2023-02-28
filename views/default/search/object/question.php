@@ -7,7 +7,7 @@
  */
 
 $entity = elgg_extract('entity', $vars);
-if (!$entity instanceof ElggQuestion) {
+if (!$entity instanceof \ElggQuestion) {
 	return;
 }
 
@@ -18,8 +18,8 @@ if ($num_answers > 0) {
 	$imprint[] = [
 		'icon_name' => 'comments',
 		'content' => elgg_view('output/url', [
-			'href' => "{$entity->getURL()}#question-answers",
 			'text' => elgg_echo('answers'),
+			'href' => "{$entity->getURL()}#question-answers",
 			'badge' => $num_answers,
 		]),
 	];

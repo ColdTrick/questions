@@ -1,25 +1,18 @@
 <?php
 /**
  * Elgg questions plugin owner page
- *
- * @package Questions
  */
 
-use Elgg\Exceptions\Http\EntityNotFoundException;
-
 $page_owner = elgg_get_page_owner_entity();
-if (!$page_owner instanceof ElggUser) {
-	throw new EntityNotFoundException();
-}
 
-elgg_push_collection_breadcrumbs('object', ElggQuestion::SUBTYPE, $page_owner);
+elgg_push_collection_breadcrumbs('object', \ElggQuestion::SUBTYPE, $page_owner);
 
-elgg_register_title_button('questions', 'add', 'object', ElggQuestion::SUBTYPE);
+elgg_register_title_button('add', 'object', \ElggQuestion::SUBTYPE);
 
 // prepare options
 $options = [
 	'type' => 'object',
-	'subtype' => ElggQuestion::SUBTYPE,
+	'subtype' => \ElggQuestion::SUBTYPE,
 	'owner_guid' => $page_owner->guid,
 	'full_view' => false,
 	'list_type_toggle' => false,

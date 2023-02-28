@@ -23,7 +23,6 @@ $params = [
 
 $correct_answer = $answer->getCorrectAnswerMetadata();
 if ($correct_answer) {
-	
 	$date = Values::normalizeTime($correct_answer->time_created);
 	
 	$content = elgg_format_element('time', [

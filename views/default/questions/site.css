@@ -1,5 +1,5 @@
 .elgg-menu-item-show-tags {
-	margin-left: auto !important;	
+	margin-left: auto !important;
 }
 
 .questions-tags-filter {
@@ -14,9 +14,9 @@
 	
 	li.elgg-tag {
 		a {
-	    	line-height: inherit;
-	    }
-	}	    
+			line-height: inherit;
+		}
+	}
 }
 
 .question-solution-time {

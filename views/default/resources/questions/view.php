@@ -1,15 +1,13 @@
 <?php
 /**
  * View a question
- *
- * @package ElggQuestions
  */
 
 use Elgg\Database\Clauses\OrderByClause;
 use Elgg\Database\QueryBuilder;
 
 $guid = (int) elgg_extract('guid', $vars);
-elgg_entity_gatekeeper($guid, 'object', ElggQuestion::SUBTYPE);
+elgg_entity_gatekeeper($guid, 'object', \ElggQuestion::SUBTYPE);
 
 /* @var $question ElggQuestion */
 $question = get_entity($guid);
@@ -37,7 +35,7 @@ if (!empty($marked_answer)) {
 // add the rest of the answers
 $options = [
 	'type' => 'object',
-	'subtype' => ElggAnswer::SUBTYPE,
+	'subtype' => \ElggAnswer::SUBTYPE,
 	'container_guid' => $question->guid,
 	'count' => true,
 	'limit' => false,
@@ -82,8 +80,7 @@ if (!empty($marked_answer)) {
 $answer_menu = '';
 
 // add answer form
-if (($question->getStatus() === ElggQuestion::STATUS_OPEN) && $question->canWriteToContainer(0, 'object', ElggAnswer::SUBTYPE)) {
-	
+if ($question->getStatus() === \ElggQuestion::STATUS_OPEN && $question->canWriteToContainer(0, 'object', \ElggAnswer::SUBTYPE)) {
 	$class = [
 		'mtm',
 	];
@@ -91,8 +88,8 @@ if (($question->getStatus() === ElggQuestion::STATUS_OPEN) && $question->canWrit
 		$class[] = 'hidden';
 	}
 	
-	$answers = elgg_view_form('object/answer/add', [
-		'action' => elgg_generate_action_url('object/answer/edit', [], false),
+	$answers = elgg_view_form('object/answer/edit', [
+		'sticky_enabled' => true,
 		'class' => $class,
 	], [
 		'container_guid' => $question->guid,
@@ -104,7 +101,7 @@ if (($question->getStatus() === ElggQuestion::STATUS_OPEN) && $question->canWrit
 			'text' => elgg_echo('answers:addyours'),
 			'href' => false,
 			'class' => ['elgg-button', 'elgg-button-action', 'elgg-toggle'],
-			'data-toggle-selector' => '.elgg-form-object-answer-add',
+			'data-toggle-selector' => '.elgg-form-object-answer-edit',
 		]);
 	}
 }

@@ -8,7 +8,7 @@ $container_options = false;
 $show_access_options = true;
 $access_setting = false;
 
-if ($question instanceof ElggQuestion) {
+if ($question instanceof \ElggQuestion) {
 	$editing = true;
 	
 	echo elgg_view_field([
@@ -18,7 +18,11 @@ if ($question instanceof ElggQuestion) {
 	]);
 }
 
-$container = get_entity(elgg_extract('container_guid', $vars));
+$container = null;
+$container_guid = (int) elgg_extract('container_guid', $vars);
+if (!empty($container_guid)) {
+	$container = get_entity($container_guid);
+}
 
 // build form elements
 echo elgg_view_field([
@@ -55,12 +59,12 @@ echo elgg_view_field([
 ]);
 
 // access options
-if ($container instanceof ElggUser) {
+if ($container instanceof \ElggUser) {
 	$access_setting = questions_get_personal_access_level();
 	if ($access_setting !== false) {
 		$show_access_options = false;
 	}
-} elseif ($container instanceof ElggGroup) {
+} elseif ($container instanceof \ElggGroup) {
 	$access_setting = questions_get_group_access_level($container);
 	if ($access_setting !== false) {
 		$show_access_options = false;
@@ -74,7 +78,7 @@ if ($show_access_options) {
 		'name' => 'access_id',
 		'value' => elgg_extract('access_id', $vars),
 		'entity_type' => 'object',
-		'entity_subtype' => ElggQuestion::SUBTYPE,
+		'entity_subtype' => \ElggQuestion::SUBTYPE,
 		'entity' => $question,
 		'container_guid' => elgg_extract('container_guid', $vars),
 	]);
@@ -116,9 +120,8 @@ if (!$editing || (questions_experts_enabled() && questions_is_expert($container)
 		$groups = elgg_get_entities($group_options);
 		// build group optgroup
 		$group_optgroup = [];
-		/* @var $group ElggGroup */
+		/* @var $group \ElggGroup */
 		foreach ($groups as $group) {
-			
 			// can questions be asked in this group
 			if (!questions_can_ask_question($group)) {
 				continue;
@@ -174,27 +177,8 @@ if (!$container_options) {
 }
 
 // end of the form
-$footer_fields = [];
-
-$footer_fields[] = [
+$footer = elgg_view_field([
 	'#type' => 'submit',
 	'value' => elgg_echo('submit'),
-];
-
-if ($editing && questions_can_move_to_discussions($container)) {
-	$footer_fields[] = [
-		'#type' => 'submit',
-		'icon' => 'exchange-alt',
-		'value' => elgg_echo('questions:edit:question:move_to_discussions'),
-		'class' => ['elgg-button-action'],
-		'formaction' => elgg_generate_action_url('object/question/move_to_discussions', [], false),
-		'confirm' => elgg_echo('questions:edit:question:move_to_discussions:confirm'),
-	];
-}
-
-$footer = elgg_view_field([
-	'#type' => 'fieldset',
-	'align' => 'horizontal',
-	'fields' => $footer_fields,
 ]);
 elgg_set_form_footer($footer);

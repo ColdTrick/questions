@@ -1,24 +1,21 @@
 <?php
 /**
  * Elgg questions plugin owner page
- *
- * @package Questions
  */
 
-elgg_entity_gatekeeper(elgg_get_page_owner_guid(), 'group');
 elgg_group_tool_gatekeeper('questions');
 
-/* @var $page_owner ElggGroup */
+/* @var $page_owner \ElggGroup */
 $page_owner = elgg_get_page_owner_entity();
 
-elgg_push_collection_breadcrumbs('object', ElggQuestion::SUBTYPE, $page_owner);
+elgg_push_collection_breadcrumbs('object', \ElggQuestion::SUBTYPE, $page_owner);
 
-elgg_register_title_button('questions', 'add', 'object', ElggQuestion::SUBTYPE);
+elgg_register_title_button('add', 'object', \ElggQuestion::SUBTYPE);
 
 // prepare options
 $options = [
 	'type' => 'object',
-	'subtype' => ElggQuestion::SUBTYPE,
+	'subtype' => \ElggQuestion::SUBTYPE,
 	'container_guid' => $page_owner->guid,
 	'full_view' => false,
 	'list_type_toggle' => false,
@@ -54,6 +51,6 @@ $content = elgg_list_entities($options);
 // draw page
 echo elgg_view_page($title, [
 	'content' => $filter . $content,
-	'filter_id' => 'questions',
+	'filter_id' => 'questions/groups',
 	'filter_value' => 'all',
 ]);

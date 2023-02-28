@@ -2,16 +2,19 @@
 
 namespace ColdTrick\Questions;
 
+/**
+ * Change access permissions
+ */
 class Access {
 	
 	/**
-	 * After the question is updated in the databse make sure the answers have the same access_id
+	 * After the question is updated in the database make sure the answers have the same access_id
 	 *
 	 * @param \Elgg\Event $event 'update:after', 'object'
 	 *
 	 * @return void
 	 */
-	public static function updateAnswerAccessToQuestionAccess(\Elgg\Event $event) {
+	public static function updateAnswerAccessToQuestionAccess(\Elgg\Event $event): void {
 		$entity = $event->getObject();
 		if (!$entity instanceof \ElggQuestion) {
 			return;
@@ -25,7 +28,6 @@ class Access {
 		
 		// ignore access for this part
 		elgg_call(ELGG_IGNORE_ACCESS, function() use ($entity) {
-			
 			$answers = $entity->getAnswers([
 				'limit' => false,
 				'batch' => true,

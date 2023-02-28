@@ -4,8 +4,12 @@
  */
 
 $item = elgg_extract('item', $vars);
+if (!$item instanceof \ElggRiverItem) {
+	return;
+}
+
 $question = $item->getObjectEntity();
-if (!$question instanceof ElggQuestion) {
+if (!$question instanceof \ElggQuestion) {
 	return;
 }
 

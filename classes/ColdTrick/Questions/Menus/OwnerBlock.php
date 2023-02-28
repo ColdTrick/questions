@@ -4,21 +4,23 @@ namespace ColdTrick\Questions\Menus;
 
 use Elgg\Menu\MenuItems;
 
+/**
+ * Add menu items to the owner_block menu
+ */
 class OwnerBlock {
 	
 	/**
 	 * Add menu items to the owner_block menu
 	 *
-	 * @param \Elgg\Hook $hook 'register', 'menu:owner_block'
+	 * @param \Elgg\Event $event 'register', 'menu:owner_block'
 	 *
-	 * @return void|MenuItems
+	 * @return null|MenuItems
 	 */
-	public static function registerQuestions(\Elgg\Hook $hook) {
-		
+	public static function registerQuestions(\Elgg\Event $event): ?MenuItems {
 		/* @var $items MenuItems */
-		$items = $hook->getValue();
+		$items = $event->getValue();
 		
-		$entity = $hook->getEntityParam();
+		$entity = $event->getEntityParam();
 		if ($entity instanceof \ElggGroup && $entity->isToolEnabled('questions')) {
 			$items[] = \ElggMenuItem::factory([
 				'name' => 'questions',
