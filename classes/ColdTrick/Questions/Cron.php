@@ -84,7 +84,7 @@ class Cron {
 	}
 	
 	/**
-	 * A plugin hook for the CRON, so we can send out notifications to the experts about their workload
+	 * A event handler for the CRON, so we can send out notifications to the experts about their workload
 	 *
 	 * @param \Elgg\Event $event 'cron', 'daily'
 	 *

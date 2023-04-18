@@ -38,7 +38,7 @@ class CreateQuestionNotificationEventHandler extends NotificationEventHandler {
 			$experts = $users;
 		}
 		
-		// trigger a hook so others can extend the list
+		// trigger an event so others can extend the list
 		$params = [
 			'entity' => $question,
 			'experts' => $experts,
