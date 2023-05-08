@@ -152,7 +152,7 @@ class Cron {
 				'name' => 'solution_time',
 				'value' => $time,
 				'operand' => '<',
-				'as' => 'integer',
+				'type' => ELGG_VALUE_INTEGER,
 			];
 			$question_options['wheres'] = [
 				$status_where,
@@ -182,13 +182,13 @@ class Cron {
 					'name' => 'solution_time',
 					'value' => $time,
 					'operand' => '>=',
-					'as' => 'integer',
+					'type' => ELGG_VALUE_INTEGER,
 				],
 				[
 					'name' => 'solution_time',
 					'value' => Values::normalizeTime($time)->modify('+1 day')->getTimestamp(),
 					'operand' => '<',
-					'as' => 'integer',
+					'type' => ELGG_VALUE_INTEGER,
 				],
 			];
 			
