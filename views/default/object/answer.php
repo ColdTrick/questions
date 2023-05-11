@@ -55,7 +55,7 @@ if (!$full_view) {
 	$params['title'] = elgg_echo('generic_comment:on', [$answer_link, $question_link]);
 	
 	// excerpt
-	$excerpt = elgg_get_excerpt($answer->description);
+	$excerpt = elgg_get_excerpt((string) $answer->description);
 	
 	$params['content'] = $excerpt;
 	

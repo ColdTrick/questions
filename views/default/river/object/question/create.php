@@ -13,6 +13,6 @@ if (!$question instanceof \ElggQuestion) {
 	return;
 }
 
-$vars['message'] = elgg_get_excerpt($question->description);
+$vars['message'] = elgg_get_excerpt((string) $question->description);
 
 echo elgg_view('river/elements/layout', $vars);

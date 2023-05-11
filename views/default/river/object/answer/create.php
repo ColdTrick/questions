@@ -32,6 +32,6 @@ $object_link = elgg_view('output/url', [
 
 echo elgg_view('river/elements/layout', [
 	'item' => $item,
-	'message' => elgg_get_excerpt($answer->description),
+	'message' => elgg_get_excerpt((string) $answer->description),
 	'summary' => elgg_echo('river:object:answer:create', [$subject_link, $object_link]),
 ]);
