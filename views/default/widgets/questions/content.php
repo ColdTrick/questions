@@ -90,10 +90,10 @@ switch ($widget->context) {
 $groups = $widget->group_guid;
 if (!empty($groups)) {
 	$route = 'collection:object:question:group';
-	$route_params['guid'] = $groups[0];
+	$route_params['guid'] = is_array($groups) ? $groups[0] : $groups;
 	
 	// only in this container
-	$options['container_guid'] = $groups[0];
+	$options['container_guid'] = $groups;
 }
 
 // add tags filter
