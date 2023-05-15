@@ -31,7 +31,7 @@ class Cron {
 			
 			// backup session
 			$backup_user = elgg_get_logged_in_user_entity();
-			$session = elgg_get_session();
+			$session_manager = elgg()->session_manager;
 			
 			// get open questions last modified more than x days ago
 			/* @var $batch \ElggBatch */
@@ -49,7 +49,7 @@ class Cron {
 			/* @var $question \ElggQuestion */
 			foreach ($batch as $question) {
 				$owner = $question->getOwnerEntity();
-				$session->setLoggedInUser($owner);
+				$session_manager->setLoggedInUser($owner);
 				
 				// close the question
 				$question->close();
@@ -73,9 +73,9 @@ class Cron {
 			
 			// restore session
 			if ($backup_user instanceof \ElggUser) {
-				$session->setLoggedInUser($backup_user);
+				$session_manager->setLoggedInUser($backup_user);
 			} else {
-				$session->invalidate();
+				$session_manager->removeLoggedInUser();
 			}
 		});
 		
