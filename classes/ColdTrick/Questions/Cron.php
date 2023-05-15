@@ -129,13 +129,13 @@ class Cron {
 		];
 		
 		$backup_user = elgg_get_logged_in_user_entity();
-		$session = elgg_get_session();
+		$session_manager = elgg()->session_manager;
 		
 		// loop through all experts
 		/* @var $expert \ElggUser */
 		foreach ($experts as $expert) {
 			// fake a logged in user
-			$session->setLoggedInUser($expert);
+			$session_manager->setLoggedInUser($expert);
 			
 			$subject = elgg_echo('questions:daily:notification:subject', [], $expert->getLanguage());
 			$message = '';
@@ -234,9 +234,9 @@ class Cron {
 		}
 		
 		if (!empty($backup_user)) {
-			$session->setLoggedInUser($backup_user);
+			$session_manager->setLoggedInUser($backup_user);
 		} else {
-			$session->invalidate();
+			$session_manager->removeLoggedInUser();
 		}
 		
 		echo 'Finished Questions experts todo notifications' . PHP_EOL;
