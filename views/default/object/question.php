@@ -62,7 +62,7 @@ if ($num_answers > 0) {
 	];
 }
 
-$excerpt = elgg_get_excerpt((string)$question->description);
+$excerpt = elgg_get_excerpt((string) $question->description);
 
 $params['content'] = $excerpt;
 $params['imprint'] = $imprint;
