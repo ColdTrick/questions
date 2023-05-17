@@ -1,7 +1,7 @@
 <?php
 /**
- * This file was created by Translation Editor v10.1.1
- * On 2022-08-18 12:41
+ * This file was created by Translation Editor v11.1
+ * On 2023-05-17 15:07
  */
 
 return array (
@@ -146,5 +146,4 @@ Klik hier om de vraag te beantwoorden:
   'questions:action:question:save:error:limited_to_groups' => 'Vragen kunnen alleen in groepen worden gesteld. Selecteer aub een groep.',
   'questions:action:toggle_expert:success:make' => '%s is nu een vraag expert voor %s',
   'questions:action:toggle_expert:success:remove' => '%s is nu geen vraag expert meer voor %s',
-  'questions:action:group_settings:success' => 'De instellingen zijn opgeslagen',
 );

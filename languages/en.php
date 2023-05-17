@@ -207,6 +207,4 @@ To view the question, click here:
 	
 	'questions:action:toggle_expert:success:make' => "%s is now a questions expert for %s",
 	'questions:action:toggle_expert:success:remove' => "%s is no longer a questions expert for %s",
-	
-	'questions:action:group_settings:success' => "The group settings were saved",
 ];

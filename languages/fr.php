@@ -1,7 +1,7 @@
 <?php
 /**
- * This file was created by Translation Editor v7.0-beta
- * On 2018-12-14 16:52
+ * This file was created by Translation Editor v11.1
+ * On 2023-05-17 15:08
  */
 
 return array (
@@ -19,16 +19,13 @@ return array (
   'questions:menu:filter:todo_group' => 'Créer Groupe à Faire',
   'questions:menu:filter:experts' => 'Experts',
   'river:object:question:create' => '%s demandés questions %s',
-  'river:create:object:answer' => '%s a fourni une réponse pour question %s',
   'questions' => 'Questions',
   'questions:everyone' => 'Tous Questions',
-  'questions:add' => 'Ajoutez une question',
   'questions:todo' => 'à Faire',
   'questions:todo:none' => 'Il n’y a rien à faire. Continuer le bon travail!',
   'questions:owner' => 'Questions de %s',
   'questions:none' => 'Aucune question n\'a encore été soumise.',
   'questions:group' => 'Questions de groupe',
-  'questions:enable' => 'Activer questions de groupe',
   'questions:edit:question:title' => 'Question',
   'questions:edit:question:description' => 'Détails',
   'questions:edit:question:container' => 'Où devrait-on classé cette question',
@@ -134,5 +131,4 @@ Pour répondre, visitez:
   'questions:action:question:save:error:limited_to_groups' => 'Les questions sont limitées au groupe, sélectionnez un groupe',
   'questions:action:toggle_expert:success:make' => '%s est maintenant un expert en questions pour %s',
   'questions:action:toggle_expert:success:remove' => '%s n’est plus un expert en questions pour  %s',
-  'questions:action:group_settings:success' => 'Les paramètres du groupe ont été sauvegardés',
 );

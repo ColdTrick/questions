@@ -1,7 +1,7 @@
 <?php
 /**
- * This file was created by Translation Editor v7.0-beta
- * On 2018-12-14 16:53
+ * This file was created by Translation Editor v11.1
+ * On 2023-05-17 15:08
  */
 
 return array (
@@ -18,18 +18,14 @@ return array (
   'questions:menu:filter:todo' => 'Pendiente',
   'questions:menu:filter:todo_group' => 'Pendiente del grupo',
   'questions:menu:filter:experts' => 'Expertos',
-  'questions:menu:filter:tags' => 'Etiquetas: %s',
   'river:object:question:create' => '%s preguntó %s',
-  'river:create:object:answer' => '%s compartió una respuesta a la pregunta %s',
   'questions' => 'Preguntas',
   'questions:everyone' => 'Todas las Preguntas',
-  'questions:add' => 'Agregar una Pregunta',
   'questions:todo' => 'Pendientes',
   'questions:todo:none' => 'No hay pendientes, excelente trabajo!',
   'questions:owner' => 'Preguntas de %s',
   'questions:none' => 'No se han realizado preguntas aun.',
   'questions:group' => 'Preguntas en el grupo',
-  'questions:enable' => 'Habilitar preguntas en el grupo',
   'questions:edit:question:title' => 'Pregunta',
   'questions:edit:question:description' => 'Detalles',
   'questions:edit:question:container' => 'Dónde debería ser listada esta pregunta',
@@ -135,5 +131,4 @@ Para ver la pregunta, ingresa en:
   'questions:action:question:save:error:limited_to_groups' => 'Las preguntas solo pueden hacerse dentro de un grupo, por favor elige un grupo',
   'questions:action:toggle_expert:success:make' => '%s es una pregunta para el experto %s',
   'questions:action:toggle_expert:success:remove' => '%s ya no es una pregunta para el experto %s',
-  'questions:action:group_settings:success' => 'La configuración del grupo fue guardada',
 );
