@@ -144,6 +144,11 @@ return [
 				'\ColdTrick\Questions\Search::optionsAddAnswers' => [],
 			],
 		],
+		'seeds' => [
+			'database' => [
+				'\ColdTrick\Questions\Seeder::register' => [],
+			],
+		],
 		'supported_types' => [
 			'entity_tools' => [
 				'\ColdTrick\Questions\Plugins\EntityTools::registerQuestions' => [],
