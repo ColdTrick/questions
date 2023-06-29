@@ -4,8 +4,12 @@ use Elgg\Database\Clauses\OrderByClause;
 
 /**
  * Question entity class
+ *
+ * @property string $comments_enabled are comments enabled for this question (on|off)
+ * @property int    $solution_time    timestamp by which time an answer should have been provided
+ * @property string $status           status of the question (open|closed)
  */
-class ElggQuestion extends ElggObject {
+class ElggQuestion extends \ElggObject {
 	
 	const SUBTYPE = 'question';
 	const STATUS_OPEN = 'open';
