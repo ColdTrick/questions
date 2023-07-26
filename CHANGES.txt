@@ -1,6 +1,11 @@
 Version history
 ===============
 
+11.1 (2023-07-26):
+
+- added: question database seeder
+- fixed: buttons have a discernible text
+
 11.0 (2023-06-02):
 
 - changed: conflict with Elgg < 5.0
