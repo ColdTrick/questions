@@ -1,20 +1,17 @@
-.elgg-menu-item-show-tags {
-	margin-left: auto !important;
-}
-
 .questions-tags-filter {
-	
 	> .elgg-menu-container {
 		display: inline-block;
 		
-		> .elgg-menu {
-			display: inline-block;
-		}
-	}
-	
-	li.elgg-tag {
-		a {
-			line-height: inherit;
+		li.elgg-tag {
+			> a {
+				border: 1px solid $(border-color-soft);
+				border-radius: 3px;
+				padding: 0.25rem 0.5rem;
+				
+				&:hover {
+					background-color: $(background-color-soft);
+				 }
+			}
 		}
 	}
 }

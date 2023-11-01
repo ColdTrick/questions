@@ -23,9 +23,6 @@ class Cron {
 			return;
 		}
 		
-		echo 'Starting Questions auto-close processing' . PHP_EOL;
-		elgg_log('Starting Questions auto-close processing', 'NOTICE');
-		
 		elgg_call(ELGG_IGNORE_ACCESS, function() use ($auto_close_days) {
 			$site = elgg_get_site_entity();
 			
@@ -78,9 +75,6 @@ class Cron {
 				$session_manager->removeLoggedInUser();
 			}
 		});
-		
-		echo 'Finished Questions auto-close processing' . PHP_EOL;
-		elgg_log('Finished Questions auto-close processing', 'NOTICE');
 	}
 	
 	/**
@@ -96,9 +90,6 @@ class Cron {
 			return;
 		}
 		
-		echo 'Starting Questions experts todo notifications' . PHP_EOL;
-		elgg_log('Starting Questions experts todo notifications', 'NOTICE');
-			
 		$time = (int) $event->getParam('time', time());
 		
 		// get all experts
@@ -238,8 +229,5 @@ class Cron {
 		} else {
 			$session_manager->removeLoggedInUser();
 		}
-		
-		echo 'Finished Questions experts todo notifications' . PHP_EOL;
-		elgg_log('Finished Questions experts todo notifications', 'NOTICE');
 	}
 }

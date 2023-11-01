@@ -9,7 +9,7 @@ elgg_entity_gatekeeper($question_guid, 'object', \ElggQuestion::SUBTYPE, true);
 /* @var $question \ElggQuestion */
 $question = get_entity($question_guid);
 
-elgg_push_entity_breadcrumbs($question, true);
+elgg_push_entity_breadcrumbs($question);
 
 // build page elements
 $form_vars = [

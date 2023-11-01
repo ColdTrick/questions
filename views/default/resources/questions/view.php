@@ -13,7 +13,7 @@ elgg_entity_gatekeeper($guid, 'object', \ElggQuestion::SUBTYPE);
 $question = get_entity($guid);
 
 // set breadcrumb
-elgg_push_entity_breadcrumbs($question, false);
+elgg_push_entity_breadcrumbs($question);
 
 // build page elements
 $title = $question->getDisplayName();
