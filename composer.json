@@ -21,15 +21,7 @@
 		"source": "https://github.com/ColdTrick/questions",
 		"issues": "https://github.com/ColdTrick/questions/issues"
 	},
-	"require": {
-		"composer/installers": "^1.0.8"
-	},
 	"conflict": {
 		"elgg/elgg": "<5.1"
-	},
-	"config": {
-		"allow-plugins": {
-			"composer/installers": true
-		}
 	}
 }
