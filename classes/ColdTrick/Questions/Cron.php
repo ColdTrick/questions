@@ -2,6 +2,7 @@
 
 namespace ColdTrick\Questions;
 
+use Elgg\Database\MetadataTable;
 use Elgg\Database\QueryBuilder;
 use Elgg\Values;
 
@@ -105,7 +106,7 @@ class Cron {
 		set_time_limit(0);
 		
 		$status_where = function (QueryBuilder $qb, $main_alias) {
-			$sub = $qb->subquery('metadata')
+			$sub = $qb->subquery(MetadataTable::TABLE_NAME)
 				->select('entity_guid')
 				->where($qb->compare('name', '=', 'status', ELGG_VALUE_STRING))
 				->andWhere($qb->compare('value', '=', 'closed', ELGG_VALUE_STRING));
@@ -125,7 +126,7 @@ class Cron {
 		// loop through all experts
 		/* @var $expert \ElggUser */
 		foreach ($experts as $expert) {
-			// fake a logged in user
+			// fake a logged-in user
 			$session_manager->setLoggedInUser($expert);
 			
 			$subject = elgg_echo('questions:daily:notification:subject', [], $expert->getLanguage());

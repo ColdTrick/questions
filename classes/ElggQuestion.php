@@ -16,7 +16,7 @@ class ElggQuestion extends \ElggObject {
 	const STATUS_CLOSED = 'closed';
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	protected function initializeAttributes() {
 		parent::initializeAttributes();
@@ -27,7 +27,7 @@ class ElggQuestion extends \ElggObject {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	public function canComment(int $user_guid = 0): bool {
 		if (!$this->commentsEnabled()) {
@@ -47,7 +47,10 @@ class ElggQuestion extends \ElggObject {
 	 */
 	public function getAnswers(array $options = []) {
 		$defaults = [
-			'order_by' => new OrderByClause('time_created', 'asc'),
+			'sort_by' => [
+				'property' => 'time_created',
+				'direction' => 'ASC',
+			],
 		];
 		
 		$overrides = [

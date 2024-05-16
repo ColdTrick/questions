@@ -3,6 +3,7 @@
  * View a question
  */
 
+use Elgg\Database\AnnotationsTable;
 use Elgg\Database\Clauses\OrderByClause;
 use Elgg\Database\QueryBuilder;
 
@@ -56,7 +57,7 @@ if (elgg_is_active_plugin('likes')) {
 	// order answers based on likes
 	$options['selects'] = [
 		function (QueryBuilder $qb, $main_alias) {
-			$sub = $qb->subquery('annotations')
+			$sub = $qb->subquery(AnnotationsTable::TABLE_NAME)
 				->select('count(name)')
 				->where($qb->compare('entity_guid', '=', "{$main_alias}.guid"))
 				->andWhere($qb->compare('name', '=', 'likes', ELGG_VALUE_STRING));

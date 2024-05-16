@@ -12,18 +12,18 @@ class Search {
 	 *
 	 * @param \Elgg\Event $event 'search:config', 'type_subtype_pairs'
 	 *
-	 * @return mixed
+	 * @return null|array
 	 */
-	public static function typeSubtypePairsConfig(\Elgg\Event $event) {
+	public static function typeSubtypePairsConfig(\Elgg\Event $event): ?array {
 		$types = $event->getValue();
 		$objects = elgg_extract('object', $types);
 		if (empty($objects)) {
-			return;
+			return null;
 		}
 		
 		$key = array_search(\ElggAnswer::SUBTYPE, $objects);
 		if ($key === false) {
-			return;
+			return null;
 		}
 		
 		unset($objects[$key]);
@@ -37,9 +37,9 @@ class Search {
 	 *
 	 * @param \Elgg\Event $event 'search:options', 'all'
 	 *
-	 * @return mixed
+	 * @return null|array
 	 */
-	public static function optionsAddAnswers(\Elgg\Event $event) {
+	public static function optionsAddAnswers(\Elgg\Event $event): ?array {
 		$search_params = $event->getValue();
 		
 		$type_subtype_pairs = false;
@@ -50,7 +50,7 @@ class Search {
 		}
 		
 		if (empty($subtypes) || !in_array(\ElggQuestion::SUBTYPE, $subtypes) || in_array(\ElggAnswer::SUBTYPE, $subtypes)) {
-			return;
+			return null;
 		}
 		
 		$subtypes[] = \ElggAnswer::SUBTYPE;

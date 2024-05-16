@@ -24,7 +24,7 @@ class Site {
 			'name' => 'questions',
 			'icon' => 'question',
 			'text' => elgg_echo('questions'),
-			'href' => elgg_generate_url('collection:object:question:all'),
+			'href' => elgg_generate_url('default:object:question'),
 		]);
 		
 		return $result;

@@ -4,11 +4,12 @@ namespace ColdTrick\Questions\Router;
 
 use Elgg\Exceptions\Http\EntityPermissionsException;
 use Elgg\Exceptions\HttpException;
+use Elgg\Router\Middleware\Gatekeeper;
 
 /**
  * Only allow Question experts to view a page
  */
-class ExpertGatekeeper {
+class ExpertGatekeeper extends Gatekeeper {
 	
 	/**
 	 * Validate the page access
@@ -18,9 +19,8 @@ class ExpertGatekeeper {
 	 * @return void
 	 * @throws HttpException
 	 */
-	public function __invoke(\Elgg\Request $request) {
-		// make sure we're logged in
-		$request->elgg()->gatekeeper->assertAuthenticatedUser();
+	public function __invoke(\Elgg\Request $request): void {
+		parent::__invoke($request);
 		
 		// make sure the current user is an expert
 		$page_owner = null;

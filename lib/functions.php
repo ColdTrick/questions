@@ -3,6 +3,7 @@
  * All helper functions for the questions plugin can be found in this file.
  */
 
+use Elgg\Database\EntityTable;
 use Elgg\Database\QueryBuilder;
 
 /**
@@ -52,8 +53,8 @@ function questions_experts_only_answer(): bool {
 /**
  * Check if a user is an expert
  *
- * @param \ElggEntity $container the container where a question was asked, leave empty for any relationship
- * @param \ElggUser   $user      the user to check (defaults to current user)
+ * @param null|\ElggEntity $container the container where a question was asked, leave empty for any relationship
+ * @param null|\ElggUser   $user      the user to check (defaults to current user)
  *
  * @return bool
  */
@@ -221,7 +222,7 @@ function questions_get_group_access_level(\ElggGroup $group) {
 /**
  * Return the number of days it should take to solve a question.
  *
- * @param \ElggEntity $container if a group is provided, first the setting of the group is checked, then the default setting of the site
+ * @param null|\ElggEntity $container if a group is provided, first the setting of the group is checked, then the default setting of the site
  *
  * @return int
  */
@@ -268,8 +269,8 @@ function questions_limited_to_groups(): bool {
 /**
  * Check if a user can ask a question in a container
  *
- * @param \ElggEntity $container the container to check (default: page_owner)
- * @param \ElggUser   $user      the user askting the question (default: current user)
+ * @param null|\ElggEntity $container the container to check (default: page_owner)
+ * @param null|\ElggUser   $user      the user askting the question (default: current user)
  *
  * @return bool
  */
@@ -299,8 +300,8 @@ function questions_can_ask_question(\ElggEntity $container = null, \ElggUser $us
 /**
  * Check if a user can answer a question
  *
- * @param \ElggQuestion $question the question that needs answer
- * @param \ElggUser     $user     the user askting the question (default: current user)
+ * @param null|\ElggQuestion $question the question that needs answer
+ * @param null|\ElggUser     $user     the user askting the question (default: current user)
  *
  * @return bool
  */
@@ -360,8 +361,8 @@ function questions_can_answer_question(\ElggQuestion $question, \ElggUser $user 
  *
  * NOTE: for now this is only supported in groups
  *
- * @param \ElggEntity $container the container of the questions (group or user)
- * @param \ElggUser   $user      the user doing the action (default: current user)
+ * @param \ElggEntity    $container the container of the questions (group or user)
+ * @param null|\ElggUser $user      the user doing the action (default: current user)
  *
  * @return bool
  */
@@ -418,7 +419,7 @@ function questions_get_expert_where_sql(int $user_guid = 0): ?callable {
 		// site expert
 		if (questions_is_expert($site, $user)) {
 			// filter all non group questions
-			$sub = $qb->subquery('entities')
+			$sub = $qb->subquery(EntityTable::TABLE_NAME)
 				->select('guid')
 				->where($qb->compare('type', '=', 'group', ELGG_VALUE_STRING))
 				->andWhere($qb->compare('enabled', '=', 'yes', ELGG_VALUE_STRING));

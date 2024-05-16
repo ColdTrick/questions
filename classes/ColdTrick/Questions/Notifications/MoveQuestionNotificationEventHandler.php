@@ -10,7 +10,7 @@ use Elgg\Notifications\NotificationEventHandler;
 class MoveQuestionNotificationEventHandler extends NotificationEventHandler {
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	public function getSubscriptions(): array {
 		if (!questions_experts_enabled()) {
@@ -60,21 +60,21 @@ class MoveQuestionNotificationEventHandler extends NotificationEventHandler {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	protected function getNotificationSubject(\ElggUser $recipient, string $method): string {
 		return elgg_echo('questions:notifications:move:subject', [], $recipient->getLanguage());
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	protected function getNotificationSummary(\ElggUser $recipient, string $method): string {
 		return elgg_echo('questions:notifications:move:summary', [], $recipient->getLanguage());
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	protected function getNotificationBody(\ElggUser $recipient, string $method): string {
 		return elgg_echo('questions:notifications:move:message', [
@@ -93,7 +93,7 @@ class MoveQuestionNotificationEventHandler extends NotificationEventHandler {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	public static function isConfigurableByUser(): bool {
 		return false;

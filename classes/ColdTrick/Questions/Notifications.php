@@ -110,7 +110,7 @@ class Notifications {
 	 */
 	public static function addQuestionSubscribersToCommentSubscribers(\Elgg\Event $event): ?array {
 		$notification_event = $event->getParam('event');
-		if (!$event instanceof SubscriptionNotificationEvent) {
+		if (!$notification_event instanceof SubscriptionNotificationEvent) {
 			return null;
 		}
 		

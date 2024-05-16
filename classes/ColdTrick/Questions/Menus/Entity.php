@@ -36,22 +36,22 @@ class Entity {
 		
 		$result[] = \ElggMenuItem::factory([
 			'name' => 'questions-mark',
+			'icon' => 'check',
 			'text' => elgg_echo('questions:menu:entity:answer:mark'),
 			'href' => elgg_generate_action_url('answers/toggle_mark', [
 				'guid' => $entity->guid,
 			]),
-			'icon' => 'check',
 			'item_class' => $entity->isCorrectAnswer() ? 'hidden' : '',
 			'data-toggle' => 'questions-unmark',
 		]);
 		
 		$result[] = \ElggMenuItem::factory([
 			'name' => 'questions-unmark',
+			'icon' => 'undo',
 			'text' => elgg_echo('questions:menu:entity:answer:unmark'),
 			'href' => elgg_generate_action_url('answers/toggle_mark', [
 				'guid' => $entity->guid,
 			]),
-			'icon' => 'undo',
 			'item_class' => $entity->isCorrectAnswer() ? '' : 'hidden',
 			'data-toggle' => 'questions-mark',
 		]);

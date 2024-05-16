@@ -6,7 +6,7 @@
 $answer_guid = (int) elgg_extract('guid', $vars);
 elgg_entity_gatekeeper($answer_guid, 'object', \ElggAnswer::SUBTYPE, true);
 
-/* @var $answer ElggAnswer */
+/* @var $answer \ElggAnswer */
 $answer = get_entity($answer_guid);
 
 $question = $answer->getContainerEntity();

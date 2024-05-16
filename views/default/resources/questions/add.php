@@ -20,10 +20,8 @@ if (questions_limited_to_groups()) {
 	$form_vars['class'] = 'questions-validate-container';
 }
 
-$content = elgg_view_form('object/question/save', $form_vars);
-
 // draw page
 echo elgg_view_page(elgg_echo('add:object:question'), [
-	'content' => $content,
+	'content' => elgg_view_form('object/question/save', $form_vars),
 	'filter_id' => 'question/edit',
 ]);

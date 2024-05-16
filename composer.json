@@ -22,6 +22,6 @@
 		"issues": "https://github.com/ColdTrick/questions/issues"
 	},
 	"conflict": {
-		"elgg/elgg": "<5.1"
+		"elgg/elgg": "<6.0"
 	}
 }

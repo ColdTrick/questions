@@ -10,5 +10,4 @@ $params = [
 	'no_results' => elgg_echo('questions:none'),
 ];
 $params = $params + $vars;
-
 echo elgg_view('groups/profile/module', $params);

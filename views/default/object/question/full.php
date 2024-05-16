@@ -51,5 +51,4 @@ if ($question->getStatus() === ElggQuestion::STATUS_CLOSED) {
 }
 
 $params = $params + $vars;
-
 echo elgg_view('object/elements/full', $params);

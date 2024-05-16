@@ -1,5 +1,8 @@
 <?php
 
+use Elgg\Database\MetadataTable;
+use Elgg\Database\QueryBuilder;
+
 $tags = get_input('tags', []);
 if (!is_array($tags)) {
 	$tags = [$tags];
@@ -11,12 +14,12 @@ $options['limit'] = 10;
 $options['tag_names'] = 'tags';
 
 $options['wheres'] = [];
-$options['wheres'][] = function(\Elgg\Database\QueryBuilder $qb, $main_alias) use ($tags) {
-	$subquery = $qb->subquery('metadata', 'md_sub');
-	$subquery->select('md_sub.entity_guid');
+$options['wheres'][] = function(QueryBuilder $qb, $main_alias) use ($tags) {
+	$subquery = $qb->subquery(MetadataTable::TABLE_NAME, 'md_sub');
+	$subquery->select("{$subquery->getTableAlias()}.entity_guid");
 	
 	foreach ($tags as $index => $tag) {
-		$md = $subquery->joinMetadataTable('md_sub', 'entity_guid', 'tags', 'inner', "mdf{$index}");
+		$md = $subquery->joinMetadataTable($subquery->getTableAlias(), 'entity_guid', 'tags', 'inner', "mdf{$index}");
 		
 		$subquery->andWhere($qb->compare("{$md}.value", '=', $tag, ELGG_VALUE_STRING));
 	}

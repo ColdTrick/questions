@@ -16,19 +16,8 @@ if (!$answer instanceof \ElggAnswer) {
 $subject = $item->getSubjectEntity();
 $question = $answer->getContainerEntity();
 
-$subject_link = elgg_view('output/url', [
-	'text' => $subject->getDisplayName(),
-	'href' => $subject->getURL(),
-	'class' => 'elgg-river-subject',
-	'is_trusted' => true,
-]);
-
-$object_link = elgg_view('output/url', [
-	'text' => elgg_get_excerpt($question->getDisplayName(), 100),
-	'href' => $question->getURL(),
-	'class' => 'elgg-river-object',
-	'is_trusted' => true,
-]);
+$subject_link = elgg_view_entity_url($subject, ['class' => 'elgg-river-subject']);
+$object_link = elgg_view_entity_url($question, ['class' => 'elgg-river-object']);
 
 echo elgg_view('river/elements/layout', [
 	'item' => $item,

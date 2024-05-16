@@ -3,8 +3,8 @@
  * Elgg questions plugin todo page
  */
 
+use Elgg\Database\EntityTable;
 use Elgg\Database\QueryBuilder;
-use Elgg\Exceptions\Http\EntityPermissionsException;
 
 $page_owner = elgg_get_logged_in_user_entity();
 
@@ -31,11 +31,11 @@ $options = [
 	'subtype' => \ElggQuestion::SUBTYPE,
 	'wheres' => [
 		function (QueryBuilder $qb, $main_alias) {
-			$sub = $qb->subquery('entities', 'a');
-			$sub->joinMetadataTable('a', 'guid', 'correct_answer');
-			$sub->select('a.container_guid')
-				->andWhere($qb->compare('a.type', '=', 'object', ELGG_VALUE_STRING))
-				->andWhere($qb->compare('a.subtype', '=', \ElggAnswer::SUBTYPE, ELGG_VALUE_STRING));
+			$sub = $qb->subquery(EntityTable::TABLE_NAME, 'a');
+			$sub->joinMetadataTable($sub->getTableAlias(), 'guid', 'correct_answer');
+			$sub->select("{$sub->getTableAlias()}.container_guid")
+				->andWhere($qb->compare("{$sub->getTableAlias()}.type", '=', 'object', ELGG_VALUE_STRING))
+				->andWhere($qb->compare("{$sub->getTableAlias()}.subtype", '=', \ElggAnswer::SUBTYPE, ELGG_VALUE_STRING));
 			
 			return $qb->compare("{$main_alias}.guid", 'NOT IN', $sub->getSQL());
 		},
@@ -61,7 +61,7 @@ if (!empty($tags)) {
 		$tags = elgg_string_to_array($tags);
 	}
 	
-	$options['wheres'][] = function(\Elgg\Database\QueryBuilder $qb, $main_alias) use ($tags) {
+	$options['wheres'][] = function(QueryBuilder $qb, $main_alias) use ($tags) {
 		$ands = [];
 		foreach ($tags as $index => $tag) {
 			$md = $qb->joinMetadataTable($main_alias, 'guid', 'tags', 'inner', "md{$index}");

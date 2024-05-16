@@ -7,15 +7,12 @@ if (!$answer instanceof ElggAnswer) {
 	return;
 }
 
-$full_view = (bool) elgg_extract('full_view', $vars, false);
-
 /* @var $question ElggQuestion */
 $question = elgg_call(ELGG_IGNORE_ACCESS, function() use ($answer) {
 	return $answer->getContainerEntity();
 });
 
 $params = [
-	'entity' => $answer,
 	'access' => false,
 	'icon_entity' => $answer->getOwnerEntity(),
 	'imprint' => [],
@@ -37,20 +34,12 @@ if ($correct_answer) {
 	];
 }
 
-if (!$full_view) {
+if (!(bool) elgg_extract('full_view', $vars, false)) {
 	// listing view
 	
 	// make title
-	$answer_link = elgg_view('output/url', [
-		'text' => elgg_echo('questions:search:answer:title'),
-		'href' => $answer->getURL(),
-		'is_trusted' => true,
-	]);
-	$question_link = elgg_view('output/url', [
-		'text' => $question->getDisplayName(),
-		'href' => $question->getURL(),
-		'is_trusted' => true,
-	]);
+	$answer_link = elgg_view_url($answer->getURL(), elgg_echo('questions:search:answer:title'));
+	$question_link = elgg_view_entity_url($question);
 	
 	$params['title'] = elgg_echo('generic_comment:on', [$answer_link, $question_link]);
 	

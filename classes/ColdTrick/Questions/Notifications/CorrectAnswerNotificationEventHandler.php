@@ -10,21 +10,21 @@ use Elgg\Notifications\NotificationEventHandler;
 class CorrectAnswerNotificationEventHandler extends NotificationEventHandler {
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	protected function getNotificationSubject(\ElggUser $recipient, string $method): string {
 		return elgg_echo('questions:notifications:answer:correct:subject', [$this->getQuestion()->getDisplayName()], $recipient->getLanguage());
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	protected function getNotificationSummary(\ElggUser $recipient, string $method): string {
 		return elgg_echo('questions:notifications:answer:correct:summary', [$this->getQuestion()->getDisplayName()], $recipient->getLanguage());
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	protected function getNotificationBody(\ElggUser $recipient, string $method): string {
 		return elgg_echo('questions:notifications:answer:correct:message', [
@@ -45,7 +45,7 @@ class CorrectAnswerNotificationEventHandler extends NotificationEventHandler {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	public static function isConfigurableByUser(): bool {
 		return false;

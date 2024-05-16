@@ -2,13 +2,15 @@
 
 /**
  * Answer entity class
+ *
+ * @property bool $correct_answer is this the correct answer
  */
 class ElggAnswer extends \ElggObject {
 	
 	const SUBTYPE = 'answer';
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	protected function initializeAttributes() {
 		parent::initializeAttributes();
@@ -17,7 +19,7 @@ class ElggAnswer extends \ElggObject {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	public function getURL(): string {
 		// make sure we can get the container
@@ -33,7 +35,7 @@ class ElggAnswer extends \ElggObject {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	public function canComment($user_guid = 0): bool {
 		$container = $this->getContainerEntity();
@@ -47,7 +49,7 @@ class ElggAnswer extends \ElggObject {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	public function getDisplayName(): string {
 		$question = $this->getContainerEntity();
@@ -56,9 +58,9 @@ class ElggAnswer extends \ElggObject {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
-	public function delete(bool $recursive = true): bool {
+	protected function persistentDelete(bool $recursive = true): bool {
 		// make sure the question gets reopened
 		if ($this->isCorrectAnswer()) {
 			// only if this is the correct answer
@@ -67,7 +69,7 @@ class ElggAnswer extends \ElggObject {
 			});
 		}
 		
-		return parent::delete($recursive);
+		return parent::persistentDelete($recursive);
 	}
 	
 	/**
@@ -99,7 +101,7 @@ class ElggAnswer extends \ElggObject {
 	/**
 	 * Check if the user can mark this answer as the correct one
 	 *
-	 * @param \ElggUser $user (optional) user to check the ability for (default: current user)
+	 * @param null|\ElggUser $user (optional) user to check the ability for (default: current user)
 	 *
 	 * @return bool
 	 */

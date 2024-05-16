@@ -10,7 +10,7 @@ use Elgg\Notifications\NotificationEventHandler;
 class CreateQuestionNotificationEventHandler extends NotificationEventHandler {
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	public function getSubscriptions(): array {
 		$result = parent::getSubscriptions();
@@ -65,21 +65,21 @@ class CreateQuestionNotificationEventHandler extends NotificationEventHandler {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	protected function getNotificationSubject(\ElggUser $recipient, string $method): string {
 		return elgg_echo('questions:notifications:create:subject', [], $recipient->getLanguage());
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	protected function getNotificationSummary(\ElggUser $recipient, string $method): string {
 		return elgg_echo('questions:notifications:create:summary', [], $recipient->getLanguage());
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	protected function getNotificationBody(\ElggUser $recipient, string $method): string {
 		return elgg_echo('questions:notifications:create:message', [
@@ -98,7 +98,7 @@ class CreateQuestionNotificationEventHandler extends NotificationEventHandler {
 	}
 			
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	protected static function isConfigurableForGroup(\ElggGroup $group): bool {
 		return $group->isToolEnabled('questions');

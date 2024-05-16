@@ -16,7 +16,6 @@ if ((bool) elgg_extract('full_view', $vars, false)) {
 }
 
 $params = [
-	'entity' => $question,
 	'icon_entity' => $question->getOwnerEntity(),
 ];
 
@@ -62,10 +61,8 @@ if ($num_answers > 0) {
 	];
 }
 
-$excerpt = elgg_get_excerpt((string) $question->description);
-
-$params['content'] = $excerpt;
+$params['content'] = elgg_get_excerpt((string) $question->description);
 $params['imprint'] = $imprint;
-$params = $params + $vars;
 
+$params = $params + $vars;
 echo elgg_view('object/elements/summary', $params);

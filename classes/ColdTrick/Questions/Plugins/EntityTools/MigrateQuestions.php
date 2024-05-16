@@ -10,21 +10,21 @@ use ColdTrick\EntityTools\Migrate;
 class MigrateQuestions extends Migrate {
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	public function canBackDate(): bool {
 		return true;
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	public function canChangeContainer(): bool {
 		return true;
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	public function canChangeOwner(): bool {
 		return true;
