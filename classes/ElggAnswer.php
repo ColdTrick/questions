@@ -64,7 +64,7 @@ class ElggAnswer extends \ElggObject {
 		// make sure the question gets reopened
 		if ($this->isCorrectAnswer()) {
 			// only if this is the correct answer
-			elgg_call(ELGG_IGNORE_ACCESS, function() {
+			elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DELETED_ENTITIES, function() {
 				$this->undoMarkAsCorrect();
 			});
 		}

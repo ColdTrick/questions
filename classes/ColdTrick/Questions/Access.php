@@ -27,7 +27,7 @@ class Access {
 		}
 		
 		// ignore access for this part
-		elgg_call(ELGG_IGNORE_ACCESS, function() use ($entity) {
+		elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DELETED_ENTITIES, function() use ($entity) {
 			$answers = $entity->getAnswers([
 				'limit' => false,
 				'batch' => true,
