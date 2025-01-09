@@ -71,6 +71,14 @@ class Permissions {
 		
 		/* @var $returnvalue bool */
 		$returnvalue = $event->getValue();
+		if ($entity instanceof \ElggAnswer) {
+			$container = $entity->getContainerEntity()?->getContainerEntity();
+
+			// use default access for group editors to moderate answers otherwise only allow for owners
+			if (!$container instanceof \ElggGroup || !$container->canEdit($user->guid)) {
+				$returnvalue = $entity->owner_guid === $user->guid;
+			}
+		}
 		
 		// expert only changes
 		if (questions_experts_enabled()) {
