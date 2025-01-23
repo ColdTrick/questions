@@ -1,6 +1,10 @@
 Version history
 ===============
 
+13.0.1 (2025-01-23):
+
+- fixed: questions owners should not be able to edit answers
+
 13.0 (2024-06-28):
 
 - added: restorable capability
