@@ -58,7 +58,7 @@ function questions_experts_only_answer(): bool {
  *
  * @return bool
  */
-function questions_is_expert(\ElggEntity $container = null, \ElggUser $user = null): bool {
+function questions_is_expert(?\ElggEntity $container = null, ?\ElggUser $user = null): bool {
 	if (!questions_experts_enabled()) {
 		return false;
 	}
@@ -226,7 +226,7 @@ function questions_get_group_access_level(\ElggGroup $group) {
  *
  * @return int
  */
-function questions_get_solution_time(\ElggEntity $container = null): int {
+function questions_get_solution_time(?\ElggEntity $container = null): int {
 	static $plugin_setting;
 	
 	if (!isset($plugin_setting)) {
@@ -270,11 +270,11 @@ function questions_limited_to_groups(): bool {
  * Check if a user can ask a question in a container
  *
  * @param null|\ElggEntity $container the container to check (default: page_owner)
- * @param null|\ElggUser   $user      the user askting the question (default: current user)
+ * @param null|\ElggUser   $user      the user asking the question (default: current user)
  *
  * @return bool
  */
-function questions_can_ask_question(\ElggEntity $container = null, \ElggUser $user = null): bool {
+function questions_can_ask_question(?\ElggEntity $container = null, ?\ElggUser $user = null): bool {
 	// default to page owner
 	if (!$container instanceof \ElggEntity) {
 		$container = elgg_get_page_owner_entity();
@@ -300,12 +300,12 @@ function questions_can_ask_question(\ElggEntity $container = null, \ElggUser $us
 /**
  * Check if a user can answer a question
  *
- * @param null|\ElggQuestion $question the question that needs answer
- * @param null|\ElggUser     $user     the user askting the question (default: current user)
+ * @param \ElggQuestion  $question the question that needs answer
+ * @param null|\ElggUser $user     the user asking the question (default: current user)
  *
  * @return bool
  */
-function questions_can_answer_question(\ElggQuestion $question, \ElggUser $user = null): bool {
+function questions_can_answer_question(\ElggQuestion $question, ?\ElggUser $user = null): bool {
 	static $general_experts_only;
 	
 	// default to current user
@@ -366,7 +366,7 @@ function questions_can_answer_question(\ElggQuestion $question, \ElggUser $user 
  *
  * @return bool
  */
-function questions_auto_mark_answer_correct(\ElggEntity $container, \ElggUser $user = null) {
+function questions_auto_mark_answer_correct(\ElggEntity $container, ?\ElggUser $user = null) {
 	if (!$container instanceof \ElggGroup) {
 		// for now only supported in groups
 		return false;

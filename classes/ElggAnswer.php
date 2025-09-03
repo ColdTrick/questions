@@ -105,7 +105,7 @@ class ElggAnswer extends \ElggObject {
 	 *
 	 * @return bool
 	 */
-	public function canMarkAnswer(\ElggUser $user = null): bool {
+	public function canMarkAnswer(?\ElggUser $user = null): bool {
 		// check if we have a user
 		if (empty($user)) {
 			$user = elgg_get_logged_in_user_entity();
