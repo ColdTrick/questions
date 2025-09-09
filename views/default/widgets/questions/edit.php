@@ -45,7 +45,6 @@ echo elgg_view('object/widget/edit/num_display', [
 	'entity' => $widget,
 	'default' => 5,
 	'name' => 'limit',
-	'min' => 1,
 ]);
 
 echo elgg_view_field([
