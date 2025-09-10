@@ -9,6 +9,7 @@ return [
 	 */
 	'item:object:answer' => "Answer",
 	'item:object:question' => "Question",
+	'list:object:question:no_results' => 'No questions have been submitted yet.',
 	
 	'collection:object:question' => "Questions",
 	'collection:object:answer' => "Answers",
@@ -51,7 +52,6 @@ return [
 	'questions:todo' => 'Todo',
 	'questions:todo:none' => 'There is nothing Todo, keep up the good work!',
 	'questions:owner' => "%s's Questions",
-	'questions:none' => "No questions have been submitted yet.",
 	'questions:group' => 'Group questions',
 	'groups:tool:questions' => 'Enable group questions',
 	'groups:tool:questions:description' => 'Allow group members to ask questions in this group.',

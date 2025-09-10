@@ -24,7 +24,7 @@ return array (
   'questions:todo' => 'à Faire',
   'questions:todo:none' => 'Il n’y a rien à faire. Continuer le bon travail!',
   'questions:owner' => 'Questions de %s',
-  'questions:none' => 'Aucune question n\'a encore été soumise.',
+  'list:object:question:no_results' => 'Aucune question n\'a encore été soumise.',
   'questions:group' => 'Questions de groupe',
   'questions:edit:question:title' => 'Question',
   'questions:edit:question:description' => 'Détails',

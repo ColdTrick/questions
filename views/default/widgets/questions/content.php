@@ -20,7 +20,7 @@ $options = [
 	'limit' => $limit,
 	'full_view' => false,
 	'pagination' => false,
-	'no_results' => elgg_echo('questions:none'),
+	'no_results' => true,
 	'widget_more' => elgg_view_url($widget->getURL(), elgg_echo('widget:questions:more'))
 ];
 

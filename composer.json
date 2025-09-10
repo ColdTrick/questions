@@ -2,7 +2,14 @@
 	"name": "coldtrick/questions",
 	"description": "Q&A functionality analogous to Quora, Stack Overflow, or Facebook Questions",
 	"homepage": "https://www.coldtrick.com",
-	"authors": [
+    "type": "elgg-plugin",
+    "keywords": ["elgg", "plugin"],
+    "license": "GPL-2.0-only",
+    "support": {
+        "source": "https://github.com/ColdTrick/questions",
+        "issues": "https://github.com/ColdTrick/questions/issues"
+    },
+    "authors": [
 		{
 			"name": "Evan Winslow",
 			"homepage": "https://github.com/ewinslow/",
@@ -14,14 +21,7 @@
 			"role": "Developer"
 		}
 	],
-	"type": "elgg-plugin",
-	"keywords": ["elgg", "plugin"],
-	"license": "GPL-2.0-only",
-	"support": {
-		"source": "https://github.com/ColdTrick/questions",
-		"issues": "https://github.com/ColdTrick/questions/issues"
-	},
 	"conflict": {
-		"elgg/elgg": "<6.0"
+		"elgg/elgg": "<6.3"
 	}
 }

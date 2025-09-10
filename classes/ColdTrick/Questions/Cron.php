@@ -25,12 +25,6 @@ class Cron {
 		}
 		
 		elgg_call(ELGG_IGNORE_ACCESS, function() use ($auto_close_days) {
-			$site = elgg_get_site_entity();
-			
-			// backup session
-			$backup_user = elgg_get_logged_in_user_entity();
-			$session_manager = elgg()->session_manager;
-			
 			// get open questions last modified more than x days ago
 			/* @var $batch \ElggBatch */
 			$batch = elgg_get_entities([
@@ -44,42 +38,25 @@ class Cron {
 				'batch' => true,
 				'batch_inc_offset' => false,
 			]);
+			
 			/* @var $question \ElggQuestion */
 			foreach ($batch as $question) {
+				/* @var $owner \ElggUser */
 				$owner = $question->getOwnerEntity();
-				$session_manager->setLoggedInUser($owner);
 				
 				// close the question
 				$question->close();
 				
 				// notify the user that the question was closed
-				$subject = elgg_echo('questions:notification:auto_close:subject', [$question->getDisplayName()]);
-				$message = elgg_echo('questions:notification:auto_close:message', [
-					$question->getDisplayName(),
-					$auto_close_days,
-					$question->getURL(),
+				$owner->notify('close', $question, [
+					'days' => $auto_close_days,
 				]);
-				
-				$notification_params = [
-					'summary' => elgg_echo('questions:notification:auto_close:summary', [$question->getDisplayName()]),
-					'object' => $question,
-					'action' => 'close',
-				];
-				
-				notify_user($owner->guid, $site->guid, $subject, $message, $notification_params);
-			}
-			
-			// restore session
-			if ($backup_user instanceof \ElggUser) {
-				$session_manager->setLoggedInUser($backup_user);
-			} else {
-				$session_manager->removeLoggedInUser();
 			}
 		});
 	}
 	
 	/**
-	 * A event handler for the CRON, so we can send out notifications to the experts about their workload
+	 * An event handler for the CRON, so we can send out notifications to the experts about their workload
 	 *
 	 * @param \Elgg\Event $event 'cron', 'daily'
 	 *
@@ -109,7 +86,7 @@ class Cron {
 			$sub = $qb->subquery(MetadataTable::TABLE_NAME)
 				->select('entity_guid')
 				->where($qb->compare('name', '=', 'status', ELGG_VALUE_STRING))
-				->andWhere($qb->compare('value', '=', 'closed', ELGG_VALUE_STRING));
+				->andWhere($qb->compare('value', '=', \ElggQuestion::STATUS_CLOSED, ELGG_VALUE_STRING));
 			
 			return $qb->compare("{$main_alias}.guid", 'NOT IN', $sub->getSQL());
 		};
@@ -129,8 +106,9 @@ class Cron {
 			// fake a logged-in user
 			$session_manager->setLoggedInUser($expert);
 			
-			$subject = elgg_echo('questions:daily:notification:subject', [], $expert->getLanguage());
-			$message = '';
+			$overdue = '';
+			$due = '';
+			$new = '';
 			
 			$container_where = questions_get_expert_where_sql($expert->guid);
 			if (empty($container_where)) {
@@ -157,14 +135,9 @@ class Cron {
 			];
 			$questions = elgg_get_entities($question_options);
 			if (!empty($questions)) {
-				$message .= elgg_echo('questions:daily:notification:message:overdue', [], $expert->getLanguage()) . PHP_EOL;
-				
 				foreach ($questions as $question) {
-					$message .= " - {$question->getDisplayName()} ({$question->getURL()})" . PHP_EOL;
+					$overdue .= " - {$question->getDisplayName()} ({$question->getURL()})" . PHP_EOL;
 				}
-				
-				$message .= elgg_echo('questions:daily:notification:message:more', [], $expert->getLanguage());
-				$message .= ' ' . elgg_generate_url('collection:object:question:todo') . PHP_EOL . PHP_EOL;
 			}
 			
 			// get due questions
@@ -186,14 +159,9 @@ class Cron {
 			
 			$questions = elgg_get_entities($question_options);
 			if (!empty($questions)) {
-				$message .= elgg_echo('questions:daily:notification:message:due', [], $expert->getLanguage()) . PHP_EOL;
-				
 				foreach ($questions as $question) {
-					$message .= " - {$question->getDisplayName()} ({$question->getURL()})" . PHP_EOL;
+					$due .= " - {$question->getDisplayName()} ({$question->getURL()})" . PHP_EOL;
 				}
-				
-				$message .= elgg_echo('questions:daily:notification:message:more', [], $expert->getLanguage());
-				$message .= ' ' . elgg_generate_url('collection:object:question:todo') . PHP_EOL . PHP_EOL;
 			}
 			
 			// get new questions
@@ -208,20 +176,18 @@ class Cron {
 			
 			$questions = elgg_get_entities($question_options);
 			if (!empty($questions)) {
-				$message .= elgg_echo('questions:daily:notification:message:new', [], $expert->getLanguage()) . PHP_EOL;
-				
 				foreach ($questions as $question) {
-					$message .= " - {$question->getDisplayName()} ({$question->getURL()})" . PHP_EOL;
+					$new .= " - {$question->getDisplayName()} ({$question->getURL()})" . PHP_EOL;
 				}
-				
-				$message .= elgg_echo('questions:daily:notification:message:more', [], $expert->getLanguage());
-				$message .= ' ' . elgg_generate_url('collection:object:question:all') . PHP_EOL . PHP_EOL;
 			}
 			
-			// is there content in the message
-			if (!empty($message)) {
-				// force to email
-				notify_user($expert->guid, 0, $subject, $message, [], 'email');
+			// is there content for the message
+			if (!empty($overdue) || !empty($due) || !empty($new)) {
+				$expert->notify('questions_expert_workload', $expert, [
+					'overdue' => $overdue,
+					'due' => $due,
+					'new' => $new,
+				]);
 			}
 		}
 		

@@ -82,7 +82,7 @@ Om de reactie te bekijken, klik hier:
   'questions:everyone' => 'Alle Vragen',
   'questions:todo' => 'Todo',
   'questions:owner' => '%s\'s Vragen',
-  'questions:none' => 'Er zijn nog geen vragen gesteld.',
+  'list:object:question:no_results' => 'Er zijn nog geen vragen gesteld.',
   'questions:group' => 'Groep vragen',
   'questions:edit:question:title' => 'Vraag',
   'questions:edit:question:description' => 'Toelichting',

@@ -1,7 +1,5 @@
 <?php
 
-use Elgg\Database\Clauses\OrderByClause;
-
 /**
  * Question entity class
  *
@@ -11,9 +9,9 @@ use Elgg\Database\Clauses\OrderByClause;
  */
 class ElggQuestion extends \ElggObject {
 	
-	const SUBTYPE = 'question';
-	const STATUS_OPEN = 'open';
-	const STATUS_CLOSED = 'closed';
+	public const SUBTYPE = 'question';
+	public const STATUS_OPEN = 'open';
+	public const STATUS_CLOSED = 'closed';
 	
 	/**
 	 * {@inheritdoc}
@@ -40,9 +38,9 @@ class ElggQuestion extends \ElggObject {
 	/**
 	 * Get the answers on this question
 	 *
-	 * @param array $options accepts all elgg_get_entities options
+	 * @param array $options accepts all elgg_get_entities() options
 	 *
-	 * @return false|int|ElggAnswer[]
+	 * @return false|int|\ElggAnswer[]
 	 * @see elgg_get_entities()
 	 */
 	public function getAnswers(array $options = []) {
@@ -67,7 +65,7 @@ class ElggQuestion extends \ElggObject {
 	/**
 	 * List the answers on this question
 	 *
-	 * @param array $options accepts all elgg_list_entities options
+	 * @param array $options accepts all elgg_list_entities() options
 	 *
 	 * @return string
 	 * @see elgg_list_entities()

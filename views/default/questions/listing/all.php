@@ -12,7 +12,7 @@ use Elgg\Database\QueryBuilder;
 $defaults = [
 	'type' => 'object',
 	'subtype' => \ElggQuestion::SUBTYPE,
-	'no_results' => elgg_echo('questions:none'),
+	'no_results' => true,
 	'wheres' => [],
 ];
 

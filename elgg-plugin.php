@@ -1,9 +1,11 @@
 <?php
 
-use ColdTrick\Questions\Notifications\CreateQuestionNotificationEventHandler;
-use ColdTrick\Questions\Notifications\MoveQuestionNotificationEventHandler;
-use ColdTrick\Questions\Notifications\CreateAnswerNotificationEventHandler;
-use ColdTrick\Questions\Notifications\CorrectAnswerNotificationEventHandler;
+use ColdTrick\Questions\Notifications\AutoCloseQuestionHandler;
+use ColdTrick\Questions\Notifications\CorrectAnswerHandler;
+use ColdTrick\Questions\Notifications\CreateAnswerHandler;
+use ColdTrick\Questions\Notifications\CreateQuestionHandler;
+use ColdTrick\Questions\Notifications\ExpertWorkloadHandler;
+use ColdTrick\Questions\Notifications\MoveQuestionHandler;
 use Elgg\Router\Middleware\Gatekeeper;
 use Elgg\Router\Middleware\GroupPageOwnerGatekeeper;
 use Elgg\Router\Middleware\UserPageOwnerGatekeeper;
@@ -36,6 +38,7 @@ return [
 				'searchable' => true,
 				'likable' => true,
 				'restorable' => true,
+				'subscribable' => true,
 			],
 		],
 		[
@@ -128,9 +131,6 @@ return [
 			'menu:social' => [
 				'\ColdTrick\Questions\Menus\Social::removeCommentsLinkForAnswers' => ['priority' => 600],
 			],
-			'menu:title:object:question' => [
-				\Elgg\Notifications\RegisterSubscriptionMenuItemsHandler::class => [],
-			],
 			'menu:user_hover' => [
 				'\ColdTrick\Questions\Menus\UserHover::registerToggleExpert' => [],
 			],
@@ -169,12 +169,18 @@ return [
 	'notifications' => [
 		'object' => [
 			'answer' => [
-				'correct' => CorrectAnswerNotificationEventHandler::class,
-				'create' => CreateAnswerNotificationEventHandler::class,
+				'correct' => CorrectAnswerHandler::class,
+				'create' => CreateAnswerHandler::class,
 			],
 			'question' => [
-				'create' => CreateQuestionNotificationEventHandler::class,
-				'move' => MoveQuestionNotificationEventHandler::class,
+				'close' => AutoCloseQuestionHandler::class,
+				'create' => CreateQuestionHandler::class,
+				'move' => MoveQuestionHandler::class,
+			],
+		],
+		'user' => [
+			'user' => [
+				'questions_expert_workload' => ExpertWorkloadHandler::class,
 			],
 		],
 	],
@@ -220,6 +226,9 @@ return [
 			'resource' => 'questions/group',
 			'defaults' => [
 				'subpage' => 'all',
+			],
+			'required_plugins' => [
+				'groups',
 			],
 			'middleware' => [
 				GroupPageOwnerGatekeeper::class,

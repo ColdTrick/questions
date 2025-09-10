@@ -7,7 +7,7 @@ use Elgg\Notifications\NotificationEventHandler;
 /**
  * Notification handler for when a question is created
  */
-class CreateQuestionNotificationEventHandler extends NotificationEventHandler {
+class CreateQuestionHandler extends NotificationEventHandler {
 	
 	/**
 	 * {@inheritdoc}

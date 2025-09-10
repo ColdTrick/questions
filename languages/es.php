@@ -24,7 +24,7 @@ return array (
   'questions:todo' => 'Pendientes',
   'questions:todo:none' => 'No hay pendientes, excelente trabajo!',
   'questions:owner' => 'Preguntas de %s',
-  'questions:none' => 'No se han realizado preguntas aun.',
+  'list:object:question:no_results' => 'No se han realizado preguntas aun.',
   'questions:group' => 'Preguntas en el grupo',
   'questions:edit:question:title' => 'Pregunta',
   'questions:edit:question:description' => 'Detalles',

@@ -7,7 +7,7 @@ use Elgg\Notifications\NotificationEventHandler;
 /**
  * Notification handler for when a correct answer is given
  */
-class CorrectAnswerNotificationEventHandler extends NotificationEventHandler {
+class CorrectAnswerHandler extends NotificationEventHandler {
 	
 	/**
 	 * {@inheritdoc}

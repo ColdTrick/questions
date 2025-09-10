@@ -1,17 +1,9 @@
 <?php
-/**
- * Question entity view
- */
 
 use Elgg\Values;
 
 $question = elgg_extract('entity', $vars);
 if (!$question instanceof \ElggQuestion) {
-	return;
-}
-
-if ((bool) elgg_extract('full_view', $vars, false)) {
-	echo elgg_view('object/question/full', $vars);
 	return;
 }
 

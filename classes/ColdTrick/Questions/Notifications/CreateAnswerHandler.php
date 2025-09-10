@@ -7,7 +7,7 @@ use Elgg\Notifications\NotificationEventHandler;
 /**
  * Notification handler for when an answer is created
  */
-class CreateAnswerNotificationEventHandler extends NotificationEventHandler {
+class CreateAnswerHandler extends NotificationEventHandler {
 	
 	/**
 	 * {@inheritdoc}

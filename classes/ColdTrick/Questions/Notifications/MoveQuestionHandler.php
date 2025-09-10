@@ -7,7 +7,7 @@ use Elgg\Notifications\NotificationEventHandler;
 /**
  * Notification handler for when a Question is moved to a different container (group)
  */
-class MoveQuestionNotificationEventHandler extends NotificationEventHandler {
+class MoveQuestionHandler extends NotificationEventHandler {
 	
 	/**
 	 * {@inheritdoc}

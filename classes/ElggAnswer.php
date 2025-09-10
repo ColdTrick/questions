@@ -7,7 +7,7 @@
  */
 class ElggAnswer extends \ElggObject {
 	
-	const SUBTYPE = 'answer';
+	public const SUBTYPE = 'answer';
 	
 	/**
 	 * {@inheritdoc}
