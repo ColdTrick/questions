@@ -68,14 +68,14 @@ class CreateQuestionHandler extends NotificationEventHandler {
 	 * {@inheritdoc}
 	 */
 	protected function getNotificationSubject(\ElggUser $recipient, string $method): string {
-		return elgg_echo('questions:notifications:create:subject', [], $recipient->getLanguage());
+		return elgg_echo('questions:notifications:create:subject');
 	}
 	
 	/**
 	 * {@inheritdoc}
 	 */
 	protected function getNotificationSummary(\ElggUser $recipient, string $method): string {
-		return elgg_echo('questions:notifications:create:summary', [], $recipient->getLanguage());
+		return elgg_echo('questions:notifications:create:summary');
 	}
 	
 	/**
@@ -85,7 +85,7 @@ class CreateQuestionHandler extends NotificationEventHandler {
 		return elgg_echo('questions:notifications:create:message', [
 			$this->getQuestion()->getDisplayName(),
 			$this->getQuestion()->getURL(),
-		], $recipient->getLanguage());
+		]);
 	}
 	
 	/**

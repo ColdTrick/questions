@@ -63,14 +63,14 @@ class MoveQuestionHandler extends NotificationEventHandler {
 	 * {@inheritdoc}
 	 */
 	protected function getNotificationSubject(\ElggUser $recipient, string $method): string {
-		return elgg_echo('questions:notifications:move:subject', [], $recipient->getLanguage());
+		return elgg_echo('questions:notifications:move:subject');
 	}
 	
 	/**
 	 * {@inheritdoc}
 	 */
 	protected function getNotificationSummary(\ElggUser $recipient, string $method): string {
-		return elgg_echo('questions:notifications:move:summary', [], $recipient->getLanguage());
+		return elgg_echo('questions:notifications:move:summary');
 	}
 	
 	/**
@@ -80,7 +80,7 @@ class MoveQuestionHandler extends NotificationEventHandler {
 		return elgg_echo('questions:notifications:move:message', [
 			$this->getQuestion()->getDisplayName(),
 			$this->getQuestion()->getURL(),
-		], $recipient->getLanguage());
+		]);
 	}
 	
 	/**

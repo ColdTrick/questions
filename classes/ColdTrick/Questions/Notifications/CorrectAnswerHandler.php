@@ -13,14 +13,14 @@ class CorrectAnswerHandler extends NotificationEventHandler {
 	 * {@inheritdoc}
 	 */
 	protected function getNotificationSubject(\ElggUser $recipient, string $method): string {
-		return elgg_echo('questions:notifications:answer:correct:subject', [$this->getQuestion()->getDisplayName()], $recipient->getLanguage());
+		return elgg_echo('questions:notifications:answer:correct:subject', [$this->getQuestion()->getDisplayName()]);
 	}
 	
 	/**
 	 * {@inheritdoc}
 	 */
 	protected function getNotificationSummary(\ElggUser $recipient, string $method): string {
-		return elgg_echo('questions:notifications:answer:correct:summary', [$this->getQuestion()->getDisplayName()], $recipient->getLanguage());
+		return elgg_echo('questions:notifications:answer:correct:summary', [$this->getQuestion()->getDisplayName()]);
 	}
 	
 	/**
@@ -32,7 +32,7 @@ class CorrectAnswerHandler extends NotificationEventHandler {
 			$this->getQuestion()->getDisplayName(),
 			$this->event->getObject()->description,
 			$this->event->getObject()->getURL(),
-		], $recipient->getLanguage());
+		]);
 	}
 	
 	/**
