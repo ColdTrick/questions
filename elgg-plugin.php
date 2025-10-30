@@ -122,6 +122,9 @@ return [
 			'menu:filter:questions/groups' => [
 				'\ColdTrick\Questions\Menus\Filter::registerQuestionsGroups' => [],
 			],
+			'menu:relationship' => [
+				'\ColdTrick\Questions\Menus\Relationship::toggleGroupExpert' => [],
+			],
 			'menu:owner_block' => [
 				'\ColdTrick\Questions\Menus\OwnerBlock::registerQuestions' => [],
 			],
