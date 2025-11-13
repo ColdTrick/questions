@@ -18,7 +18,7 @@ require_once(__DIR__ . '/lib/functions.php');
 
 return [
 	'plugin' => [
-		'version' => '13.0.1',
+		'version' => '14.0',
 	],
 	'settings' => [
 		'close_on_marked_answer' => 'no',

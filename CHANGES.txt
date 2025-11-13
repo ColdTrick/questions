@@ -1,6 +1,12 @@
 Version history
 ===============
 
+14.0 (2025-11-13):
+
+- changed: assignment of group experts was moved to the group members page
+- changed: updated for Elgg 6.3
+- fixed: PHP implicit null declaration
+
 13.0.1 (2025-01-23):
 
 - fixed: questions owners should not be able to edit answers
