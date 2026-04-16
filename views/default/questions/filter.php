@@ -3,6 +3,11 @@
 use Elgg\Database\MetadataTable;
 use Elgg\Database\QueryBuilder;
 
+$route_name = elgg_get_current_route_name();
+if (!str_starts_with($route_name, 'default:object:question') && !str_starts_with($route_name, 'collection:object:question:')) {
+	return;
+}
+
 $tags = get_input('tags', []);
 if (!is_array($tags)) {
 	$tags = [$tags];

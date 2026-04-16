@@ -69,7 +69,7 @@ class Permissions {
 			return null;
 		}
 		
-		/* @var $returnvalue bool */
+		/** @var bool $returnvalue  */
 		$returnvalue = $event->getValue();
 		if ($entity instanceof \ElggAnswer) {
 			$container = $entity->getContainerEntity()?->getContainerEntity();

@@ -6,7 +6,7 @@
 $question_guid = (int) elgg_extract('guid', $vars);
 elgg_entity_gatekeeper($question_guid, 'object', \ElggQuestion::SUBTYPE, true);
 
-/* @var $question \ElggQuestion */
+/** @var \ElggQuestion $question */
 $question = get_entity($question_guid);
 
 elgg_push_entity_breadcrumbs($question);

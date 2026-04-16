@@ -10,7 +10,7 @@ use Elgg\Database\QueryBuilder;
 $guid = (int) elgg_extract('guid', $vars);
 elgg_entity_gatekeeper($guid, 'object', \ElggQuestion::SUBTYPE);
 
-/* @var $question ElggQuestion */
+/** @var \ElggQuestion $question */
 $question = get_entity($guid);
 
 // set breadcrumb

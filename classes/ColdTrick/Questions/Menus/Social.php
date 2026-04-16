@@ -21,7 +21,7 @@ class Social {
 			return null;
 		}
 		
-		/* @var $items MenuItems */
+		/** @var MenuItems $items */
 		$items = $event->getValue();
 		
 		$items->remove('comment');

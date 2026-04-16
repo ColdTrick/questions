@@ -149,7 +149,7 @@ class ElggAnswer extends \ElggObject {
 		
 		// depending on the plugin settings, we also need to close the question
 		if (elgg_get_plugin_setting('close_on_marked_answer', 'questions') === 'yes') {
-			/* @var $question \ElggQuestion */
+			/** @var \ElggQuestion $question */
 			$question = $this->getContainerEntity();
 			
 			$question->close();
@@ -165,7 +165,7 @@ class ElggAnswer extends \ElggObject {
 		$this->correct_answer = null;
 		
 		// don't forget to reopen the question
-		/* @var $question \ElggQuestion */
+		/** @var \ElggQuestion $question */
 		$question = $this->getContainerEntity();
 		
 		$question->reopen();

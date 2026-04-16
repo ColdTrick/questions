@@ -22,6 +22,6 @@
 		}
 	],
 	"conflict": {
-		"elgg/elgg": "<6.3"
+		"elgg/elgg": "<7.0"
 	}
 }

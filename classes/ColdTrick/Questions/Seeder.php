@@ -49,7 +49,7 @@ class Seeder extends Seed {
 			try {
 				$logger->disable();
 				
-				/* @var $entity \ElggQuestion */
+				/** @var \ElggQuestion $entity */
 				$entity = $this->createObject([
 					'subtype' => \ElggQuestion::SUBTYPE,
 					'owner_guid' => $owner->guid,
@@ -113,7 +113,7 @@ class Seeder extends Seed {
 	 * {@inheritdoc}
 	 */
 	public function unseed() {
-		/* @var $entities \ElggBatch */
+		/** @var \ElggBatch $entities */
 		$entities = elgg_get_entities([
 			'type' => 'object',
 			'subtype' => \ElggQuestion::SUBTYPE,
@@ -123,7 +123,7 @@ class Seeder extends Seed {
 			'batch_inc_offset' => false,
 		]);
 		
-		/* @var $entity \ElggQuestion */
+		/** @var \ElggQuestion $entity */
 		foreach ($entities as $entity) {
 			if ($entity->delete()) {
 				$this->log("Deleted question {$entity->guid}");
@@ -177,7 +177,7 @@ class Seeder extends Seed {
 			try {
 				$logger->disable();
 				
-				/* @var $answer \ElggAnswer */
+				/** @var \ElggAnswer $answer */
 				$answer = $this->createObject([
 					'subtype' => \ElggAnswer::SUBTYPE,
 					'owner_guid' => $owner->guid,
@@ -221,7 +221,7 @@ class Seeder extends Seed {
 		if (!empty($created) && $this->faker()->boolean(10)) {
 			$key = array_rand($created);
 			
-			/* @var $correct_answer \ElggAnswer */
+			/** @var \ElggAnswer $correct_answer */
 			$correct_answer = $created[$key];
 			$correct_answer->markAsCorrect();
 		}

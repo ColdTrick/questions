@@ -26,7 +26,7 @@ class Cron {
 		
 		elgg_call(ELGG_IGNORE_ACCESS, function() use ($auto_close_days) {
 			// get open questions last modified more than x days ago
-			/* @var $batch \ElggBatch */
+			/** @var \ElggBatch $batch */
 			$batch = elgg_get_entities([
 				'type' => 'object',
 				'subtype' => \ElggQuestion::SUBTYPE,
@@ -39,9 +39,9 @@ class Cron {
 				'batch_inc_offset' => false,
 			]);
 			
-			/* @var $question \ElggQuestion */
+			/** @var \ElggQuestion $question  */
 			foreach ($batch as $question) {
-				/* @var $owner \ElggUser */
+				/** @var \ElggUser $owner */
 				$owner = $question->getOwnerEntity();
 				
 				// close the question
@@ -71,6 +71,7 @@ class Cron {
 		$time = (int) $event->getParam('time', time());
 		
 		// get all experts
+		/** @var \ElggBatch $experts */
 		$experts = elgg_get_entities([
 			'type' => 'user',
 			'limit' => false,
@@ -101,7 +102,7 @@ class Cron {
 		$session_manager = elgg()->session_manager;
 		
 		// loop through all experts
-		/* @var $expert \ElggUser */
+		/** @var \ElggUser $expert */
 		foreach ($experts as $expert) {
 			// fake a logged-in user
 			$session_manager->setLoggedInUser($expert);

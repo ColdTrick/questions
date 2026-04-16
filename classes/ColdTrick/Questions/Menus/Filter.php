@@ -18,7 +18,7 @@ class Filter {
 	 * @return null|MenuItems
 	 */
 	public static function registerQuestions(\Elgg\Event $event): ?MenuItems {
-		/* @var $items MenuItems */
+		/** @var MenuItems $items */
 		$items = $event->getValue();
 		
 		if (questions_is_expert()) {
@@ -50,7 +50,7 @@ class Filter {
 	 * @return null|MenuItems
 	 */
 	public static function registerQuestionsGroups(\Elgg\Event $event): ?MenuItems {
-		/* @var $items MenuItems */
+		/** @var MenuItems $items */
 		$items = $event->getValue();
 		
 		$page_owner = elgg_get_page_owner_entity();
@@ -60,10 +60,10 @@ class Filter {
 		
 		if (questions_is_expert($page_owner)) {
 			$items[] = \ElggMenuItem::factory([
-				'name' => 'todo_group',
+				'name' => 'todo',
 				'text' => elgg_echo('questions:menu:filter:todo_group'),
 				'href' => elgg_generate_url('collection:object:question:todo', [
-					'group_guid' => $page_owner->guid,
+					'guid' => $page_owner->guid,
 				]),
 				'priority' => 710,
 			]);
@@ -74,7 +74,7 @@ class Filter {
 				'name' => 'experts',
 				'text' => elgg_echo('questions:menu:filter:experts'),
 				'href' => elgg_generate_url('collection:object:question:experts', [
-					'group_guid' => $page_owner->guid,
+					'guid' => $page_owner->guid,
 				]),
 				'priority' => 800,
 			]);

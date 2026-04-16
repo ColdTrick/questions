@@ -30,7 +30,7 @@ class UserHover {
 		
 		$site = elgg_get_site_entity();
 		
-		/* @var $items MenuItems */
+		/** @var MenuItems $items */
 		$items = $event->getValue();
 		
 		$is_expert = $user->hasRelationship($site->guid, QUESTIONS_EXPERT_ROLE);

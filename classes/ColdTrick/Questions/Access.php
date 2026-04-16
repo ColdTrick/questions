@@ -28,12 +28,13 @@ class Access {
 		
 		// ignore access for this part
 		elgg_call(ELGG_IGNORE_ACCESS | ELGG_SHOW_DELETED_ENTITIES, function() use ($entity) {
+			/** @var \ElggBatch $answers */
 			$answers = $entity->getAnswers([
 				'limit' => false,
 				'batch' => true,
 			]);
 			
-			/* @var $answer \ElggAnswer */
+			/** @var \ElggAnswer $answer */
 			foreach ($answers as $answer) {
 				// update the access_id with the questions access_id
 				$answer->access_id = $entity->access_id;

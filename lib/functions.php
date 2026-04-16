@@ -366,7 +366,7 @@ function questions_can_answer_question(\ElggQuestion $question, ?\ElggUser $user
  *
  * @return bool
  */
-function questions_auto_mark_answer_correct(\ElggEntity $container, ?\ElggUser $user = null) {
+function questions_auto_mark_answer_correct(\ElggEntity $container, ?\ElggUser $user = null): bool {
 	if (!$container instanceof \ElggGroup) {
 		// for now only supported in groups
 		return false;

@@ -3,7 +3,7 @@
  * Questions widget settings
  */
 
-/* @var $widget \ElggWidget */
+/** @var \ElggWidget $widget */
 $widget = elgg_extract('entity', $vars);
 
 if ($widget->context === 'dashboard') {

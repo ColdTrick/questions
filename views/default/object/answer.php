@@ -7,7 +7,7 @@ if (!$answer instanceof ElggAnswer) {
 	return;
 }
 
-/* @var $question ElggQuestion */
+/** @var \ElggQuestion $question */
 $question = elgg_call(ELGG_IGNORE_ACCESS, function() use ($answer) {
 	return $answer->getContainerEntity();
 });

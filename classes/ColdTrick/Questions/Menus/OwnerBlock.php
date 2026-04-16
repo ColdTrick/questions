@@ -17,14 +17,14 @@ class OwnerBlock {
 	 * @return null|MenuItems
 	 */
 	public static function registerQuestions(\Elgg\Event $event): ?MenuItems {
-		/* @var $items MenuItems */
+		/** @var MenuItems $items */
 		$items = $event->getValue();
 		
 		$entity = $event->getEntityParam();
 		if ($entity instanceof \ElggGroup && $entity->isToolEnabled('questions')) {
 			$items[] = \ElggMenuItem::factory([
 				'name' => 'questions',
-				'text' => elgg_echo('questions:group'),
+				'text' => elgg_echo('collection:object:question:group'),
 				'href' => elgg_generate_url('collection:object:question:group', [
 					'guid' => $entity->guid,
 				]),

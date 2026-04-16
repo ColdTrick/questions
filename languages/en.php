@@ -14,6 +14,10 @@ return [
 	'collection:object:question' => "Questions",
 	'collection:object:answer' => "Answers",
 	
+	'collection:object:question:all' => "All questions",
+	'collection:object:question:group' => "Group questions",
+	'collection:object:question:owner' => "%s's questions",
+	
 	'add:object:question' => "Ask a question",
 	
 	'notification:object:answer:create' => "Send a notification when an answer is created",
@@ -48,11 +52,8 @@ return [
 	
 	'questions:filter_by_tag' => 'Filter by tag',
 	
-	'questions:everyone' => 'All Questions',
 	'questions:todo' => 'Todo',
 	'questions:todo:none' => 'There is nothing Todo, keep up the good work!',
-	'questions:owner' => "%s's Questions",
-	'questions:group' => 'Group questions',
 	'groups:tool:questions' => 'Enable group questions',
 	'groups:tool:questions:description' => 'Allow group members to ask questions in this group.',
 

@@ -83,7 +83,7 @@ class Notifications {
 			return null;
 		}
 		
-		/* @var $owner \ElggUser */
+		/** @var \ElggUser $owner */
 		$owner = $question->getOwnerEntity();
 		if ($object->owner_guid === $owner->guid) {
 			// don't add question owner if it's the comment owner

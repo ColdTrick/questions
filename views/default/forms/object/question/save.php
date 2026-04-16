@@ -120,7 +120,7 @@ if (!$editing || (questions_experts_enabled() && questions_is_expert($container)
 		$groups = elgg_get_entities($group_options);
 		// build group optgroup
 		$group_optgroup = [];
-		/* @var $group \ElggGroup */
+		/** @var \ElggGroup $group */
 		foreach ($groups as $group) {
 			// can questions be asked in this group
 			if (!questions_can_ask_question($group)) {

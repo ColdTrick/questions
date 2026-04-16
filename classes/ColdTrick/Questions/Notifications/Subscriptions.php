@@ -20,7 +20,7 @@ class Subscriptions {
 			return;
 		}
 		
-		/* @var $owner \ElggUser */
+		/** @var \ElggUser $owner */
 		$owner = $object->getOwnerEntity();
 		$question = $object->getContainerEntity();
 		if (!$question instanceof \ElggQuestion) {
@@ -59,7 +59,7 @@ class Subscriptions {
 			return;
 		}
 		
-		/* @var $owner \ElggUser */
+		/** @var \ElggUser $owner */
 		$owner = $object->getOwnerEntity();
 		$question = $answer->getContainerEntity();
 		if (!$question instanceof \ElggQuestion) {

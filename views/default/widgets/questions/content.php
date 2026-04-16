@@ -6,7 +6,7 @@
 use Elgg\Database\EntityTable;
 use Elgg\Database\QueryBuilder;
 
-/* @var $widget \ElggWidget */
+/** @var \ElggWidget $widget */
 $widget = elgg_extract('entity', $vars);
 
 $limit = (int) $widget->limit;
@@ -42,7 +42,7 @@ switch ($widget->context) {
 					function (QueryBuilder $qb, $main_alias) {
 						$sub = $qb->subquery(EntityTable::TABLE_NAME, 'a');
 						$sub->joinMetadataTable($sub->getTableAlias(), 'guid', 'correct_answer');
-						$sub->select('a.container_guid')
+						$sub->select("{$sub->getTableAlias()}.container_guid")
 							->andWhere($qb->compare("{$sub->getTableAlias()}.type", '=', 'object', ELGG_VALUE_STRING))
 							->andWhere($qb->compare("{$sub->getTableAlias()}.subtype", '=', \ElggAnswer::SUBTYPE, ELGG_VALUE_STRING));
 						

@@ -1,5 +1,6 @@
 <?php
 
+use ColdTrick\Questions\Controllers\QuestionsListing;
 use ColdTrick\Questions\Notifications\AutoCloseQuestionHandler;
 use ColdTrick\Questions\Notifications\CorrectAnswerHandler;
 use ColdTrick\Questions\Notifications\CreateAnswerHandler;
@@ -20,14 +21,6 @@ return [
 	'plugin' => [
 		'version' => '14.0',
 	],
-	'settings' => [
-		'close_on_marked_answer' => 'no',
-		'solution_time_group' => 'yes',
-		'limit_to_groups' => 'no',
-		'experts_enabled' => 'no',
-		'experts_answer' => 'no',
-		'experts_mark' => 'no',
-	],
 	'entities' => [
 		[
 			'type' => 'object',
@@ -35,9 +28,10 @@ return [
 			'class' => \ElggQuestion::class,
 			'capabilities' => [
 				'commentable' => true,
-				'searchable' => true,
 				'likable' => true,
 				'restorable' => true,
+				'river_emittable' => true,
+				'searchable' => true,
 				'subscribable' => true,
 			],
 		],
@@ -47,9 +41,23 @@ return [
 			'class' => \ElggAnswer::class,
 			'capabilities' => [
 				'commentable' => true,
-				'searchable' => true,
 				'likable' => true,
+				'river_emittable' => true,
+				'searchable' => true,
 			],
+		],
+	],
+	'settings' => [
+		'close_on_marked_answer' => 'no',
+		'solution_time_group' => 'yes',
+		'limit_to_groups' => 'no',
+		'experts_enabled' => 'no',
+		'experts_answer' => 'no',
+		'experts_mark' => 'no',
+	],
+	'group_tools' => [
+		'questions' => [
+			'default_on' => false,
 		],
 	],
 	'actions' => [
@@ -57,6 +65,75 @@ return [
 		'object/answer/edit' => [],
 		'object/question/save' => [],
 		'questions/toggle_expert' => [],
+	],
+	'routes' => [
+		'add:object:question' => [
+			'path' => '/questions/add/{guid}',
+			'resource' => 'questions/add',
+			'middleware' => [
+				Gatekeeper::class,
+			],
+		],
+		'edit:object:question' => [
+			'path' => '/questions/edit/{guid}',
+			'resource' => 'questions/edit',
+			'middleware' => [
+				Gatekeeper::class,
+			],
+		],
+		'view:object:question' => [
+			'path' => '/questions/view/{guid}/{title?}',
+			'resource' => 'questions/view',
+		],
+		'edit:object:answer' => [
+			'path' => '/answers/edit/{guid}',
+			'resource' => 'answers/edit',
+			'middleware' => [
+				Gatekeeper::class,
+			],
+		],
+		'collection:object:question:todo' => [
+			'path' => '/questions/todo/{guid?}',
+			'controller' => QuestionsListing::class,
+			'middleware' => [
+				Gatekeeper::class,
+			],
+			'requirements' => [
+				'guid' => '\d+'
+			],
+		],
+		'collection:object:question:experts' => [
+			'path' => '/questions/experts/{guid?}',
+			'controller' => QuestionsListing::class,
+			'requirements' => [
+				'guid' => '\d+'
+			],
+		],
+		'collection:object:question:group' => [
+			'path' => '/questions/group/{guid}',
+			'controller' => QuestionsListing::class,
+			'required_plugins' => [
+				'groups',
+			],
+			'middleware' => [
+				GroupPageOwnerGatekeeper::class,
+			],
+		],
+		'collection:object:question:owner' => [
+			'path' => '/questions/owner/{username}',
+			'controller' => QuestionsListing::class,
+			'middleware' => [
+				UserPageOwnerGatekeeper::class,
+			],
+		],
+		'collection:object:question:all' => [
+			'path' => '/questions/all',
+			'controller' => QuestionsListing::class,
+		],
+		'default:object:question' => [
+			'path' => '/questions',
+			'controller' => QuestionsListing::class,
+		],
 	],
 	'events' => [
 		'container_permissions_check' => [
@@ -164,93 +241,34 @@ return [
 			],
 		],
 	],
-	'group_tools' => [
-		'questions' => [
-			'default_on' => false,
-		],
-	],
 	'notifications' => [
 		'object' => [
 			'answer' => [
-				'correct' => CorrectAnswerHandler::class,
-				'create' => CreateAnswerHandler::class,
+				'correct' => [
+					CorrectAnswerHandler::class => [],
+				],
+				'create' => [
+					CreateAnswerHandler::class => [],
+				],
 			],
 			'question' => [
-				'close' => AutoCloseQuestionHandler::class,
-				'create' => CreateQuestionHandler::class,
-				'move' => MoveQuestionHandler::class,
+				'close' => [
+					AutoCloseQuestionHandler::class => [],
+				],
+				'create' => [
+					CreateQuestionHandler::class => [],
+				],
+				'move' => [
+					MoveQuestionHandler::class => [],
+				],
 			],
 		],
 		'user' => [
 			'user' => [
-				'questions_expert_workload' => ExpertWorkloadHandler::class,
+				'questions_expert_workload' => [
+					ExpertWorkloadHandler::class => [],
+				],
 			],
-		],
-	],
-	'routes' => [
-		'add:object:question' => [
-			'path' => '/questions/add/{guid}',
-			'resource' => 'questions/add',
-			'middleware' => [
-				Gatekeeper::class,
-			],
-		],
-		'edit:object:question' => [
-			'path' => '/questions/edit/{guid}',
-			'resource' => 'questions/edit',
-			'middleware' => [
-				Gatekeeper::class,
-			],
-		],
-		'view:object:question' => [
-			'path' => '/questions/view/{guid}/{title?}',
-			'resource' => 'questions/view',
-		],
-		'edit:object:answer' => [
-			'path' => '/answers/edit/{guid}',
-			'resource' => 'answers/edit',
-			'middleware' => [
-				Gatekeeper::class,
-			],
-		],
-		'collection:object:question:todo' => [
-			'path' => '/questions/todo/{group_guid?}',
-			'resource' => 'questions/todo',
-			'middleware' => [
-				Gatekeeper::class,
-			],
-		],
-		'collection:object:question:experts' => [
-			'path' => '/questions/experts/{group_guid?}',
-			'resource' => 'questions/experts',
-		],
-		'collection:object:question:group' => [
-			'path' => '/questions/group/{guid}/{subpage?}',
-			'resource' => 'questions/group',
-			'defaults' => [
-				'subpage' => 'all',
-			],
-			'required_plugins' => [
-				'groups',
-			],
-			'middleware' => [
-				GroupPageOwnerGatekeeper::class,
-			],
-		],
-		'collection:object:question:owner' => [
-			'path' => '/questions/owner/{username}',
-			'resource' => 'questions/owner',
-			'middleware' => [
-				UserPageOwnerGatekeeper::class,
-			],
-		],
-		'collection:object:question:all' => [
-			'path' => '/questions/all',
-			'resource' => 'questions/all',
-		],
-		'default:object:question' => [
-			'path' => '/questions',
-			'resource' => 'questions/all',
 		],
 	],
 	'view_extensions' => [
@@ -259,6 +277,9 @@ return [
 		],
 		'groups/edit/settings' => [
 			'questions/groups/settings' => [],
+		],
+		'page/list/all' => [
+			'questions/filter' => ['priority' => 400],
 		],
 	],
 	'widgets' => [

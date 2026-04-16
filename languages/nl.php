@@ -1,10 +1,13 @@
 <?php
 /**
- * This file was created by Translation Editor v11.1
- * On 2023-05-17 15:07
+ * This file was created by Translation Editor v14.0.4
+ * On 2026-04-16 10:10
  */
 
 return array (
+  'collection:object:question:all' => 'Alle vragen',
+  'collection:object:question:group' => 'Groep vragen',
+  'collection:object:question:owner' => '%s\'s vragen',
   'groups:tool:questions:description' => 'Laat groepsleden vragen stellen in deze groep.',
   'input:container_guid:object:question:info' => 'Deze vraag zal worden geplaatst in %s',
   'add:object:question' => 'Stel een vraag',
@@ -79,11 +82,8 @@ Om de reactie te bekijken, klik hier:
   'questions:menu:filter:experts' => 'Experts',
   'river:object:question:create' => '%s stelde vraag %s',
   'questions' => 'Vragen',
-  'questions:everyone' => 'Alle Vragen',
   'questions:todo' => 'Todo',
-  'questions:owner' => '%s\'s Vragen',
   'list:object:question:no_results' => 'Er zijn nog geen vragen gesteld.',
-  'questions:group' => 'Groep vragen',
   'questions:edit:question:title' => 'Vraag',
   'questions:edit:question:description' => 'Toelichting',
   'questions:edit:question:container' => 'Waar moet deze vraag gesteld worden',

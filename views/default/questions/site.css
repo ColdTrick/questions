@@ -4,12 +4,12 @@
 		
 		li.elgg-tag {
 			> a {
-				border: 1px solid $(border-color-soft);
+				border: 1px solid var(--elgg-border-color-soft);
 				border-radius: 3px;
 				padding: 0.25rem 0.5rem;
 				
 				&:hover {
-					background-color: $(background-color-soft);
+					background-color: var(--elgg-background-color-soft);
 				 }
 			}
 		}
@@ -19,12 +19,12 @@
 .question-solution-time {
 	&.question-solution-time-due,
 	&.question-solution-time-due time {
-		color: $(state-warning-font-color);
+		color: var(--elgg-state-warning-font-color);
 	}
 	
 	&.question-solution-time-late,
 	&.question-solution-time-late time {
-		color: $(state-danger-font-color);
+		color: var(--elgg-state-danger-font-color);
 	}
 }
 
