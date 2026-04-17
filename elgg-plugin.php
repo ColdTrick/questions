@@ -98,6 +98,9 @@ return [
 			'middleware' => [
 				Gatekeeper::class,
 			],
+			'options' => [
+				'group_tool' => 'questions',
+			],
 			'requirements' => [
 				'guid' => '\d+'
 			],
@@ -105,6 +108,9 @@ return [
 		'collection:object:question:experts' => [
 			'path' => '/questions/experts/{guid?}',
 			'controller' => QuestionsListing::class,
+			'options' => [
+				'group_tool' => 'questions',
+			],
 			'requirements' => [
 				'guid' => '\d+'
 			],
@@ -112,11 +118,14 @@ return [
 		'collection:object:question:group' => [
 			'path' => '/questions/group/{guid}',
 			'controller' => QuestionsListing::class,
-			'required_plugins' => [
-				'groups',
-			],
 			'middleware' => [
 				GroupPageOwnerGatekeeper::class,
+			],
+			'options' => [
+				'group_tool' => 'questions',
+			],
+			'required_plugins' => [
+				'groups',
 			],
 		],
 		'collection:object:question:owner' => [

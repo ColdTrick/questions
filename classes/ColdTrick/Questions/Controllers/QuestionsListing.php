@@ -14,13 +14,6 @@ class QuestionsListing extends GenericContentListing {
 	/**
 	 * {@inheritdoc}
 	 */
-	protected function getGroupToolOption(): ?string {
-		return 'questions';
-	}
-	
-	/**
-	 * {@inheritdoc}
-	 */
 	protected function getListingOptions(string $page, array $options): array {
 		$defaults = [
 			'no_results' => true,
@@ -102,9 +95,12 @@ class QuestionsListing extends GenericContentListing {
 		
 		elgg_unregister_menu_item('title', 'add');
 		
+		$group_tool = $this->getGroupToolOption();
+		if (isset($group_tool)) {
+			elgg_group_tool_gatekeeper($group_tool);
+		}
+		
 		if ($container instanceof \ElggGroup) {
-			elgg_group_tool_gatekeeper($this->getGroupToolOption());
-			
 			elgg_push_collection_breadcrumbs($options['type'], $options['subtype'], $container);
 		} else {
 			elgg_push_collection_breadcrumbs($options['type'], $options['subtype']);
@@ -146,10 +142,13 @@ class QuestionsListing extends GenericContentListing {
 	 */
 	protected function listTodo(array $options): string {
 		$container = $this->page_owner;
-		if ($container instanceof \ElggGroup) {
-			elgg_group_tool_gatekeeper($this->getGroupToolOption());
-		} else {
+		if (!$container instanceof \ElggGroup) {
 			$container = elgg_get_logged_in_user_entity();
+		}
+		
+		$group_tool = $this->getGroupToolOption();
+		if (isset($group_tool)) {
+			elgg_group_tool_gatekeeper($group_tool);
 		}
 		
 		elgg_push_collection_breadcrumbs($options['type'], $options['subtype'], $container);
