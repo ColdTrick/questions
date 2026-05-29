@@ -37,20 +37,6 @@ class ElggAnswer extends \ElggObject {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function canComment($user_guid = 0): bool {
-		$container = $this->getContainerEntity();
-		if ($container instanceof \ElggQuestion) {
-			if (!$container->commentsEnabled()) {
-				return false;
-			}
-		}
-		
-		return parent::canComment($user_guid);
-	}
-	
-	/**
-	 * {@inheritdoc}
-	 */
 	public function getDisplayName(): string {
 		$question = $this->getContainerEntity();
 		

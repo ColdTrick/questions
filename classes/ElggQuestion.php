@@ -25,17 +25,6 @@ class ElggQuestion extends \ElggObject {
 	}
 	
 	/**
-	 * {@inheritdoc}
-	 */
-	public function canComment(int $user_guid = 0): bool {
-		if (!$this->commentsEnabled()) {
-			return false;
-		}
-		
-		return parent::canComment($user_guid);
-	}
-	
-	/**
 	 * Get the answers on this question
 	 *
 	 * @param array $options accepts all elgg_get_entities() options

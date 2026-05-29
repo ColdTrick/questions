@@ -151,4 +151,53 @@ class Permissions {
 		
 		return questions_can_answer_question($question, $user);
 	}
+	
+	/**
+	 * Prevent comments on Answers when disabled on the parent Question
+	 *
+	 * @param \Elgg\Event $event 'container_logic_check', 'object'
+	 *
+	 * @return bool|null
+	 */
+	public static function preventAnswerCommentsWhenDisabled(\Elgg\Event $event): ?bool {
+		if ($event->getParam('subtype') !== 'comment') {
+			return null;
+		}
+		
+		$container = $event->getParam('container');
+		if (!$container instanceof \ElggAnswer) {
+			return null;
+		}
+		
+		$question = $container->getContainerEntity();
+		if ($question instanceof \ElggQuestion && !$question->commentsEnabled()) {
+			return false;
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Prevent comments on Questions when disabled
+	 *
+	 * @param \Elgg\Event $event 'container_logic_check', 'object'
+	 *
+	 * @return bool|null
+	 */
+	public static function preventQuestionCommentsWhenDisabled(\Elgg\Event $event): ?bool {
+		if ($event->getParam('subtype') !== 'comment') {
+			return null;
+		}
+		
+		$container = $event->getParam('container');
+		if (!$container instanceof \ElggQuestion) {
+			return null;
+		}
+		
+		if (!$container->commentsEnabled()) {
+			return false;
+		}
+		
+		return null;
+	}
 }

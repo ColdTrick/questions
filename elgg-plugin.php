@@ -145,6 +145,12 @@ return [
 		],
 	],
 	'events' => [
+		'container_logic_check' => [
+			'object' => [
+				'\ColdTrick\Questions\Permissions::preventAnswerCommentsWhenDisabled' => [],
+				'\ColdTrick\Questions\Permissions::preventQuestionCommentsWhenDisabled' => [],
+			],
+		],
 		'container_permissions_check' => [
 			'object' => [
 				'\ColdTrick\Questions\Permissions::answerContainer' => [],
