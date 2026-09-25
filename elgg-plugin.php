@@ -93,7 +93,14 @@ return [
 			],
 		],
 		'collection:object:question:todo' => [
-			'path' => '/questions/todo/{guid?}',
+			'path' => '/questions/todo',
+			'controller' => QuestionsListing::class,
+			'middleware' => [
+				Gatekeeper::class,
+			],
+		],
+		'collection:object:question:todo:group' => [
+			'path' => '/questions/todo/{guid}',
 			'controller' => QuestionsListing::class,
 			'middleware' => [
 				Gatekeeper::class,
@@ -101,18 +108,16 @@ return [
 			'options' => [
 				'group_tool' => 'questions',
 			],
-			'requirements' => [
-				'guid' => '\d+'
-			],
 		],
 		'collection:object:question:experts' => [
+			'path' => '/questions/experts',
+			'controller' => QuestionsListing::class,
+		],
+		'collection:object:question:experts:group' => [
 			'path' => '/questions/experts/{guid?}',
 			'controller' => QuestionsListing::class,
 			'options' => [
 				'group_tool' => 'questions',
-			],
-			'requirements' => [
-				'guid' => '\d+'
 			],
 		],
 		'collection:object:question:group' => [
@@ -208,7 +213,8 @@ return [
 				'\ColdTrick\Questions\Menus\Entity::registerAnswer' => [],
 			],
 			'menu:filter:questions' => [
-				'\Elgg\Menus\Filter::registerFilterTabs' => [],
+				'\Elgg\Menus\Filter::registerAllFilterTab' => [],
+				'\Elgg\Menus\Filter::registerMineFilterTab' => [],
 				'\ColdTrick\Questions\Menus\Filter::registerQuestions' => [],
 			],
 			'menu:filter:questions/groups' => [
