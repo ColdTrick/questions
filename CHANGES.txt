@@ -1,6 +1,10 @@
 Version history
 ===============
 
+16.0 (2026-11-12):
+
+- changed: updated for Elgg 7.1
+
 15.0 (2026-05-29):
 
 - changed: canComment to container_logic check

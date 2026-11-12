@@ -19,7 +19,7 @@ require_once(__DIR__ . '/lib/functions.php');
 
 return [
 	'plugin' => [
-		'version' => '15.0',
+		'version' => '16.0',
 	],
 	'entities' => [
 		[
