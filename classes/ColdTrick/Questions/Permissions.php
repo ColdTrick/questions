@@ -8,13 +8,30 @@ namespace ColdTrick\Questions;
 class Permissions {
 	
 	/**
+	 * Check if a user can create a question in a container
+	 *
+	 * @param \Elgg\Event $event 'container_logic_check', 'object'
+	 *
+	 * @return null|bool
+	 */
+	public static function questionContainerLogic(\Elgg\Event $event): ?bool {
+		$container = $event->getParam('container');
+		$subtype = $event->getParam('subtype');
+		if ($subtype !== \ElggQuestion::SUBTYPE || !$container instanceof \ElggUser) {
+			return null;
+		}
+		
+		return elgg_get_plugin_setting('limit_to_groups', 'questions') === 'no';
+	}
+	
+	/**
 	 * limit the container write permissions
 	 *
 	 * @param \Elgg\Event $event 'container_permissions_check', 'object'
 	 *
 	 * @return null|bool
 	 */
-	public static function questionsContainer(\Elgg\Event $event): ?bool {
+	public static function questionGroupContainer(\Elgg\Event $event): ?bool {
 		$subtype = $event->getParam('subtype');
 		if ($subtype !== \ElggQuestion::SUBTYPE) {
 			return null;
@@ -22,27 +39,11 @@ class Permissions {
 		
 		$user = $event->getUserParam();
 		$container = $event->getParam('container');
-		if (!$user instanceof \ElggUser || !$container instanceof \ElggEntity) {
-			return false;
-		}
-		
-		if (!$container instanceof \ElggGroup) {
-			if (questions_limited_to_groups()) {
-				// questions only in groups
-				return false;
-			}
-			
-			// personal
+		if (!$user instanceof \ElggUser || !$container instanceof \ElggGroup) {
 			return null;
 		}
 		
-		// group
-		if (!$container->isToolEnabled('questions')) {
-			// questions not enabled in this group
-			return false;
-		}
-		
-		if (!questions_experts_enabled() || ($container->getPluginSetting('questions', 'who_can_ask') !== 'experts')) {
+		if (!questions_experts_enabled() || $container->getPluginSetting('questions', 'who_can_ask') !== 'experts') {
 			// no experts enabled, or not limited to experts
 			return null;
 		}
@@ -137,10 +138,6 @@ class Permissions {
 	 * @return null|bool
 	 */
 	public static function answerContainer(\Elgg\Event $event): ?bool {
-		if ($event->getValue()) {
-			return null;
-		}
-		
 		$question = $event->getParam('container');
 		$user = $event->getUserParam();
 		$subtype = $event->getParam('subtype');
@@ -150,6 +147,21 @@ class Permissions {
 		}
 		
 		return questions_can_answer_question($question, $user);
+	}
+	
+	/**
+	 * Check if a user can create an answer in a container
+	 *
+	 * @param \Elgg\Event $event 'container_logic_check', 'object'
+	 *
+	 * @return null|bool
+	 */
+	public static function answerContainerLogic(\Elgg\Event $event): ?bool {
+		if ($event->getParam('subtype') !== \ElggAnswer::SUBTYPE) {
+			return null;
+		}
+		
+		return $event->getParam('container') instanceof \ElggQuestion;
 	}
 	
 	/**

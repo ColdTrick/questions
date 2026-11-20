@@ -152,6 +152,9 @@ return [
 	'events' => [
 		'container_logic_check' => [
 			'object' => [
+				\ColdTrick\Questions\GroupToolContainerLogicCheck::class => [],
+				'\ColdTrick\Questions\Permissions::answerContainerLogic' => [],
+				'\ColdTrick\Questions\Permissions::questionContainerLogic' => [],
 				'\ColdTrick\Questions\Permissions::preventAnswerCommentsWhenDisabled' => [],
 				'\ColdTrick\Questions\Permissions::preventQuestionCommentsWhenDisabled' => [],
 			],
@@ -159,7 +162,7 @@ return [
 		'container_permissions_check' => [
 			'object' => [
 				'\ColdTrick\Questions\Permissions::answerContainer' => [],
-				'\ColdTrick\Questions\Permissions::questionsContainer' => [],
+				'\ColdTrick\Questions\Permissions::questionGroupContainer' => [],
 			],
 		],
 		'create' => [
